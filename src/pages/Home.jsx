@@ -1,0 +1,461 @@
+import React, { useState, useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
+import { ArrowRight, Star, ChevronLeft, ChevronRight, Leaf, Rabbit, Recycle, Droplets } from 'lucide-react';
+
+/* ─── DATA ─── */
+const sliderContent = [
+  { 
+    id: 1, 
+    image: '/images/slider_1.png', 
+    mobileImage: 'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?q=80&w=800&h=1000&fit=crop' 
+  },
+  { 
+    id: 2, 
+    image: '/images/slider_2.png', 
+    mobileImage: 'https://images.unsplash.com/photo-1615397323602-5eef6317bc2d?q=80&w=800&h=1000&fit=crop' 
+  },
+  { 
+    id: 3, 
+    image: '/images/slider_3.png', 
+    mobileImage: 'https://images.unsplash.com/photo-1570194065650-d6faeb4ae288?q=80&w=800&h=1000&fit=crop' 
+  }
+];
+
+const categories = [
+  { id: 1, name: 'Capitã Aqua', image: 'https://toutlissie.com.br/cdn/shop/files/AZ.png?v=1736942249&width=1080' },
+  { id: 2, name: 'Capitã Nutre', image: 'https://toutlissie.com.br/cdn/shop/files/NUT.png?v=1736942286&width=1080' },
+  { id: 3, name: 'Capitã Force', image: 'https://toutlissie.com.br/cdn/shop/files/Ros.png?v=1736942406&width=1080' },
+  { id: 4, name: 'Finalizadores', image: 'https://toutlissie.com.br/cdn/shop/files/WSA.png?v=1736944077&width=1080' }
+];
+
+const bestSellers = [
+  { id: 1, name: 'Kit Progressiva Capilar 1L + Shampoo Capilar 1L | Magic Premium', price: 359.97, installments: '6x de R$ 59,99 Sem Juros', image: '/images/product_shampoo_solid.png', badge: '🔥 Mais vendidos' },
+  { id: 2, name: 'Kit Fios de Madame - Linha Botox Capilar', price: 289.97, oldPrice: 369.97, installments: '6x de R$ 48,32 Sem Juros', image: '/images/product_shampoo_solid.png', badge: '🔥 Mais vendidos', discount: '22% OFF' },
+  { id: 3, name: 'Progressiva Capilar 1L Passo 02 | Magic Premium', price: 299.97, installments: '6x de R$ 49,99 Sem Juros', image: '/images/product_shampoo_solid.png', badge: '🔥 Mais vendidos' },
+  { id: 4, name: 'KIT EFEITO CARACÓIS + pH EQUILIBRE', price: 369.97, oldPrice: 659.97, installments: '6x de R$ 61,66 Sem Juros', image: '/images/product_shampoo_solid.png', discount: '44% OFF', type: 'social' }
+];
+
+const instagramReels = [
+  { id: 1, poster: '/images/slider_1.png', product: 'Reparador Spray 60ml', oldPrice: 'R$ 116,97', price: 'R$ 58,48' },
+  { id: 2, poster: '/images/slider_2.png', product: 'Shampoo Sólido Matú', oldPrice: 'R$ 89,97', price: 'R$ 59,97' },
+  { id: 3, poster: '/images/slider_3.png', product: 'Sérum Facial Capitã', oldPrice: 'R$ 149,97', price: 'R$ 99,97' },
+  { id: 4, poster: '/images/category_body.png', product: 'Óleo Corporal Premium', oldPrice: 'R$ 129,97', price: 'R$ 79,97' },
+  { id: 5, poster: '/images/category_hair.png', product: 'Máscara Reconstrutora', oldPrice: 'R$ 99,97', price: 'R$ 69,97' },
+  { id: 6, poster: '/images/category_oil.png', product: 'Tônico Equilibrante', oldPrice: 'R$ 79,97', price: 'R$ 49,97' }
+];
+
+const newArrivals = [
+  { id: 5, name: 'Sérum Reparador 60ml - Cherry Oil', price: 79.97, image: '/images/product_bottle.png' },
+  { id: 6, name: 'Manteiga de Karité Premium', price: 59.90, image: '/images/product_bottle.png' },
+  { id: 7, name: 'Tônico Facial Equilibrante', price: 69.90, image: '/images/product_face_wash.png' },
+  { id: 8, name: 'Óleo Multifuncional Argan', price: 89.90, image: '/images/product_body_oil.png' }
+];
+
+const testimonials = [
+  { id: 1, name: 'Mariana Silva', text: 'Os produtos da Matú mudaram minha relação com o espelho. A textura é leve e o resultado é uma pele viçosa de verdade.', rating: 5, image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=150&h=150' },
+  { id: 2, name: 'Camila Torres', text: 'Finalmente encontrei um shampoo sólido que realmente limpa sem agredir. E o cheiro é maravilhoso.', rating: 5, image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&q=80&w=150&h=150' },
+  { id: 3, name: 'Juliana Paiva', text: 'O óleo corporal é meu momento de paz no dia. Sinto que estou dando o melhor para o meu corpo.', rating: 5, image: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=150&h=150' },
+  { id: 4, name: 'Beatriz Costa', text: 'O tônico equilibrante é perfeito para minha pele mista. Reduziu a oleosidade sem ressecar.', rating: 5, image: 'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&q=80&w=150&h=150' },
+  { id: 5, name: 'Fernanda Lima', text: 'Não vivo mais sem o sérum renovador. Minha pele está mais firme e com um brilho natural incrível.', rating: 5, image: 'https://images.unsplash.com/photo-1548142813-c348350df52b?auto=format&fit=crop&q=80&w=150&h=150' },
+  { id: 6, name: 'Helena Souza', text: 'A manteiga de karité é um milagre para áreas secas. Uso no corpo todo e sinto a diferença imediata.', rating: 5, image: 'https://images.unsplash.com/photo-1502685104226-ee32379fefbe?auto=format&fit=crop&q=80&w=150&h=150' }
+];
+
+const faqData = [
+  { q: "Como posso entrar em contato com vocês?", a: "Você pode nos contatar via WhatsApp, e-mail (contato@matu.com.br) ou através de nossas redes sociais. Estamos disponíveis de segunda a sexta, das 9h às 18h." },
+  { q: "Quais são os benefícios de comprar na Matú?", a: "Ao escolher a Matú, você apoia uma marca 100% natural, vegana e cruelty-free. Nossos produtos são artesanais e focados em ingredientes botânicos de alta performance." },
+  { q: "Como funciona o parcelamento das compras?", a: "Oferecemos parcelamento em até 6x sem juros em todos os cartões de crédito, com parcela mínima de R$ 50,00." },
+  { q: "É seguro comprar na Matú?", a: "Sim! Utilizamos os protocolos de segurança mais modernos (SSL) e gateways de pagamento certificados para garantir total proteção aos seus dados." },
+  { q: "Posso rastrear meu pedido?", a: "Com certeza. Assim que seu pedido for despachado, você receberá um código de rastreio via e-mail e WhatsApp para acompanhar cada passo da entrega." },
+  { q: "Quais métodos de pagamento estão disponíveis?", a: "Aceitamos Pix (com 5% de desconto), Cartão de Crédito e Boleto Bancário." }
+];
+
+const benefitsData = [
+  { icon: <Leaf size={32} />, title: '100% Natural', desc: 'Fórmulas puras, sem toxinas ou parabenos.' },
+  { icon: <Rabbit size={32} />, title: 'Cruelty Free', desc: 'Beleza limpa. Nunca testado em animais.' },
+  { icon: <Recycle size={32} />, title: 'Sustentável', desc: 'Embalagens e processos eco-conscientes.' },
+  { icon: <Droplets size={32} />, title: 'Hidratação 48h', desc: 'Ativos botânicos de absorção profunda.' }
+];
+
+/* ─── REUSABLE PRODUCT CARD ─── */
+function ProductCard({ product, addToCart }) {
+  return (
+    <div className="m-product-card swipe-item">
+      <div className="m-product-img">
+        {product.badge && <span className="m-badge">{product.badge}</span>}
+        {product.discount && <span className="m-badge m-badge-discount">{product.discount}</span>}
+        <img src={product.image} alt={product.name} />
+      </div>
+      <div className="m-product-info">
+        <h3>{product.name}</h3>
+        <div className="m-price-block">
+          {product.oldPrice && <span className="m-old-price">R$ {product.oldPrice.toFixed(2).replace('.', ',')}</span>}
+          <span className="m-price">R$ {product.price.toFixed(2).replace('.', ',')}</span>
+          <span className="m-installments">Ou 6x de <strong>R$ {(product.price / 6).toFixed(2).replace('.', ',')}</strong> Sem Juros</span>
+        </div>
+        <button className="m-btn-buy" onClick={() => addToCart(product)}>
+          {product.type === 'social' ? 'Saiba Mais' : 'Comprar'}
+        </button>
+      </div>
+    </div>
+  );
+}
+
+/* ─── MAIN COMPONENT ─── */
+export default function Home({ addToCart }) {
+  const [activeSlide, setActiveSlide] = useState(0);
+  const [tSlide, setTSlide] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => setActiveSlide(p => (p + 1) % sliderContent.length), 5000);
+    return () => clearInterval(timer);
+  }, [activeSlide]);
+
+  const swipeScroll = (className, dir) => {
+    const container = document.querySelector(`.${className}`);
+    if (container) {
+      container.scrollBy({ left: dir === 'left' ? -320 : 320, behavior: 'smooth' });
+    }
+  };
+
+  const nextT = () => setTSlide(p => (p + 1) % testimonials.length);
+  const prevT = () => setTSlide(p => (p - 1 + testimonials.length) % testimonials.length);
+
+  return (
+    <div className="home-root">
+
+      {/* ═══════════════ 1. HERO BANNER (DUAL SYSTEM) ═══════════════ */}
+      <section className="hero-banner-section">
+        {sliderContent.map((s, i) => (
+          <div key={s.id} className={`hero-slide ${i === activeSlide ? 'active' : ''}`}>
+            {/* Desktop Banner */}
+            <img src={s.image} alt="Banner" className="hero-img-desktop" />
+            {/* Mobile Banner */}
+            <img src={s.mobileImage} alt="Banner" className="hero-img-mobile" />
+          </div>
+        ))}
+        <div className="hero-dots">
+          {sliderContent.map((_, i) => (
+            <button key={i} className={`hero-dot ${i === activeSlide ? 'active' : ''}`} onClick={() => setActiveSlide(i)} />
+          ))}
+        </div>
+      </section>
+
+      {/* ═══════════════ 2. CATEGORY HIGHLIGHTS ═══════════════ */}
+      <section className="sect">
+        <div className="ctnr">
+          {/* CSS Horizontal Swipe exactly like Best Sellers on mobile, or 4 columns on desktop */}
+          <div className="swipe-track cat-track desktop-grid-4">
+            {categories.map((c) => (
+              <div key={c.id} className="cat-card swipe-item">
+                <img src={c.image} alt={c.name} />
+                <div className="cat-label"><span>{c.name}</span></div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════ 3. BEST SELLERS ═══════════════ */}
+      <section className="sect sect-sand" id="produtos">
+        <div className="ctnr">
+          <div className="sect-head">
+            <h2>Mais Vendidos</h2>
+            <Link to="/#produtos" className="see-more">Ver Coleção <span className="sm-arrow"><ChevronRight size={14} /></span></Link>
+          </div>
+          <div className="swipe-track bs-track desktop-grid-4">
+            {bestSellers.map(p => <ProductCard key={p.id} product={p} addToCart={addToCart} />)}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════ 4. INSTAGRAM REELS ═══════════════ */}
+      <section className="sect">
+        <div className="ctnr">
+          <div className="sect-head">
+            <h2>Matú no Instagram</h2>
+            <p className="sect-sub">Acompanhe nossa rotina botânica e dicas de autocuidado.</p>
+          </div>
+          <div className="slider-wrapper">
+            <button className="slider-nav prev" onClick={() => swipeScroll('reels-track', 'left')}><ChevronLeft size={22} /></button>
+            <div className="swipe-track reels-track hide-scrollbar">
+              {instagramReels.map(r => (
+                <div key={r.id} className="reel-card swipe-item" onClick={() => window.open('https://instagram.com/matu.cosmeticos', '_blank')}>
+                  <img src={r.poster} alt={r.product} className="reel-poster" />
+                  <div className="reel-overlay">
+                    <div className="reel-product-pill">
+                      <img src="/images/product_face_wash.png" alt="" className="reel-thumb" />
+                      <div>
+                        <span className="reel-pname">{r.product}</span>
+                        <span className="reel-pprice"><s>{r.oldPrice}</s> {r.price}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <button className="slider-nav next" onClick={() => swipeScroll('reels-track', 'right')}><ChevronRight size={22} /></button>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════ 5. PARALLAX BANNER (DUAL SYSTEM) ═══════════════ */}
+      <section className="parallax-banner-section">
+        {/* Desktop Image */}
+        <img src="https://images.unsplash.com/photo-1556228578-0d85b1a4d571?q=80&w=1920&h=800&fit=crop" alt="Matú Natureza" className="par-img-desktop" />
+        {/* Mobile Image */}
+        <img src="https://images.unsplash.com/photo-1556228578-0d85b1a4d571?q=80&w=800&h=1000&fit=crop" alt="Matú Natureza Mobile" className="par-img-mobile" />
+        <div className="par-overlay" />
+        <div className="par-content">
+          <h2>Sua verdadeira beleza desperta quando você se reconecta à natureza.</h2>
+          <p>Rituais que respeitam o seu tempo e o meio ambiente.</p>
+        </div>
+      </section>
+
+      {/* ═══════════════ 6. NEW ARRIVALS ═══════════════ */}
+      <section className="sect">
+        <div className="ctnr">
+          <div className="sect-head">
+            <h2>Nossas Novidades</h2>
+            <Link to="/#produtos" className="see-more">Ver Mais <span className="sm-arrow"><ChevronRight size={14} /></span></Link>
+          </div>
+          <div className="swipe-track na-track desktop-grid-4">
+            {newArrivals.map(p => <ProductCard key={p.id} product={p} addToCart={addToCart} />)}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════ 7. TESTIMONIALS ═══════════════ */}
+      <section className="sect sect-sand">
+        <div className="ctnr">
+          <div className="sect-head"><h2>Relatos de Experiência</h2><p className="sect-sub">O que as pessoas estão sentindo com a Matú.</p></div>
+          <div className="slider-wrapper">
+            <button className="slider-nav prev" onClick={prevT}><ChevronLeft size={22} /></button>
+            <div className="swipe-track test-track desktop-grid-3">
+              {[0, 1, 2].map(offset => {
+                const idx = (tSlide + offset) % testimonials.length;
+                const t = testimonials[idx];
+                return (
+                  <div key={`${t.id}-${offset}`} className={`test-card swipe-item ${offset > 0 ? 'hide-mobile' : ''}`}>
+                    <div className="test-top">
+                      <img src={t.image} alt={t.name} className="test-avatar" />
+                      <div className="test-stars">{[...Array(t.rating)].map((_, i) => <Star key={i} size={14} fill="var(--color-primary)" stroke="none" />)}</div>
+                    </div>
+                    <p className="test-text">"{t.text}"</p>
+                    <div className="test-author">
+                      <span className="test-name">{t.name}</span>
+                      <span className="test-role">Cliente Verificada</span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+            <button className="slider-nav next" onClick={nextT}><ChevronRight size={22} /></button>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════ 8. FAQ ═══════════════ */}
+      <section className="sect">
+        <div className="ctnr">
+          <div className="faq-layout">
+            <div className="faq-left">
+              <span className="tag-label">Dúvidas</span>
+              <h2>FAQ</h2>
+              <p>Encontre aqui as respostas para as dúvidas mais comuns sobre a Matú.</p>
+              <div className="faq-cta-box">
+                <p><strong>Não encontrou sua resposta?</strong></p>
+                <span className="faq-resp">Tempo médio de resposta: 24h</span>
+                <a href="#contato" className="btn btn-primary">Entre em Contato</a>
+              </div>
+            </div>
+            <div className="faq-right">
+              {faqData.map((item, i) => (
+                <details key={i} className="faq-item">
+                  <summary>{item.q}<ArrowRight className="faq-arrow" size={16} /></summary>
+                  <div className="faq-answer"><p>{item.a}</p></div>
+                </details>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════ 9. BENEFITS ═══════════════ */}
+      <section className="sect sect-sand" style={{ paddingBottom: '7rem' }}>
+        <div className="ctnr">
+          <div className="sect-head center"><h2>Por que escolher a Matú?</h2></div>
+          {/* Swiping track for Benefits as well */}
+          <div className="swipe-track ben-track desktop-grid-4">
+            {benefitsData.map((b, i) => (
+              <div key={i} className="ben-card swipe-item">
+                <div className="ben-icon">{b.icon}</div>
+                <h3>{b.title}</h3>
+                <p>{b.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ─── STYLES ─── */}
+      <style>{`
+/* ═══════ FOUNDATION ═══════ */
+.home-root { width: 100%; overflow-x: hidden; }
+.sect { padding: 5rem 0; }
+.sect-sand { background: #f9fafb; } /* F9FAFB per spec instead of beige */
+.ctnr { max-width: var(--max-width, 1400px); margin: 0 auto; padding: 0 4%; }
+.sect-head { margin-bottom: 3rem; }
+.sect-head h2 { font-size: 2.2rem; font-weight: 800; color: #16A34A; }
+.sect-head.center { text-align: center; }
+.sect-sub { color: #4B5563; max-width: 550px; font-size: 1rem; margin-top: 0.5rem; }
+.tag-label { display: inline-block; font-size: .75rem; font-weight: 800; text-transform: uppercase; letter-spacing: .2em; color: #16A34A; margin-bottom: .8rem; }
+.sect-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 1rem; }
+.see-more { display: flex; align-items: center; gap: .5rem; font-weight: 600; font-size: .9rem; color: #4B5563; text-decoration: none; }
+.sm-arrow { width: 24px; height: 24px; border-radius: 50%; background: #16A34A; color: #fff; display: flex; align-items: center; justify-content: center; }
+
+/* ═══════ 1. HERO (DUAL BANNER) ═══════ */
+.hero-banner-section { position: relative; width: 100%; overflow: hidden; }
+.hero-slide { position: absolute; inset: 0; opacity: 0; transition: opacity 1.2s ease; z-index: 1; }
+.hero-slide.active { opacity: 1; z-index: 2; position: relative; }
+/* Desktop Banner - aspect-[21/9] */
+.hero-img-desktop { display: block; width: 100%; height: auto; aspect-ratio: 21/9; object-fit: cover; object-position: center; }
+/* Mobile Banner - aspect-[4/5] */
+.hero-img-mobile { display: none; width: 100%; height: auto; aspect-ratio: 4/5; object-fit: cover; object-position: center; }
+.hero-dots { position: absolute; bottom: 25px; left: 50%; transform: translateX(-50%); display: flex; gap: 10px; z-index: 10; }
+.hero-dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,0.4); border: none; cursor: pointer; transition: all .3s; }
+.hero-dot.active { width: 32px; border-radius: 5px; background: #fff; }
+
+/* ═══════ 2. CATEGORY HIGHLIGHTS ═══════ */
+.cat-card { position: relative; border-radius: 12px; overflow: hidden; cursor: pointer; aspect-ratio: 4/5; }
+.cat-card img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s ease; }
+.cat-card:hover img { transform: scale(1.05); }
+.cat-label { position: absolute; inset: 0; background: rgba(0,0,0,0.15); display: flex; align-items: center; justify-content: center; }
+.cat-label span { color: #fff; font-weight: 800; font-size: 1.5rem; text-shadow: 0 4px 10px rgba(0,0,0,0.4); text-transform: uppercase; }
+
+/* ═══════ PRODUCT CARD ═══════ */
+.m-product-card { background: #fff; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; border: 1px solid #E5E7EB; transition: transform .3s ease; }
+.m-product-card:hover { transform: translateY(-4px); box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
+.m-product-img { position: relative; aspect-ratio: 1/1.15; overflow: hidden; background: #fafafa; }
+.m-product-img img { width: 100%; height: 100%; object-fit: cover; }
+.m-badge { position: absolute; top: 10px; left: 10px; background: #16A34A; color: #fff; padding: 4px 10px; border-radius: 20px; font-size: .7rem; font-weight: 700; z-index: 3; }
+.m-badge-discount { left: auto; right: 10px; background: #e11d48; }
+.m-product-info { padding: 1.2rem; display: flex; flex-direction: column; flex: 1; text-align: center; }
+.m-product-info h3 { font-size: .95rem; color: #111827; margin-bottom: .6rem; min-height: 2.8em; }
+.m-price-block { display: flex; flex-direction: column; margin-bottom: 1rem; }
+.m-old-price { text-decoration: line-through; color: #9CA3AF; font-size: .8rem; }
+.m-price { font-size: 1.2rem; font-weight: 800; color: #16A34A; }
+.m-installments { font-size: .75rem; color: #6B7280; }
+.m-btn-buy { width: 100%; background: #16A34A; color: #fff; border: none; padding: .8rem; border-radius: 50px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; cursor: pointer; transition: background .2s; }
+.m-btn-buy:hover { background: #15803d; }
+
+/* ═══════ MOBILE-FIRST SWIPE SYSTEM ═══════ */
+.swipe-track {
+  display: flex !important;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none; /* Firefox */
+  width: 100%;
+  gap: 1.5rem;
+}
+.swipe-track::-webkit-scrollbar { display: none; } /* Chrome/Safari */
+.swipe-item {
+  scroll-snap-align: center;
+  flex-shrink: 0;
+  width: 80vw; /* Default mobile sizing */
+}
+/* For smaller viewports */
+@media(min-width: 480px) {
+  .swipe-item { width: 300px; }
+}
+/* Desktop Grid overrides swipe */
+@media(min-width: 868px) {
+  .swipe-track.desktop-grid-4 {
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr);
+    overflow-x: visible;
+  }
+  .swipe-track.desktop-grid-3 {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr);
+    overflow-x: visible;
+  }
+  /* Category 4 columns on desktop */
+  .desktop-grid-4 .swipe-item, .desktop-grid-3 .swipe-item { width: 100%; }
+}
+
+/* ═══════ 4. INSTAGRAM REELS ═══════ */
+.slider-wrapper { position: relative; display: flex; align-items: center; }
+.reel-card { aspect-ratio: 9/16; border-radius: 12px; overflow: hidden; position: relative; cursor: pointer; }
+.reel-poster { width: 100%; height: 100%; object-fit: cover; }
+.reel-overlay { position: absolute; bottom: 0; left: 0; right: 0; padding: .8rem; background: linear-gradient(transparent, rgba(0,0,0,.7)); }
+.reel-product-pill { display: flex; align-items: center; gap: .5rem; background: rgba(255,255,255,.95); border-radius: 8px; padding: .5rem; }
+.reel-thumb { width: 35px; height: 35px; object-fit: cover; border-radius: 4px; flex-shrink: 0; }
+.reel-pname { display: block; font-size: .75rem; font-weight: 800; color: #111; }
+.reel-pprice { font-size: .7rem; color: #555; }
+.slider-nav { position: absolute; top: 50%; transform: translateY(-50%); width: 44px; height: 44px; border-radius: 50%; background: #fff; color: #16A34A; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(0,0,0,.1); z-index: 10; border: 1px solid #E5E7EB; cursor: pointer; transition: all .2s; }
+.slider-nav:hover { background: #16A34A; color: #fff; }
+.slider-nav.prev { left: -22px; }
+.slider-nav.next { right: -22px; }
+@media(max-width: 868px) { .slider-nav { display: none; } } /* Hide desktop nav on mobile swipe */
+
+/* ═══════ 5. PARALLAX (DUAL BANNER) ═══════ */
+.parallax-banner-section { position: relative; width: 100%; overflow: hidden; }
+/* Desktop Banner - aspect-[21/9] */
+.par-img-desktop { display: block; width: 100%; height: auto; aspect-ratio: 21/9; object-fit: cover; object-position: center; }
+/* Mobile Banner - aspect-[4/5] */
+.par-img-mobile { display: none; width: 100%; height: auto; aspect-ratio: 4/5; object-fit: cover; object-position: center; }
+
+.par-overlay { position: absolute; inset: 0; background: rgba(0, 30, 15, 0.5); }
+.par-content { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 2rem; z-index: 2; }
+.par-content h2 { color: #fff; font-size: 2.8rem; max-width: 850px; line-height: 1.15; font-weight: 800; }
+.par-content p { color: rgba(255,255,255,.9); font-size: 1.2rem; margin-top: 1rem; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+
+/* ═══════ 7. TESTIMONIALS ═══════ */
+.test-card { background: #fff; padding: 2rem; border-radius: 16px; border: 1px solid #E5E7EB; display: flex; flex-direction: column; gap: 1rem; }
+.test-top { display: flex; justify-content: space-between; align-items: center; }
+.test-avatar { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; border: 2px solid #F3F4F6; }
+.test-stars { display: flex; gap: 2px; color: #16A34A; }
+.test-text { font-size: .95rem; line-height: 1.6; color: #374151; font-style: italic; flex: 1; }
+.test-author { display: flex; flex-direction: column; }
+.test-name { font-weight: 800; color: #16A34A; font-size: .9rem; }
+.test-role { font-size: .75rem; color: #9CA3AF; }
+
+/* ═══════ 8. FAQ ═══════ */
+.faq-layout { display: grid; grid-template-columns: 1fr 1.2fr; gap: 4rem; align-items: start; }
+.faq-left h2 { font-size: 2.8rem; color: #16A34A; margin-bottom: 1rem; }
+.faq-left p { color: #4B5563; line-height: 1.7; margin-bottom: 2rem; }
+.faq-cta-box { background: #F9FAFB; padding: 2rem; border-radius: 12px; border: 1px solid #E5E7EB; }
+.faq-cta-box p { color: #16A34A; margin-bottom: 0.5rem; }
+.faq-resp { font-size: .8rem; color: #6B7280; display: block; margin-bottom: 1rem; }
+.faq-right { background: #fff;border-radius: 20px; }
+.faq-item { border-bottom: 1px solid #E5E7EB; }
+.faq-item:last-child { border-bottom: none; }
+.faq-item summary { padding: 1.5rem 0; list-style: none; display: flex; justify-content: space-between; align-items: center; font-size: 1.05rem; font-weight: 600; cursor: pointer; color: #111827; }
+.faq-item summary::-webkit-details-marker { display: none; }
+.faq-item[open] summary { color: #16A34A; padding-bottom: 1rem; }
+.faq-arrow { transition: transform .3s; opacity: .5; }
+.faq-item[open] .faq-arrow { transform: rotate(90deg); opacity: 1; color: #16A34A; }
+.faq-answer { padding-bottom: 1.5rem; color: #4B5563; line-height: 1.6; font-size: .95rem; }
+
+/* ═══════ 9. BENEFITS ═══════ */
+.ben-card { text-align: center; padding: 1.5rem; background: #fff; border-radius: 12px; border: 1px solid #E5E7EB; }
+.ben-icon { width: 64px; height: 64px; border-radius: 50%; background: #F0FDF4; color: #16A34A; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.2rem; }
+.ben-card:hover .ben-icon { transform: scale(1.1) rotate(5deg); transition: transform 0.3s; }
+.ben-card h3 { font-size: 1.1rem; color: #111827; margin-bottom: .5rem; }
+.ben-card p { font-size: .85rem; color: #6B7280; }
+
+/* ═══════ MEDIA QUERIES ═══════ */
+@media(max-width: 768px) {
+  /* Dual Banner Swapping */
+  .hero-img-desktop, .par-img-desktop { display: none; }
+  .hero-img-mobile, .par-img-mobile { display: block; }
+  
+  .par-content h2 { font-size: 1.8rem; }
+  .faq-layout { grid-template-columns: 1fr; gap: 2rem; }
+  .hide-mobile { display: none !important; }
+}
+      `}</style>
+    </div>
+  );
+}
