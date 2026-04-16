@@ -385,8 +385,8 @@ export default function Home({ addToCart }) {
 /* Mobile Banner - aspect-[4/5] */
 .hero-img-mobile { display: none; width: 100%; height: auto; aspect-ratio: 4/5; object-fit: cover; object-position: center; }
 .hero-dots { position: absolute; bottom: 25px; left: 50%; transform: translateX(-50%); display: flex; gap: 10px; z-index: 10; }
-.hero-dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,0.5); border: none; cursor: pointer; transition: all .3s; }
-.hero-dot.active { width: 32px; border-radius: 6px; background: #fff; }
+.hero-dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(45, 90, 68, 0.3); border: none; cursor: pointer; transition: all .3s; }
+.hero-dot.active { width: 32px; border-radius: 6px; background: #2D5A44; }
 
 /* ═══════ 4. CAPITÃ AQUA BENTO GRID ═══════ */
 .bento-grid {
@@ -674,7 +674,7 @@ export default function Home({ addToCart }) {
 /* Carousel Dots Mobile */
 .hide-desktop { display: none; }
 .carousel-dots-mobile { display: flex; justify-content: center; gap: 8px; margin-top: 2rem; }
-.c-dot { width: 8px; height: 8px; border-radius: 50%; background: #E5E7EB; transition: all 0.3s ease; }
+.c-dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(45, 90, 68, 0.2); transition: all 0.3s ease; }
 .c-dot.active { width: 24px; border-radius: 4px; background: #2D5A44; }
 
 /* ═══════ MEDIA QUERIES ═══════ */
