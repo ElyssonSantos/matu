@@ -143,7 +143,7 @@ export default function Home({ addToCart }) {
   const swipeScroll = (className, dir) => {
     const container = document.querySelector(`.${className}`);
     if (container) {
-      const offset = className === 'reels-track' ? 340 : 320;
+      const offset = className === 'reels-track' ? 260 : 320;
       container.scrollBy({ left: dir === 'left' ? -offset : offset, behavior: 'smooth' });
     }
   };
@@ -505,20 +505,20 @@ export default function Home({ addToCart }) {
 .insta-card { 
   position: relative; 
   flex-shrink: 0; 
-  width: 320px; 
+  width: 240px; 
   aspect-ratio: 9/16; 
   border-radius: 20px; 
   overflow: hidden; 
   cursor: pointer; 
-  transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
   background: #000;
   box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-  opacity: 0.6;
-  transform: scale(0.9);
+  opacity: 0.5;
+  transform: scale(0.85);
 }
 
 .insta-card.is-centered { 
-  transform: scale(1.15); 
+  transform: scale(1.1); 
   z-index: 5; 
   opacity: 1;
   box-shadow: 0 20px 50px rgba(0,0,0,0.2);
@@ -535,33 +535,23 @@ export default function Home({ addToCart }) {
 
 .insta-product-mini { 
   display: flex; 
-  align-items: center; 
-  gap: 0.8rem; 
-  background: rgba(0,0,0,0.6); 
-  backdrop-filter: blur(5px);
-  border-radius: 12px; 
-  padding: 0.6rem; 
-  border: 1px solid rgba(255,255,255,0.1);
+  flex-direction: column;
+  gap: 0.4rem; 
+  background: none; 
+  backdrop-filter: none;
+  border-radius: 0; 
+  padding: 0; 
+  border: none;
 }
 
-.mini-thumb-box { 
-  width: 45px; 
-  height: 45px; 
-  background: #fff; 
-  border-radius: 8px; 
-  display: flex; 
-  align-items: center; 
-  justify-content: center; 
-  overflow: hidden; 
-  flex-shrink: 0;
-}
+.mini-thumb-box { display: none; }
 .mini-thumb-box img { width: 100%; height: 100%; object-fit: contain; padding: 2px; }
 
-.mini-info { display: flex; flex-direction: column; gap: 2px; }
-.mini-name { color: #fff; font-size: 0.75rem; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 160px; }
-.mini-prices { display: flex; gap: 8px; align-items: center; }
-.mini-old { color: rgba(255,255,255,0.5); font-size: 0.7rem; text-decoration: line-through; }
-.mini-new { color: #2D5A44; font-size: 0.8rem; font-weight: 900; }
+.mini-info { display: flex; flex-direction: column; gap: 4px; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
+.mini-name { color: #fff; font-size: 0.85rem; font-weight: 700; white-space: nowrap; }
+.mini-prices { display: flex; gap: 10px; align-items: center; }
+.mini-old { color: rgba(255,255,255,0.7); font-size: 0.75rem; text-decoration: line-through; }
+.mini-new { color: #2D5A44; font-size: 0.9rem; font-weight: 900; }
 
 .insta-nav {
   position: absolute;
