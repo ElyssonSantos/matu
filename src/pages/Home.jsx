@@ -6,18 +6,18 @@ import { ArrowRight, Star, ChevronLeft, ChevronRight, Leaf, Rabbit, Recycle, Dro
 const sliderContent = [
   {
     id: 1,
-    image: '/images/slider_1.png',
-    mobileImage: '/images/hero_bg_1775930365612.png'
+    image: 'https://images.unsplash.com/photo-1612817288484-6f916006741a?q=80&w=2560&auto=format&fit=crop',
+    mobileImage: 'https://images.unsplash.com/photo-1612817288484-6f916006741a?q=80&w=1080&auto=format&fit=crop'
   },
   {
     id: 2,
-    image: '/images/slider_2.png',
-    mobileImage: '/images/slider_2.png'
+    image: 'https://images.unsplash.com/photo-1540555700478-4be289fbecee?q=80&w=2560&auto=format&fit=crop',
+    mobileImage: 'https://images.unsplash.com/photo-1540555700478-4be289fbecee?q=80&w=1080&auto=format&fit=crop'
   },
   {
     id: 3,
-    image: '/images/slider_3.png',
-    mobileImage: '/images/slider_3.png'
+    image: 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=2560&auto=format&fit=crop',
+    mobileImage: 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=1080&auto=format&fit=crop'
   }
 ];
 
@@ -148,8 +148,8 @@ export default function Home({ addToCart }) {
     }
   };
 
-  const nextT = () => setTSlide(p => (p + 1) % Math.ceil(testimonials.length / 3));
-  const prevT = () => setTSlide(p => (p - 1 + Math.ceil(testimonials.length / 3)) % Math.ceil(testimonials.length / 3));
+  const nextT = () => setTSlide(p => (p + 1) % testimonials.length);
+  const prevT = () => setTSlide(p => (p - 1 + testimonials.length) % testimonials.length);
 
   return (
     <div className="home-root">
@@ -282,46 +282,27 @@ export default function Home({ addToCart }) {
             <h2>Depoimentos</h2>
           </div>
           <div className="testimonials-slider-container">
-            <div className="t-track" style={{ transform: `translateX(-${tSlide * 100}%)` }}>
-              <div className="t-group">
-                {testimonials.slice(0, 3).map(t => (
-                  <div key={t.id} className="test-card-new">
-                    <div className="test-header">
-                      <img src={t.image} alt={t.name} className="test-avatar" />
-                      <div className="test-meta">
-                        <div className="test-stars">
-                          {[...Array(t.rating)].map((_, i) => <Star key={i} size={14} fill="#2D5A44" stroke="none" />)}
-                        </div>
-                        <span className="test-name">{t.name.split(' ')[0]}</span>
+            <div className="t-track" style={{ transform: `translateX(-${tSlide * (100 / (window.innerWidth < 768 ? 1 : 1.5))}%)` }}>
+              {testimonials.map(t => (
+                <div key={t.id} className="test-card-new">
+                  <div className="test-header">
+                    <img src={t.image} alt={t.name} className="test-avatar" />
+                    <div className="test-meta">
+                      <div className="test-stars">
+                        {[...Array(t.rating)].map((_, i) => <Star key={i} size={14} fill="#2D5A44" stroke="none" />)}
                       </div>
+                      <span className="test-name">{t.name.split(' ')[0]}</span>
                     </div>
-                    <h4 className="test-highlight">{t.highlight}</h4>
-                    <p className="test-text">{t.text}</p>
                   </div>
-                ))}
-              </div>
-              <div className="t-group">
-                {testimonials.slice(3, 6).map(t => (
-                  <div key={t.id} className="test-card-new">
-                    <div className="test-header">
-                      <img src={t.image} alt={t.name} className="test-avatar" />
-                      <div className="test-meta">
-                        <div className="test-stars">
-                          {[...Array(t.rating)].map((_, i) => <Star key={i} size={14} fill="#2D5A44" stroke="none" />)}
-                        </div>
-                        <span className="test-name">{t.name.split(' ')[0]}</span>
-                      </div>
-                    </div>
-                    <h4 className="test-highlight">{t.highlight}</h4>
-                    <p className="test-text">{t.text}</p>
-                  </div>
-                ))}
-              </div>
+                  <h4 className="test-highlight">{t.highlight}</h4>
+                  <p className="test-text">{t.text}</p>
+                </div>
+              ))}
             </div>
             
             <div className="t-controls-row">
               <div className="t-progress-bar">
-                <div className="t-progress-fill" style={{ width: tSlide === 0 ? '50%' : '100%' }} />
+                <div className="t-progress-fill" style={{ width: `${((tSlide + 1) / testimonials.length) * 100}%` }} />
               </div>
               <div className="t-nav-btns">
                 <button className="t-nav-btn" onClick={prevT}><ChevronLeft size={20} /></button>
@@ -399,8 +380,8 @@ export default function Home({ addToCart }) {
 .hero-banner-section { position: relative; width: 100%; overflow: hidden; }
 .hero-slide { position: absolute; inset: 0; opacity: 0; transition: opacity 1.2s ease; z-index: 1; }
 .hero-slide.active { opacity: 1; z-index: 2; position: relative; }
-/* Desktop Banner - aspect-[21/9] */
-.hero-img-desktop { display: block; width: 100%; height: auto; aspect-ratio: 21/9; object-fit: cover; object-position: center; }
+/* Desktop Banner - aspect-[32/11] */
+.hero-img-desktop { display: block; width: 100%; height: auto; aspect-ratio: 32/11; object-fit: cover; object-position: center; }
 /* Mobile Banner - aspect-[4/5] */
 .hero-img-mobile { display: none; width: 100%; height: auto; aspect-ratio: 4/5; object-fit: cover; object-position: center; }
 .hero-dots { position: absolute; bottom: 25px; left: 50%; transform: translateX(-50%); display: flex; gap: 10px; z-index: 10; }
@@ -611,15 +592,24 @@ export default function Home({ addToCart }) {
 }
 
 /* ═══════ 5. PARALLAX ═══════ */
-.parallax-banner-section { position: relative; width: 100%; overflow: hidden; }
-.par-img-desktop { display: block; width: 100%; height: auto; aspect-ratio: 21/9; object-fit: cover; }
-.par-img-mobile { display: none; width: 100%; height: auto; aspect-ratio: 4/5; object-fit: cover; }
+.parallax-banner-section { position: relative; width: 100%; height: 400px; overflow: hidden; }
+.par-img-desktop { display: block; width: 100%; height: 100%; object-fit: cover; }
+.par-img-mobile { display: none; width: 100%; height: 100%; object-fit: cover; }
 
 /* ═══════ 7. TESTIMONIALS (NEW STYLE) ═══════ */
-.testimonials-slider-container { position: relative; overflow: hidden; margin-top: 2rem; }
-.t-track { display: flex; transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1); width: 100%; }
-.t-group { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; min-width: 100%; flex-shrink: 0; padding: 10px 0; }
-.test-card-new { background: #F3F4F6; padding: 2.5rem; border-radius: 12px; display: flex; flex-direction: column; text-align: left; transition: transform 0.3s ease; }
+.testimonials-slider-container { position: relative; overflow: hidden; margin-top: 2rem; padding: 20px 0; }
+.t-track { display: flex; transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1); width: 100%; gap: 30px; }
+.test-card-new { 
+  background: #F3F4F6; 
+  padding: 2.5rem; 
+  border-radius: 12px; 
+  display: flex; 
+  flex-direction: column; 
+  text-align: left; 
+  transition: all 0.3s ease; 
+  min-width: 60%;
+  flex-shrink: 0;
+}
 .test-card-new:hover { transform: translateY(-5px); }
 .test-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; }
 .test-avatar { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; }
