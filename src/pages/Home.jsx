@@ -140,23 +140,7 @@ export default function Home({ addToCart }) {
         </div>
       </section>
 
-      {/* ═══════════════ 2. CATEGORY HIGHLIGHTS (EXACT REFERENCE STRICT) ═══════════════ */}
-      <section className="sect" style={{ paddingBottom: '0' }}>
-        <div className="ctnr-full">
-          <div className="category-grid">
-            {categories.map((c) => (
-              <div key={c.id} className="cat-box group">
-                <img src={c.image} alt={c.name} />
-                <div className="cat-overlay">
-                  <span>{c.name}</span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ═══════════════ 3. BEST SELLERS ═══════════════ */}
+      {/* ═══════════════ 2. BEST SELLERS ═══════════════ */}
       <section className="sect" id="produtos">
         <div className="ctnr">
           <div className="sect-head">
@@ -169,7 +153,7 @@ export default function Home({ addToCart }) {
         </div>
       </section>
 
-      {/* ═══════════════ 4. INSTAGRAM REELS ═══════════════ */}
+      {/* ═══════════════ 3. INSTAGRAM REELS ═══════════════ */}
       <section className="sect sect-bg">
         <div className="ctnr">
           <div className="sect-head">
@@ -195,6 +179,39 @@ export default function Home({ addToCart }) {
               ))}
             </div>
             <button className="slider-nav next" onClick={() => swipeScroll('reels-track', 'right')}><ChevronRight size={22} /></button>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════ 4. CAPITÃ AQUA HIGHLIGHT (BENTO GRID) ═══════════════ */}
+      <section className="sect">
+        <div className="ctnr-full">
+          <div className="bento-grid">
+            <div className="bento-item item-large">
+              <img src="https://images.unsplash.com/photo-1556228578-0d85b1a4d571?q=80&w=1200&fit=crop" alt="Capitã Aqua" />
+              <div className="bento-content">
+                <h3>Capitã Aqua</h3>
+                <p>MÁSCARA HIDRATANTE PROFISSIONAL</p>
+              </div>
+            </div>
+            <div className="bento-item item-small">
+              <img src="https://images.unsplash.com/photo-1599305090598-fe179d501227?q=80&w=800&fit=crop" alt="Capitã Nutre" />
+              <div className="bento-content">
+                <h3>Capitã Nutre</h3>
+              </div>
+            </div>
+            <div className="bento-item item-small">
+              <img src="https://images.unsplash.com/photo-1615397323602-5eef6317bc2d?q=80&w=800&fit=crop" alt="Capitã Force" />
+              <div className="bento-content">
+                <h3>Capitã Force</h3>
+              </div>
+            </div>
+            <div className="bento-item item-medium">
+              <img src="https://images.unsplash.com/photo-1570194065650-d6faeb4ae288?q=80&w=1000&fit=crop" alt="Finalizadores" />
+              <div className="bento-content">
+                <h3>Finalizadores</h3>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -232,23 +249,19 @@ export default function Home({ addToCart }) {
           <div className="slider-wrapper">
             <button className="slider-nav prev" onClick={prevT}><ChevronLeft size={22} /></button>
             <div className="swipe-track test-track desktop-grid-3">
-              {[0, 1, 2].map(offset => {
-                const idx = (tSlide + offset) % testimonials.length;
-                const t = testimonials[idx];
-                return (
-                  <div key={`${t.id}-${offset}`} className={`test-card swipe-item ${offset > 0 ? 'hide-mobile' : ''}`}>
-                    <div className="test-top">
-                      <img src={t.image} alt={t.name} className="test-avatar" />
-                      <div className="test-stars">{[...Array(t.rating)].map((_, i) => <Star key={i} size={14} fill="#16A34A" stroke="none" />)}</div>
-                    </div>
-                    <p className="test-text">"{t.text}"</p>
-                    <div className="test-author">
-                      <span className="test-name">{t.name}</span>
-                      <span className="test-role">Cliente Verificada</span>
-                    </div>
+              {testimonials.map((t, idx) => (
+                <div key={t.id} className="test-card swipe-item">
+                  <div className="test-top">
+                    <img src={t.image} alt={t.name} className="test-avatar" />
+                    <div className="test-stars">{[...Array(t.rating)].map((_, i) => <Star key={i} size={14} fill="#16A34A" stroke="none" />)}</div>
                   </div>
-                );
-              })}
+                  <p className="test-text">"{t.text}"</p>
+                  <div className="test-author">
+                    <span className="test-name">{t.name}</span>
+                    <span className="test-role">Cliente Verificada</span>
+                  </div>
+                </div>
+              ))}
             </div>
             <button className="slider-nav next" onClick={nextT}><ChevronRight size={22} /></button>
           </div>
@@ -281,18 +294,22 @@ export default function Home({ addToCart }) {
         </div>
       </section>
 
-      {/* ═══════════════ 9. BENEFITS ═══════════════ */}
+      {/* ═══════════════ 9. BENEFITS (CAROUSEL MOBILE) ═══════════════ */}
       <section className="sect sect-bg" style={{ paddingBottom: '7rem' }}>
         <div className="ctnr">
           <div className="sect-head center"><h2>Por que escolher a Matú?</h2></div>
-          {/* Swiping track for Benefits as well */}
-          <div className="swipe-track ben-track desktop-grid-4">
+          <div className="swipe-track ben-track desktop-grid-4 ben-mobile-carousel">
             {benefitsData.map((b, i) => (
               <div key={i} className="ben-card swipe-item">
                 <div className="ben-icon">{b.icon}</div>
                 <h3>{b.title}</h3>
                 <p>{b.desc}</p>
               </div>
+            ))}
+          </div>
+          <div className="carousel-dots-mobile hide-desktop">
+            {benefitsData.map((_, i) => (
+              <span key={i} className={`c-dot ${i === 0 ? 'active' : ''}`} />
             ))}
           </div>
         </div>
@@ -328,58 +345,50 @@ export default function Home({ addToCart }) {
 .hero-dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,0.5); border: none; cursor: pointer; transition: all .3s; }
 .hero-dot.active { width: 32px; border-radius: 6px; background: #fff; }
 
-/* ═══════ 2. CATEGORY HIGHLIGHTS (EXACT SPECIFICATION) ═══════ */
-.category-grid {
+/* ═══════ 4. CAPITÃ AQUA BENTO GRID ═══════ */
+.bento-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: 1fr;
+  grid-auto-rows: 250px;
   gap: 16px;
-  padding: 3rem 0 1rem 0;
+  padding: 2rem 0;
 }
 @media(min-width: 768px) {
-  .category-grid {
+  .bento-grid {
     grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(2, 300px);
     gap: 24px;
-    padding: 4rem 0 2rem 0;
   }
+  .item-large { grid-column: 1 / 3; grid-row: 1 / 3; }
+  .item-small { grid-column: 3 / 4; grid-row: 1 / 2; }
+  .item-small:nth-child(3) { grid-column: 4 / 5; grid-row: 1 / 2; }
+  .item-medium { grid-column: 3 / 5; grid-row: 2 / 3; }
 }
-.cat-box {
+.bento-item {
   position: relative;
   overflow: hidden;
-  border-radius: 12px;
-  cursor: pointer;
-  aspect-ratio: 4/5;
-  background-color: #F9FAFB;
+  border-radius: 24px;
+  background: #F9FAFB;
 }
-.cat-box img {
+.bento-item img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.5s ease;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
-.cat-box:hover img {
-  transform: scale(1.1);
-}
-.cat-overlay {
+.bento-item:hover img { transform: scale(1.05); }
+.bento-content {
   position: absolute;
   inset: 0;
-  background-color: rgba(0, 0, 0, 0.2);
+  background: linear-gradient(to top, rgba(0,0,0,0.7), transparent 60%);
   display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  z-index: 10;
-  padding: 1rem;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 2rem;
+  color: #fff;
 }
-.cat-overlay span {
-  color: #FFFFFF;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  font-size: 1rem;
-}
-@media(min-width: 768px) {
-  .cat-overlay span { font-size: 1.25rem; }
-}
+.bento-content h3 { font-size: 1.5rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; margin: 0; }
+.bento-content p { font-size: 0.85rem; font-weight: 600; opacity: 0.9; margin-top: 0.5rem; letter-spacing: 0.1em; }
 
 /* ═══════ PRODUCT CARD ═══════ */
 .m-product-card { background: #FFFFFF; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; border: 1px solid #E5E7EB; transition: transform .3s ease, box-shadow .3s ease; }
@@ -403,34 +412,22 @@ export default function Home({ addToCart }) {
   flex-wrap: nowrap;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
-  scrollbar-width: none; /* Firefox */
+  scrollbar-width: none;
   width: 100%;
   gap: 1.2rem;
   padding-bottom: 1rem;
 }
-.swipe-track::-webkit-scrollbar { display: none; } /* Chrome/Safari */
+.swipe-track::-webkit-scrollbar { display: none; }
 .swipe-item {
   scroll-snap-align: center;
   flex-shrink: 0;
-  width: 80vw; /* Default mobile sizing */
+  width: 80vw;
 }
-/* For smaller viewports */
-@media(min-width: 480px) {
-  .swipe-item { width: 300px; }
-}
-/* Desktop Grid overrides swipe */
+@media(min-width: 480px) { .swipe-item { width: 300px; } }
 @media(min-width: 868px) {
   .swipe-track { gap: 1.5rem; padding-bottom: 0; }
-  .swipe-track.desktop-grid-4 {
-    display: grid !important;
-    grid-template-columns: repeat(4, 1fr);
-    overflow-x: visible;
-  }
-  .swipe-track.desktop-grid-3 {
-    display: grid !important;
-    grid-template-columns: repeat(3, 1fr);
-    overflow-x: visible;
-  }
+  .swipe-track.desktop-grid-4 { display: grid !important; grid-template-columns: repeat(4, 1fr); overflow-x: visible; }
+  .swipe-track.desktop-grid-3 { display: grid !important; grid-template-columns: repeat(3, 1fr); overflow-x: visible; }
   .desktop-grid-4 .swipe-item, .desktop-grid-3 .swipe-item { width: 100%; }
 }
 
@@ -449,15 +446,12 @@ export default function Home({ addToCart }) {
 .slider-nav:hover { background: #16A34A; color: #FFFFFF; border-color: #16A34A; }
 .slider-nav.prev { left: -22px; }
 .slider-nav.next { right: -22px; }
-@media(max-width: 868px) { .slider-nav { display: none; } } /* Hide desktop nav on mobile swipe */
+@media(max-width: 868px) { .slider-nav { display: none; } }
 
-/* ═══════ 5. PARALLAX (DUAL BANNER) ═══════ */
+/* ═══════ 5. PARALLAX ═══════ */
 .parallax-banner-section { position: relative; width: 100%; overflow: hidden; }
-/* Desktop Banner - aspect-[21/9] */
-.par-img-desktop { display: block; width: 100%; height: auto; aspect-ratio: 21/9; object-fit: cover; object-position: center; }
-/* Mobile Banner - aspect-[4/5] */
-.par-img-mobile { display: none; width: 100%; height: auto; aspect-ratio: 4/5; object-fit: cover; object-position: center; }
-
+.par-img-desktop { display: block; width: 100%; height: auto; aspect-ratio: 21/9; object-fit: cover; }
+.par-img-mobile { display: none; width: 100%; height: auto; aspect-ratio: 4/5; object-fit: cover; }
 .par-overlay { position: absolute; inset: 0; background: rgba(0, 30, 20, 0.45); }
 .par-content { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 2rem; z-index: 2; }
 .par-content h2 { color: #FFFFFF; font-size: 2.8rem; max-width: 850px; line-height: 1.15; font-weight: 800; text-shadow: 0 2px 10px rgba(0,0,0,0.3); }
@@ -484,8 +478,6 @@ export default function Home({ addToCart }) {
 .faq-item { border-bottom: 1px solid #E5E7EB; }
 .faq-item:last-child { border-bottom: none; }
 .faq-item summary { padding: 1.5rem 0; list-style: none; display: flex; justify-content: space-between; align-items: center; font-size: 1.1rem; font-weight: 700; cursor: pointer; color: #1F2937; }
-.faq-item summary::-webkit-details-marker { display: none; }
-.faq-item[open] summary { color: #16A34A; padding-bottom: 1rem; }
 .faq-arrow { transition: transform .3s; opacity: .5; }
 .faq-item[open] .faq-arrow { transform: rotate(90deg); opacity: 1; color: #16A34A; }
 .faq-answer { padding-bottom: 1.5rem; color: #4B5563; line-height: 1.7; font-size: 1rem; }
@@ -497,15 +489,20 @@ export default function Home({ addToCart }) {
 .ben-card h3 { font-size: 1.15rem; color: #1F2937; margin-bottom: .8rem; font-weight: 800; }
 .ben-card p { font-size: .95rem; color: #6B7280; line-height: 1.5; }
 
+/* Carousel Dots Mobile */
+.hide-desktop { display: none; }
+.carousel-dots-mobile { display: flex; justify-content: center; gap: 8px; margin-top: 2rem; }
+.c-dot { width: 8px; height: 8px; border-radius: 50%; background: #E5E7EB; transition: all 0.3s ease; }
+.c-dot.active { width: 24px; border-radius: 4px; background: #16A34A; }
+
 /* ═══════ MEDIA QUERIES ═══════ */
 @media(max-width: 768px) {
-  /* Dual Banner Swapping */
   .hero-img-desktop, .par-img-desktop { display: none; }
   .hero-img-mobile, .par-img-mobile { display: block; }
-  
   .par-content h2 { font-size: 1.8rem; }
   .faq-layout { grid-template-columns: 1fr; gap: 2.5rem; }
   .hide-mobile { display: none !important; }
+  .hide-desktop { display: flex; }
 }
       `}</style>
     </div>
