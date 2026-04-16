@@ -4,20 +4,20 @@ import { ArrowRight, Star, ChevronLeft, ChevronRight, Leaf, Rabbit, Recycle, Dro
 
 /* ─── DATA ─── */
 const sliderContent = [
-  { 
-    id: 1, 
-    image: '/images/slider_1.png', 
-    mobileImage: '/images/hero_bg_1775930365612.png' 
+  {
+    id: 1,
+    image: '/images/slider_1.png',
+    mobileImage: '/images/hero_bg_1775930365612.png'
   },
-  { 
-    id: 2, 
-    image: '/images/slider_2.png', 
-    mobileImage: '/images/slider_2.png' 
+  {
+    id: 2,
+    image: '/images/slider_2.png',
+    mobileImage: '/images/slider_2.png'
   },
-  { 
-    id: 3, 
-    image: '/images/slider_3.png', 
-    mobileImage: '/images/slider_3.png' 
+  {
+    id: 3,
+    image: '/images/slider_3.png',
+    mobileImage: '/images/slider_3.png'
   }
 ];
 
@@ -322,7 +322,7 @@ export default function Home({ addToCart }) {
 .ctnr { max-width: 1300px; margin: 0 auto; padding: 0 4%; }
 .ctnr-full { max-width: 1400px; margin: 0 auto; padding: 0 4%; }
 .sect-head { margin-bottom: 2.5rem; }
-.sect-head h2 { font-size: 2.2rem; font-weight: 800; color: #2D5A44; }
+.sect-head h2 { font-size: 3.2rem; font-weight: 900; color: #000000; letter-spacing: -0.04em; line-height: 1.1; }
 .sect-head.center { text-align: center; justify-content: center; }
 .sect-sub { color: #1F2937; max-width: 550px; font-size: 1.05rem; margin-top: 0.5rem; }
 .tag-label { display: inline-block; font-size: .8rem; font-weight: 800; text-transform: uppercase; letter-spacing: .15em; color: #2D5A44; margin-bottom: 1rem; }
@@ -483,7 +483,7 @@ export default function Home({ addToCart }) {
 
 /* ═══════ 8. FAQ ═══════ */
 .faq-layout { display: grid; grid-template-columns: 1fr 1.2fr; gap: 4rem; align-items: start; }
-.faq-left h2 { font-size: 2.8rem; color: #2D5A44; margin-bottom: 1rem; }
+.faq-left h2 { font-size: 3.2rem; color: #000000; margin-bottom: 1rem; font-weight: 900; letter-spacing: -0.04em; }
 .faq-left p { color: #4B5563; line-height: 1.7; margin-bottom: 2.5rem; font-size: 1.05rem; }
 .faq-cta-box { background: #F9FAFB; padding: 2rem; border-radius: 16px; border: 1px solid #E5E7EB; }
 .faq-cta-box p strong { color: #1F2937; margin-bottom: 0.5rem; display: block; font-size: 1.1rem; }
