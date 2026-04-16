@@ -143,8 +143,11 @@ export default function Home({ addToCart }) {
   const swipeScroll = (className, dir) => {
     const container = document.querySelector(`.${className}`);
     if (container) {
-      const cardWidth = window.innerWidth < 768 ? (window.innerWidth / 3) : (window.innerWidth / 5);
-      container.scrollBy({ left: dir === 'left' ? -cardWidth : cardWidth, behavior: 'smooth' });
+      const card = container.querySelector('.rf-video-item');
+      if (card) {
+        const cardWidth = card.offsetWidth + 15; // Width + gap
+        container.scrollBy({ left: dir === 'left' ? -cardWidth : cardWidth, behavior: 'smooth' });
+      }
     }
   };
 
@@ -183,7 +186,7 @@ export default function Home({ addToCart }) {
       </section>
 
       <section className="sect sect-bg sect-instagram">
-        <div className="ctnr">
+        <div className="ctnr" style={{ position: 'relative' }}>
           <div className="sect-head">
             <h2>Matú no Instagram</h2>
             <p className="sect-sub" style={{ marginTop: '1.5rem' }}>Acompanhe nossa rotina botânica e dicas de autocuidado.</p>
@@ -215,6 +218,14 @@ export default function Home({ addToCart }) {
               </div>
             ))}
           </div>
+          
+          <button className="rf-nav-btn prev" onClick={() => swipeScroll('reelfy-scroll-container', 'left')}>
+            <svg viewBox="0 0 100 100"><path d="M 10,50 L 60,100 L 70,90 L 30,50 L 70,10 L 60,0 Z" fill="currentColor"></path></svg>
+          </button>
+          <button className="rf-nav-btn next" onClick={() => swipeScroll('reelfy-scroll-container', 'right')}>
+            <svg viewBox="0 0 100 100"><path d="M 10,50 L 60,100 L 70,90 L 30,50 L 70,10 L 60,0 Z" fill="currentColor" transform="translate(100, 100) rotate(180)"></path></svg>
+          </button>
+
           <div className="reelfy-dots">
             {instagramReels.map((_, idx) => (
               <span key={idx} className={`rf-dot ${centeredInsta === idx ? 'is-active' : ''}`}></span>
@@ -428,11 +439,35 @@ export default function Home({ addToCart }) {
 .rf-dot { width: 8px; height: 8px; border-radius: 50%; background: #ddd; transition: all 0.3s; }
 .rf-dot.is-active { background: #2D5A44; }
 
+.rf-nav-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  background: rgba(255,255,255,0.95);
+  border: none;
+  border-radius: 50%;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 20;
+  color: #111;
+  transition: all 0.3s;
+}
+.rf-nav-btn:hover { background: #2D5A44; color: #fff; transform: translateY(-50%) scale(1.1); }
+.rf-nav-btn svg { width: 14px; height: 14px; }
+.rf-nav-btn.prev { left: 20px; }
+.rf-nav-btn.next { right: 20px; }
+
 @media(max-width: 768px) {
   .hero-img-desktop, .par-img-desktop { display: none; }
   .hero-img-mobile, .par-img-mobile { display: block; }
-  .rf-video-item { width: calc(45% - 10px); }
+  .rf-video-item { width: calc(55% - 10px); }
   .reelfy-scroll-container { padding: 2rem 5%; }
+  .rf-nav-btn { display: none; }
   .faq-layout { grid-template-columns: 1fr; gap: 2.5rem; }
 }
 
