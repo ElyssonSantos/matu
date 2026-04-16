@@ -104,6 +104,35 @@ function ProductCard({ product, addToCart }) {
 export default function Home({ addToCart }) {
   const [activeSlide, setActiveSlide] = useState(0);
   const [tSlide, setTSlide] = useState(0);
+  const [centeredInsta, setCenteredInsta] = useState(2); // Start with item 2 (middle-ish)
+  const instaTrackRef = useRef(null);
+
+  useEffect(() => {
+    const track = instaTrackRef.current;
+    if (!track) return;
+
+    const handleScroll = () => {
+      const cards = track.querySelectorAll('.insta-card');
+      const trackCenter = track.getBoundingClientRect().left + track.offsetWidth / 2;
+      
+      let closestIndex = 0;
+      let minDistance = Infinity;
+
+      cards.forEach((card, i) => {
+        const cardCenter = card.getBoundingClientRect().left + card.offsetWidth / 2;
+        const distance = Math.abs(trackCenter - cardCenter);
+        if (distance < minDistance) {
+          minDistance = distance;
+          closestIndex = i;
+        }
+      });
+      setCenteredInsta(closestIndex);
+    };
+
+    track.addEventListener('scroll', handleScroll);
+    handleScroll(); // Initial check
+    return () => track.removeEventListener('scroll', handleScroll);
+  }, []);
 
   useEffect(() => {
     const timer = setInterval(() => setActiveSlide(p => (p + 1) % sliderContent.length), 5000);
@@ -114,7 +143,8 @@ export default function Home({ addToCart }) {
   const swipeScroll = (className, dir) => {
     const container = document.querySelector(`.${className}`);
     if (container) {
-      container.scrollBy({ left: dir === 'left' ? -320 : 320, behavior: 'smooth' });
+      const offset = className === 'reels-track' ? 340 : 320;
+      container.scrollBy({ left: dir === 'left' ? -offset : offset, behavior: 'smooth' });
     }
   };
 
@@ -161,9 +191,13 @@ export default function Home({ addToCart }) {
             <p className="sect-sub" style={{ marginTop: '1.5rem' }}>Acompanhe nossa rotina botânica e dicas de autocuidado.</p>
           </div>
           <div className="insta-slider-viewport">
-            <div className="insta-track reels-track" id="instaTrack">
+            <div className="insta-track reels-track" id="instaTrack" ref={instaTrackRef}>
               {instagramReels.map((r, i) => (
-                <div key={r.id} className="insta-card swipe-item" onClick={() => window.open('https://instagram.com/matu.cosmeticos', '_blank')}>
+                <div 
+                  key={r.id} 
+                  className={`insta-card swipe-item ${centeredInsta === i ? 'is-centered' : ''}`} 
+                  onClick={() => window.open('https://instagram.com/matu.cosmeticos', '_blank')}
+                >
                   <img src={r.poster} alt={r.product} className="insta-poster" />
                   <div className="insta-card-overlay">
                     <div className="insta-product-mini">
@@ -495,13 +529,19 @@ export default function Home({ addToCart }) {
   border-radius: 20px; 
   overflow: hidden; 
   cursor: pointer; 
-  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
   background: #000;
   box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+  opacity: 0.6;
+  transform: scale(0.9);
 }
 
-/* Identical Highlight logic - simpler with flex-track */
-.insta-card:nth-child(even) { transform: scale(1.05); z-index: 2; }
+.insta-card.is-centered { 
+  transform: scale(1.15); 
+  z-index: 5; 
+  opacity: 1;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+}
 
 .insta-poster { width: 100%; height: 100%; object-fit: cover; opacity: 0.95; }
 
