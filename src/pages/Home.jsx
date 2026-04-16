@@ -393,8 +393,16 @@ export default function Home({ addToCart }) {
 .bento-item:hover .bento-content {
   background: rgba(0,0,0,0.5);
 }
-.bento-content h3 { font-size: 1.5rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; margin: 0; }
-.bento-content p { font-size: 0.85rem; font-weight: 600; opacity: 0.9; margin-top: 0.5rem; letter-spacing: 0.1em; }
+.bento-content h3 { 
+  font-size: 2rem; 
+  font-weight: 800; 
+  color: #FFFFFF; 
+  margin: 0; 
+  text-transform: none; 
+  letter-spacing: -0.02em;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+.bento-content p { font-size: 0.9rem; font-weight: 600; opacity: 0.95; margin-top: 0.5rem; letter-spacing: 0.05em; text-transform: uppercase; color: #FFFFFF; }
 
 /* ═══════ PRODUCT CARD ═══════ */
 .m-product-card { background: #FFFFFF; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; border: 1px solid #E5E7EB; transition: transform .3s ease, box-shadow .3s ease; }
