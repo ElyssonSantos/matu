@@ -36,12 +36,12 @@ const bestSellers = [
 ];
 
 const instagramReels = [
-  { id: 1, poster: '/images/slider_1.png', product: 'Reparador Spray 60ml', oldPrice: 'R$ 116,97', price: 'R$ 58,48' },
-  { id: 2, poster: '/images/slider_2.png', product: 'Shampoo Sólido Matú', oldPrice: 'R$ 89,97', price: 'R$ 59,97' },
-  { id: 3, poster: '/images/slider_3.png', product: 'Sérum Facial Capitã', oldPrice: 'R$ 149,97', price: 'R$ 99,97' },
-  { id: 4, poster: '/images/category_body.png', product: 'Óleo Corporal Premium', oldPrice: 'R$ 129,97', price: 'R$ 79,97' },
-  { id: 5, poster: '/images/category_hair.png', product: 'Máscara Reconstrutora', oldPrice: 'R$ 99,97', price: 'R$ 69,97' },
-  { id: 6, poster: '/images/category_oil.png', product: 'Tônico Equilibrante', oldPrice: 'R$ 79,97', price: 'R$ 49,97' }
+  { id: 1, poster: '/images/media__1775931116204.png', product: 'Reparador Spray 60ml', oldPrice: 'R$ 116,97', price: 'R$ 58,48', thumb: '/images/product_bottle.png' },
+  { id: 2, poster: '/images/media__1775931109284.png', product: 'Shampoo Sólido Matú', oldPrice: 'R$ 89,97', price: 'R$ 59,97', thumb: '/images/product_shampoo_solid.png' },
+  { id: 3, poster: '/images/category_skin.png', product: 'Sérum Facial Capitã', oldPrice: 'R$ 149,97', price: 'R$ 99,97', thumb: '/images/product_face_cream.png' },
+  { id: 4, poster: '/images/category_body.png', product: 'Óleo Corporal Premium', oldPrice: 'R$ 129,97', price: 'R$ 79,97', thumb: '/images/product_body_oil.png' },
+  { id: 5, poster: '/images/category_hair.png', product: 'Máscara Reconstrutora', oldPrice: 'R$ 99,97', price: 'R$ 69,97', thumb: '/images/product_face_wash.png' },
+  { id: 6, poster: '/images/category_oil.png', product: 'Tônico Equilibrante', oldPrice: 'R$ 79,97', price: 'R$ 49,97', thumb: '/images/product_face_wash.png' }
 ];
 
 const newArrivals = [
@@ -154,21 +154,21 @@ export default function Home({ addToCart }) {
       </section>
 
       {/* ═══════════════ 3. INSTAGRAM REELS ═══════════════ */}
-      <section className="sect sect-bg">
+      <section className="sect sect-bg sect-instagram">
         <div className="ctnr">
           <div className="sect-head">
             <h2>Matú no Instagram</h2>
-            <p className="sect-sub">Acompanhe nossa rotina botânica e dicas de autocuidado.</p>
+            <p className="sect-sub" style={{ marginTop: '1.5rem' }}>Acompanhe nossa rotina botânica e dicas de autocuidado.</p>
           </div>
           <div className="slider-wrapper">
             <button className="slider-nav prev" onClick={() => swipeScroll('reels-track', 'left')}><ChevronLeft size={22} /></button>
-            <div className="swipe-track reels-track hide-scrollbar">
+            <div className="swipe-track reels-track hide-scrollbar desktop-grid-4">
               {instagramReels.map(r => (
                 <div key={r.id} className="reel-card swipe-item" onClick={() => window.open('https://instagram.com/matu.cosmeticos', '_blank')}>
                   <img src={r.poster} alt={r.product} className="reel-poster" />
                   <div className="reel-overlay">
                     <div className="reel-product-pill">
-                      <img src="/images/product_face_wash.png" alt="" className="reel-thumb" />
+                      <img src={r.thumb} alt="" className="reel-thumb" />
                       <div>
                         <span className="reel-pname">{r.product}</span>
                         <span className="reel-pprice"><s>{r.oldPrice}</s> {r.price}</span>
@@ -444,7 +444,9 @@ export default function Home({ addToCart }) {
 }
 
 /* ═══════ 4. INSTAGRAM REELS ═══════ */
-.slider-wrapper { position: relative; display: flex; align-items: center; margin-top: 1rem; }
+.sect-instagram { padding: 8rem 0; }
+.reels-track { gap: 2.5rem !important; }
+.slider-wrapper { position: relative; display: flex; align-items: center; margin-top: 4rem; }
 .reel-card { aspect-ratio: 9/16; border-radius: 12px; overflow: hidden; position: relative; cursor: pointer; background: #000; }
 .reel-poster { width: 100%; height: 100%; object-fit: cover; opacity: 0.9; transition: opacity 0.3s; }
 .reel-card:hover .reel-poster { opacity: 1; }

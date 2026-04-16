@@ -4,35 +4,6 @@ import { Leaf, Rabbit, Recycle, Droplets, ChevronRight } from 'lucide-react';
 export default function Footer() {
   return (
     <footer className="footer">
-      <div className="container">
-        <div className="benefits-section">
-          <div className="benefit-circle-item">
-            <div className="icon-circle">
-              <Leaf size={32} />
-            </div>
-            <span>100% Natural</span>
-          </div>
-          <div className="benefit-circle-item">
-            <div className="icon-circle">
-              <Rabbit size={32} />
-            </div>
-            <span>Cruelty-Free</span>
-          </div>
-          <div className="benefit-circle-item">
-            <div className="icon-circle">
-              <Recycle size={32} />
-            </div>
-            <span>Sustentável</span>
-          </div>
-          <div className="benefit-circle-item">
-            <div className="icon-circle">
-              <Droplets size={32} />
-            </div>
-            <span>Ingredientes Selecionados</span>
-          </div>
-        </div>
-      </div>
-
       <div className="footer-sand-bg">
         <div className="container">
           <div className="footer-content">
@@ -82,45 +53,11 @@ export default function Footer() {
       <style>{`
         .footer {
           background-color: white;
-          padding-top: 6rem;
+          padding-top: 2rem;
           color: var(--color-text-medium);
           overflow-x: hidden;
         }
 
-        .benefits-section {
-          display: grid;
-          grid-template-columns: repeat(4, 1fr);
-          gap: 2rem;
-          margin-bottom: 8rem;
-          text-align: center;
-        }
-
-        .benefit-circle-item {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          gap: 1.5rem;
-        }
-
-        .icon-circle {
-          width: 80px;
-          height: 80px;
-          border-radius: 50%;
-          background-color: var(--color-primary);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          color: white;
-          transition: none;
-        }
-
-        .benefit-circle-item span {
-          font-weight: 600;
-          font-size: 0.8rem;
-          text-transform: uppercase;
-          letter-spacing: 0.05em;
-          color: var(--color-primary);
-        }
 
         .footer-sand-bg {
           background-color: var(--color-bg-sand);
@@ -206,26 +143,15 @@ export default function Footer() {
           letter-spacing: 0.02em;
         }
 
+
         @media (max-width: 992px) {
-          .benefits-section {
-            grid-template-columns: repeat(2, 1fr);
-          }
           .footer-content {
             grid-template-columns: repeat(2, 1fr);
           }
         }
 
         @media (max-width: 768px) {
-          .footer { padding-top: 4rem; }
-          .benefits-section { 
-            grid-template-columns: repeat(2, 1fr); 
-            gap: 1.5rem; 
-            margin-bottom: 4rem;
-          }
-          .benefit-circle-item span { font-size: 0.65rem; }
-          .icon-circle { width: 50px; height: 50px; }
-          .icon-circle svg { width: 20px; height: 20px; }
-          
+          .footer { padding-top: 2rem; }
           .footer-sand-bg { padding: 4rem 0 2rem; }
           .footer-content { grid-template-columns: 1fr; gap: 3rem; }
           .footer-col h2 { font-size: 2.5rem; }
