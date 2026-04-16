@@ -114,7 +114,7 @@ export default function Home({ addToCart }) {
     const handleScroll = () => {
       const cards = track.querySelectorAll('.insta-card');
       const trackCenter = track.getBoundingClientRect().left + track.offsetWidth / 2;
-      
+
       let closestIndex = 0;
       let minDistance = Infinity;
 
@@ -143,8 +143,8 @@ export default function Home({ addToCart }) {
   const swipeScroll = (className, dir) => {
     const container = document.querySelector(`.${className}`);
     if (container) {
-      const offset = className === 'reels-track' ? 260 : 320;
-      container.scrollBy({ left: dir === 'left' ? -offset : offset, behavior: 'smooth' });
+      const cardWidth = window.innerWidth < 768 ? (window.innerWidth / 3) : (window.innerWidth / 5);
+      container.scrollBy({ left: dir === 'left' ? -cardWidth : cardWidth, behavior: 'smooth' });
     }
   };
 
@@ -158,9 +158,7 @@ export default function Home({ addToCart }) {
       <section className="hero-banner-section">
         {sliderContent.map((s, i) => (
           <div key={s.id} className={`hero-slide ${i === activeSlide ? 'active' : ''}`}>
-            {/* Desktop Banner */}
             <img src={s.image} alt="Banner" className="hero-img-desktop" />
-            {/* Mobile Banner */}
             <img src={s.mobileImage} alt="Banner" className="hero-img-mobile" />
           </div>
         ))}
@@ -190,29 +188,37 @@ export default function Home({ addToCart }) {
             <h2>Matú no Instagram</h2>
             <p className="sect-sub" style={{ marginTop: '1.5rem' }}>Acompanhe nossa rotina botânica e dicas de autocuidado.</p>
           </div>
-          <div className="insta-slider-viewport">
-            <div className="insta-track reels-track" id="instaTrack" ref={instaTrackRef}>
-              {instagramReels.map((r, i) => (
-                <div 
-                  key={r.id} 
-                  className={`insta-card swipe-item ${centeredInsta === i ? 'is-centered' : ''}`} 
-                  onClick={() => window.open('https://instagram.com/matu.cosmeticos', '_blank')}
-                >
-                  <img src={r.poster} alt={r.product} className="insta-poster" />
-                  <div className="insta-card-overlay">
-                    <div className="insta-product-clean">
-                      <span className="clean-name">{r.product}</span>
-                      <div className="clean-prices">
-                        <span className="clean-old">R$ {r.oldPrice.split(' ')[1]}</span>
-                        <span className="clean-new">R$ {r.price.split(' ')[1]}</span>
+          <div className="rf-gallery-main rf-carousel reelfy-scroll-container" id="instaTrack" ref={instaTrackRef}>
+            {instagramReels.map((r, i) => (
+              <div key={r.id} className={`rf-video-item ${centeredInsta === i ? 'is-selected' : ''}`}>
+                <div className="reelfy_card card_type-overlay_product reelfy_card_autoplay">
+                  <div className="reelfy_card_video_wrapper">
+                    <div className="reelfy_card_video">
+                      <img src={r.poster} alt={r.product} className="reelfy-poster-img" />
+                      <div className="reelfy_card_product card_product_ajax active">
+                        <div className="reelfy_card_product__image">
+                          <img src={r.thumb} alt={r.product} />
+                        </div>
+                        <div className="reelfy_card_product__content">
+                          <div className="reelfy_card_product__title">
+                            <span>{r.product}</span>
+                          </div>
+                          <div className="reelfy_card_product__prices">
+                            <span className="rf-old-price">{r.oldPrice}</span>
+                            <span className="rf-new-price">{r.price}</span>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              ))}
-            </div>
-            <button className="insta-nav prev" onClick={() => swipeScroll('reels-track', 'left')}><ChevronLeft size={24} /></button>
-            <button className="insta-nav next" onClick={() => swipeScroll('reels-track', 'right')}><ChevronRight size={24} /></button>
+              </div>
+            ))}
+          </div>
+          <div className="reelfy-dots">
+            {instagramReels.map((_, idx) => (
+              <span key={idx} className={`rf-dot ${centeredInsta === idx ? 'is-active' : ''}`}></span>
+            ))}
           </div>
         </div>
       </section>
@@ -252,9 +258,7 @@ export default function Home({ addToCart }) {
 
       {/* ═══════════════ 5. PARALLAX BANNER (DUAL SYSTEM) ═══════════════ */}
       <section className="parallax-banner-section">
-        {/* Desktop Image */}
         <img src="https://images.unsplash.com/photo-1556228578-0d85b1a4d571?q=80&w=1920&h=800&fit=crop" alt="Matú Natureza" className="par-img-desktop" />
-        {/* Mobile Image */}
         <img src="https://images.unsplash.com/photo-1556228578-0d85b1a4d571?q=80&w=800&h=1000&fit=crop" alt="Matú Natureza Mobile" className="par-img-mobile" />
       </section>
 
@@ -294,7 +298,7 @@ export default function Home({ addToCart }) {
                 </div>
               ))}
             </div>
-            
+
             <div className="t-controls-row">
               <div className="t-progress-bar">
                 <div className="t-progress-fill" style={{ width: `${((tSlide + 1) / testimonials.length) * 100}%` }} />
@@ -355,219 +359,83 @@ export default function Home({ addToCart }) {
 
       {/* ─── STYLES ─── */}
       <style>{`
-/* ═══════ FOUNDATION ═══════ */
 .home-root { width: 100%; overflow-x: hidden; background-color: #FFFFFF; color: #1F2937; }
 .sect { padding: 4.5rem 0; }
-.sect-bg { background-color: #F9FAFB; } /* Matu elegant alternate background */
+.sect-bg { background-color: #F9FAFB; }
 .ctnr { max-width: 1300px; margin: 0 auto; padding: 0 4%; }
 .ctnr-full { max-width: 1400px; margin: 0 auto; padding: 0 4%; }
-.sect-head { margin-bottom: 2.5rem; }
+.sect-head { margin-bottom: 2.5rem; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 1rem; }
 .sect-head h2 { font-size: 3.2rem; font-weight: 900; color: #000000; letter-spacing: -0.04em; line-height: 1.1; }
-.sect-head.center { text-align: center; justify-content: center; }
-.sect-sub { color: #1F2937; max-width: 550px; font-size: 1.05rem; margin-top: 0.5rem; }
-.tag-label { display: inline-block; font-size: .8rem; font-weight: 800; text-transform: uppercase; letter-spacing: .15em; color: #2D5A44; margin-bottom: 1rem; }
-.sect-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 1rem; }
 .see-more { display: flex; align-items: center; gap: .5rem; font-weight: 700; font-size: .95rem; color: #1F2937; text-decoration: none; transition: opacity 0.2s; }
-.see-more:hover { opacity: 0.7; }
 .sm-arrow { width: 28px; height: 28px; border-radius: 50%; background: #2D5A44; color: #fff; display: flex; align-items: center; justify-content: center; }
 
-/* ═══════ 1. HERO (DUAL BANNER) ═══════ */
 .hero-banner-section { position: relative; width: 100%; overflow: hidden; }
 .hero-slide { position: absolute; inset: 0; opacity: 0; transition: opacity 1.2s ease; z-index: 1; }
 .hero-slide.active { opacity: 1; z-index: 2; position: relative; }
-/* Desktop Banner - aspect-[32/11] */
-.hero-img-desktop { display: block; width: 100%; height: auto; aspect-ratio: 32/11; object-fit: cover; object-position: center; }
-/* Mobile Banner - aspect-[4/5] */
-.hero-img-mobile { display: none; width: 100%; height: auto; aspect-ratio: 4/5; object-fit: cover; object-position: center; }
+.hero-img-desktop { display: block; width: 100%; height: auto; aspect-ratio: 32/11; object-fit: cover; }
+.hero-img-mobile { display: none; width: 100%; height: auto; aspect-ratio: 4/5; object-fit: cover; }
 .hero-dots { position: absolute; bottom: 25px; left: 50%; transform: translateX(-50%); display: flex; gap: 10px; z-index: 10; }
 .hero-dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(45, 90, 68, 0.3); border: none; cursor: pointer; transition: all .3s; }
 .hero-dot.active { width: 32px; border-radius: 6px; background: #2D5A44; }
 
-/* ═══════ 4. CAPITÃ AQUA BENTO GRID ═══════ */
-.bento-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-auto-rows: 250px;
-  gap: 16px;
-  padding: 2rem 0;
-}
+.bento-grid { display: grid; grid-template-columns: 1fr; grid-auto-rows: 250px; gap: 16px; padding: 2rem 0; }
 @media(min-width: 768px) {
-  .bento-grid {
-    grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: repeat(2, 300px);
-    gap: 24px;
-  }
+  .bento-grid { grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(2, 300px); gap: 24px; }
   .item-large { grid-column: 1 / 3; grid-row: 1 / 3; }
   .item-small { grid-column: 3 / 4; grid-row: 1 / 2; }
   .item-small:nth-child(3) { grid-column: 4 / 5; grid-row: 1 / 2; }
   .item-medium { grid-column: 3 / 5; grid-row: 2 / 3; }
 }
-.bento-item {
-  position: relative;
-  overflow: hidden;
-  border-radius: 24px;
-  background: #F9FAFB;
-}
-.bento-item img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-}
+.bento-item { position: relative; overflow: hidden; border-radius: 24px; background: #F9FAFB; }
+.bento-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
 .bento-item:hover img { transform: scale(1.05); }
-.bento-content {
-  position: absolute;
-  inset: 0;
-  background: rgba(0,0,0,0.3);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  padding: 2rem;
-  color: #fff;
-  transition: background 0.3s ease;
-}
-.bento-item:hover .bento-content {
-  background: rgba(0,0,0,0.5);
-}
-.bento-content h3 { 
-  font-size: 2rem; 
-  font-weight: 800; 
-  color: #FFFFFF; 
-  margin: 0; 
-  text-transform: none; 
-  letter-spacing: -0.02em;
-  text-shadow: 0 2px 8px rgba(0,0,0,0.3);
-}
-.bento-content p { font-size: 0.9rem; font-weight: 600; opacity: 0.95; margin-top: 0.5rem; letter-spacing: 0.05em; text-transform: uppercase; color: #FFFFFF; }
+.bento-content { position: absolute; inset: 0; background: rgba(0,0,0,0.3); display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 2rem; color: #fff; }
+.bento-content h3 { font-size: 2rem; font-weight: 800; color: #FFFFFF; margin: 0; }
 
-/* ═══════ PRODUCT CARD ═══════ */
-.m-product-card { background: #FFFFFF; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; border: 1px solid #E5E7EB; transition: transform .3s ease, box-shadow .3s ease; }
-.m-product-card:hover { transform: translateY(-4px); box-shadow: 0 12px 30px rgba(0,0,0,0.06); }
+.m-product-card { background: #FFFFFF; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; border: 1px solid #E5E7EB; }
 .m-product-img { position: relative; aspect-ratio: 1/1.15; overflow: hidden; background: #F9FAFB; }
 .m-product-img img { width: 100%; height: 100%; object-fit: cover; }
-.m-badge { position: absolute; top: 12px; left: 12px; background: #2D5A44; color: #fff; padding: 4px 12px; border-radius: 20px; font-size: .75rem; font-weight: 800; z-index: 3; }
-.m-badge-discount { left: auto; right: 12px; background: #111827; }
+.m-badge { position: absolute; top: 12px; left: 12px; background: #2D5A44; color: #fff; padding: 4px 12px; border-radius: 20px; font-size: .75rem; font-weight: 800; }
 .m-product-info { padding: 1.5rem; display: flex; flex-direction: column; flex: 1; text-align: center; }
-.m-product-info h3 { font-size: 1.05rem; font-weight: 700; color: #1F2937; margin-bottom: .8rem; min-height: 2.8em; line-height: 1.4; }
-.m-price-block { display: flex; flex-direction: column; margin-bottom: 1.2rem; }
-.m-old-price { text-decoration: line-through; color: #9CA3AF; font-size: .85rem; margin-bottom: 0.1rem; }
+.m-product-info h3 { font-size: 1.05rem; font-weight: 700; color: #1F2937; margin-bottom: .8rem; }
 .m-price { font-size: 1.3rem; font-weight: 800; color: #2D5A44; }
-.m-installments { font-size: .8rem; color: #6B7280; margin-top: 0.2rem; }
-.m-btn-buy { width: 100%; background: #2D5A44; color: #FFFFFF; border: none; padding: .85rem; border-radius: 50px; font-weight: 800; text-transform: uppercase; letter-spacing: .05em; cursor: pointer; transition: background .2s; }
-.m-btn-buy:hover { background: #1a3b2b; }
+.m-btn-buy { width: 100%; background: #2D5A44; color: #FFFFFF; border: none; padding: .85rem; border-radius: 50px; font-weight: 800; text-transform: uppercase; cursor: pointer; }
 
-/* ═══════ MOBILE-FIRST SWIPE SYSTEM ═══════ */
-.swipe-track {
-  display: flex !important;
-  flex-wrap: nowrap;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  scrollbar-width: none;
-  width: 100%;
-  gap: 1.2rem;
-  padding-bottom: 1rem;
-}
+.swipe-track { display: flex !important; flex-wrap: nowrap; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; width: 100%; gap: 1.2rem; }
 .swipe-track::-webkit-scrollbar { display: none; }
-.swipe-item {
-  scroll-snap-align: center;
-  flex-shrink: 0;
-  width: 80vw;
-}
-@media(min-width: 480px) { .swipe-item { width: 300px; } }
+.swipe-item { scroll-snap-align: center; flex-shrink: 0; width: 80vw; }
 @media(min-width: 868px) {
-  .swipe-track { gap: 1.5rem; padding-bottom: 0; }
   .swipe-track.desktop-grid-4 { display: grid !important; grid-template-columns: repeat(4, 1fr); overflow-x: visible; }
-  .swipe-track.desktop-grid-3 { display: grid !important; grid-template-columns: repeat(3, 1fr); overflow-x: visible; }
-  .desktop-grid-4 .swipe-item, .desktop-grid-3 .swipe-item { width: 100%; }
+  .desktop-grid-4 .swipe-item { width: 100%; }
 }
 
-/* ═══════ 4. INSTAGRAM CAROUSEL (NEW IDENTICAL STYLE) ═══════ */
-.sect-instagram { padding: 8rem 0; overflow: hidden; }
-.insta-slider-viewport { position: relative; width: 100%; margin-top: 4rem; padding: 2rem 0; }
-.insta-track { 
-  display: flex; 
-  gap: 20px; 
-  overflow-x: auto; 
-  scroll-behavior: smooth; 
-  scrollbar-width: none; 
-  padding: 0 10%;
-  align-items: center;
-}
-.insta-track::-webkit-scrollbar { display: none; }
-
-.insta-card { 
-  position: relative; 
-  flex-shrink: 0; 
-  width: 260px; 
-  aspect-ratio: 9/16; 
-  border-radius: 20px; 
-  overflow: hidden; 
-  cursor: pointer; 
-  transition: all 1s cubic-bezier(0.19, 1, 0.22, 1);
-  background: #000;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-  opacity: 0.4;
-  transform: scale(0.8);
-}
-
-.insta-card.is-centered { 
-  transform: scale(1.05); 
-  z-index: 5; 
-  opacity: 1;
-  box-shadow: 0 20px 50px rgba(0,0,0,0.2);
-}
-
-.insta-poster { width: 100%; height: 100%; object-fit: cover; opacity: 0.95; }
-
-.insta-card-overlay { 
-  position: absolute; 
-  bottom: 0; left: 0; right: 0; 
-  padding: 1.5rem; 
-  background: linear-gradient(transparent, rgba(0,0,0,0.7)); 
-}
-
-.insta-product-clean { 
-  display: flex; 
-  flex-direction: column;
-  gap: 0.3rem; 
-  text-align: left;
-}
-.clean-name { color: #fff; font-size: 0.85rem; font-weight: 700; text-shadow: 0 1px 4px rgba(0,0,0,0.5); }
-.clean-prices { display: flex; gap: 8px; align-items: center; }
-.clean-old { color: rgba(255,255,255,0.6); font-size: 0.75rem; text-decoration: line-through; }
-.clean-new { color: #2D5A44; font-size: 0.9rem; font-weight: 900; }
-
-.insta-nav {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 54px;
-  height: 54px;
-  border-radius: 50%;
-  background: #fff;
-  border: none;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  z-index: 10;
-  color: #1F2937;
-  transition: all 0.3s;
-}
-.insta-nav:hover { background: #2D5A44; color: #fff; }
-.insta-nav.prev { left: 40px; }
-.insta-nav.next { right: 40px; }
+.reelfy-scroll-container { display: flex; gap: 15px; overflow-x: auto; scroll-behavior: smooth; scrollbar-width: none; padding: 3rem 0; align-items: center; scroll-snap-type: x mandatory; }
+.reelfy-scroll-container::-webkit-scrollbar { display: none; }
+.rf-video-item { flex-shrink: 0; width: calc(20% - 12px); scroll-snap-align: center; transition: all 0.6s cubic-bezier(0.19, 1, 0.22, 1); transform: scale(0.9); opacity: 0.6; }
+.rf-video-item.is-selected { transform: scale(1.05); opacity: 1; z-index: 5; }
+.reelfy_card { position: relative; border-radius: 24px; overflow: hidden; aspect-ratio: 9/16; background: #000; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+.reelfy_card_video_wrapper { width: 100%; height: 100%; position: relative; }
+.reelfy-poster-img { width: 100%; height: 100%; object-fit: cover; }
+.reelfy_card_product { position: absolute; bottom: 12px; left: 10px; right: 10px; background: #FFFFFF; border-radius: 12px; padding: 10px; display: flex; align-items: center; gap: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.15); z-index: 10; }
+.reelfy_card_product__image { width: 48px; height: 48px; border-radius: 10px; background: #fff; flex-shrink: 0; overflow: hidden; }
+.reelfy_card_product__image img { width: 100%; height: 100%; object-fit: cover; }
+.reelfy_card_product__content { display: flex; flex-direction: column; gap: 4px; overflow: hidden; text-align: left; }
+.reelfy_card_product__title { font-size: 13px; font-weight: 800; color: #000; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.reelfy_card_product__prices { display: flex; gap: 8px; align-items: center; }
+.rf-old-price { color: #999; text-decoration: line-through; font-size: 11px; font-weight: 500; }
+.rf-new-price { color: #000; font-weight: 800; font-size: 13px; }
+.reelfy-dots { display: flex; justify-content: center; gap: 8px; margin-top: 1rem; }
+.rf-dot { width: 8px; height: 8px; border-radius: 50%; background: #ddd; transition: all 0.3s; }
+.rf-dot.is-active { background: #2D5A44; }
 
 @media(max-width: 768px) {
-  .insta-nav { display: none; }
-  .insta-card { width: 280px; }
-  .insta-track { padding: 0 5%; }
+  .hero-img-desktop, .par-img-desktop { display: none; }
+  .hero-img-mobile, .par-img-mobile { display: block; }
+  .rf-video-item { width: calc(45% - 10px); }
+  .reelfy-scroll-container { padding: 2rem 5%; }
+  .faq-layout { grid-template-columns: 1fr; gap: 2.5rem; }
 }
 
-/* ═══════ 5. PARALLAX ═══════ */
 .parallax-banner-section { position: relative; width: 100%; height: 400px; overflow: hidden; }
 .par-img-desktop { display: block; width: 100%; height: 100%; object-fit: cover; }
 .par-img-mobile { display: none; width: 100%; height: 100%; object-fit: cover; }
