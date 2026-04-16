@@ -187,31 +187,31 @@ export default function Home({ addToCart }) {
       <section className="sect">
         <div className="ctnr-full">
           <div className="bento-grid">
-            <div className="bento-item item-large">
+            <Link to="/#produtos" className="bento-item item-large">
               <img src="https://images.unsplash.com/photo-1556228578-0d85b1a4d571?q=80&w=1200&fit=crop" alt="Capitã Aqua" />
               <div className="bento-content">
                 <h3>Capitã Aqua</h3>
                 <p>MÁSCARA HIDRATANTE PROFISSIONAL</p>
               </div>
-            </div>
-            <div className="bento-item item-small">
+            </Link>
+            <Link to="/#produtos" className="bento-item item-small">
               <img src="https://images.unsplash.com/photo-1599305090598-fe179d501227?q=80&w=800&fit=crop" alt="Capitã Nutre" />
               <div className="bento-content">
                 <h3>Capitã Nutre</h3>
               </div>
-            </div>
-            <div className="bento-item item-small">
+            </Link>
+            <Link to="/#produtos" className="bento-item item-small">
               <img src="https://images.unsplash.com/photo-1615397323602-5eef6317bc2d?q=80&w=800&fit=crop" alt="Capitã Force" />
               <div className="bento-content">
                 <h3>Capitã Force</h3>
               </div>
-            </div>
-            <div className="bento-item item-medium">
+            </Link>
+            <Link to="/#produtos" className="bento-item item-medium">
               <img src="https://images.unsplash.com/photo-1570194065650-d6faeb4ae288?q=80&w=1000&fit=crop" alt="Finalizadores" />
               <div className="bento-content">
                 <h3>Finalizadores</h3>
               </div>
-            </div>
+            </Link>
           </div>
         </div>
       </section>
@@ -380,12 +380,18 @@ export default function Home({ addToCart }) {
 .bento-content {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to top, rgba(0,0,0,0.7), transparent 60%);
+  background: rgba(0,0,0,0.3);
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
   padding: 2rem;
   color: #fff;
+  transition: background 0.3s ease;
+}
+.bento-item:hover .bento-content {
+  background: rgba(0,0,0,0.5);
 }
 .bento-content h3 { font-size: 1.5rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; margin: 0; }
 .bento-content p { font-size: 0.85rem; font-weight: 600; opacity: 0.9; margin-top: 0.5rem; letter-spacing: 0.1em; }
