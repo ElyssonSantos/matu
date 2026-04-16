@@ -162,7 +162,7 @@ export default function Home({ addToCart }) {
           </div>
           <div className="slider-wrapper">
             <button className="slider-nav prev" onClick={() => swipeScroll('reels-track', 'left')}><ChevronLeft size={22} /></button>
-            <div className="swipe-track reels-track hide-scrollbar desktop-grid-4">
+            <div className="swipe-track reels-track hide-scrollbar">
               {instagramReels.map(r => (
                 <div key={r.id} className="reel-card swipe-item" onClick={() => window.open('https://instagram.com/matu.cosmeticos', '_blank')}>
                   <img src={r.poster} alt={r.product} className="reel-poster" />
@@ -249,7 +249,7 @@ export default function Home({ addToCart }) {
           <div className="slider-wrapper">
             <button className="slider-nav prev" onClick={prevT}><ChevronLeft size={22} /></button>
             <div className="swipe-track test-track desktop-grid-3">
-              {testimonials.map((t, idx) => (
+              {testimonials.slice(0, 3).map((t, idx) => (
                 <div key={t.id} className="test-card swipe-item">
                   <div className="test-top">
                     <img src={t.image} alt={t.name} className="test-avatar" />
