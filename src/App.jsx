@@ -56,6 +56,40 @@ function App() {
         </Routes>
       </main>
       <Footer />
+      <a 
+        href="https://wa.me/5511999999999" 
+        target="_blank" 
+        rel="noopener noreferrer" 
+        className="whatsapp-float"
+      >
+        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" />
+      </a>
+      <style>{`
+        .whatsapp-float {
+          position: fixed;
+          bottom: 30px;
+          right: 30px;
+          width: 60px;
+          height: 60px;
+          background-color: #25d366;
+          color: #fff;
+          border-radius: 50px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+          z-index: 9999;
+          transition: all 0.3s ease;
+        }
+        .whatsapp-float:hover {
+          transform: scale(1.1);
+          background-color: #128c7e;
+        }
+        .whatsapp-float img {
+          width: 35px;
+          height: 35px;
+        }
+      `}</style>
     </Router>
   );
 }

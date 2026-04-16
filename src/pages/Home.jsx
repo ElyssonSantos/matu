@@ -154,32 +154,36 @@ export default function Home({ addToCart }) {
         </div>
       </section>
 
-      {/* ═══════════════ 3. INSTAGRAM REELS ═══════════════ */}
       <section className="sect sect-bg sect-instagram">
         <div className="ctnr">
           <div className="sect-head">
             <h2>Matú no Instagram</h2>
             <p className="sect-sub" style={{ marginTop: '1.5rem' }}>Acompanhe nossa rotina botânica e dicas de autocuidado.</p>
           </div>
-          <div className="slider-wrapper">
-            <button className="slider-nav prev" onClick={() => swipeScroll('reels-track', 'left')}><ChevronLeft size={22} /></button>
-            <div className="swipe-track reels-track hide-scrollbar">
-              {instagramReels.map(r => (
-                <div key={r.id} className="reel-card swipe-item" onClick={() => window.open('https://instagram.com/matu.cosmeticos', '_blank')}>
-                  <img src={r.poster} alt={r.product} className="reel-poster" />
-                  <div className="reel-overlay">
-                    <div className="reel-product-pill">
-                      <img src={r.thumb} alt="" className="reel-thumb" />
-                      <div>
-                        <span className="reel-pname">{r.product}</span>
-                        <span className="reel-pprice"><s>{r.oldPrice}</s> {r.price}</span>
+          <div className="insta-slider-viewport">
+            <div className="insta-track reels-track" id="instaTrack">
+              {instagramReels.map((r, i) => (
+                <div key={r.id} className="insta-card swipe-item" onClick={() => window.open('https://instagram.com/matu.cosmeticos', '_blank')}>
+                  <img src={r.poster} alt={r.product} className="insta-poster" />
+                  <div className="insta-card-overlay">
+                    <div className="insta-product-mini">
+                      <div className="mini-thumb-box">
+                        <img src={r.thumb} alt="" />
+                      </div>
+                      <div className="mini-info">
+                        <span className="mini-name">{r.product}</span>
+                        <div className="mini-prices">
+                          <span className="mini-old">R$ {r.oldPrice.split(' ')[1]}</span>
+                          <span className="mini-new">R$ {r.price.split(' ')[1]}</span>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
               ))}
             </div>
-            <button className="slider-nav next" onClick={() => swipeScroll('reels-track', 'right')}><ChevronRight size={22} /></button>
+            <button className="insta-nav prev" onClick={() => swipeScroll('reels-track', 'left')}><ChevronLeft size={24} /></button>
+            <button className="insta-nav next" onClick={() => swipeScroll('reels-track', 'right')}><ChevronRight size={24} /></button>
           </div>
         </div>
       </section>
@@ -469,24 +473,102 @@ export default function Home({ addToCart }) {
   .desktop-grid-4 .swipe-item, .desktop-grid-3 .swipe-item { width: 100%; }
 }
 
-/* ═══════ 4. INSTAGRAM REELS ═══════ */
-.sect-instagram { padding: 8rem 0; }
-.reels-track { gap: 2.5rem !important; }
-.slider-wrapper { position: relative; display: flex; align-items: center; margin-top: 4rem; }
-.reel-card { aspect-ratio: 9/16; border-radius: 12px; overflow: hidden; position: relative; cursor: pointer; background: #000; }
-.reel-poster { width: 100%; height: 100%; object-fit: cover; opacity: 0.9; transition: opacity 0.3s; }
-.reel-card:hover .reel-poster { opacity: 1; }
-.reel-overlay { position: absolute; bottom: 0; left: 0; right: 0; padding: 1rem; background: linear-gradient(transparent, rgba(0,0,0,.8)); }
-.reel-product-pill { display: flex; align-items: center; gap: .8rem; background: rgba(255,255,255,.98); border-radius: 8px; padding: .6rem; }
-.reel-thumb { width: 40px; height: 40px; object-fit: cover; border-radius: 4px; flex-shrink: 0; }
-.reel-pname { display: block; font-size: .8rem; font-weight: 800; color: #1F2937; }
-.reel-pprice { font-size: .75rem; color: #2D5A44; font-weight: 700; margin-top: 2px; display: block; }
-.reel-pprice s { color: #9CA3AF; font-weight: normal; margin-right: 4px; }
-.slider-nav { position: absolute; top: 50%; transform: translateY(-50%); width: 44px; height: 44px; border-radius: 50%; background: #FFFFFF; color: #2D5A44; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,.15); z-index: 10; border: 1px solid #E5E7EB; cursor: pointer; transition: all .2s; }
-.slider-nav:hover { background: #2D5A44; color: #FFFFFF; border-color: #2D5A44; }
-.slider-nav.prev { left: -22px; }
-.slider-nav.next { right: -22px; }
-@media(max-width: 868px) { .slider-nav { display: none; } }
+/* ═══════ 4. INSTAGRAM CAROUSEL (NEW IDENTICAL STYLE) ═══════ */
+.sect-instagram { padding: 8rem 0; overflow: hidden; }
+.insta-slider-viewport { position: relative; width: 100%; margin-top: 4rem; padding: 2rem 0; }
+.insta-track { 
+  display: flex; 
+  gap: 20px; 
+  overflow-x: auto; 
+  scroll-behavior: smooth; 
+  scrollbar-width: none; 
+  padding: 0 10%;
+  align-items: center;
+}
+.insta-track::-webkit-scrollbar { display: none; }
+
+.insta-card { 
+  position: relative; 
+  flex-shrink: 0; 
+  width: 320px; 
+  aspect-ratio: 9/16; 
+  border-radius: 20px; 
+  overflow: hidden; 
+  cursor: pointer; 
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  background: #000;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+}
+
+/* Identical Highlight logic - simpler with flex-track */
+.insta-card:nth-child(even) { transform: scale(1.05); z-index: 2; }
+
+.insta-poster { width: 100%; height: 100%; object-fit: cover; opacity: 0.95; }
+
+.insta-card-overlay { 
+  position: absolute; 
+  bottom: 0; left: 0; right: 0; 
+  padding: 1.5rem; 
+  background: linear-gradient(transparent, rgba(0,0,0,0.9)); 
+}
+
+.insta-product-mini { 
+  display: flex; 
+  align-items: center; 
+  gap: 0.8rem; 
+  background: rgba(0,0,0,0.6); 
+  backdrop-filter: blur(5px);
+  border-radius: 12px; 
+  padding: 0.6rem; 
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+.mini-thumb-box { 
+  width: 45px; 
+  height: 45px; 
+  background: #fff; 
+  border-radius: 8px; 
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+  overflow: hidden; 
+  flex-shrink: 0;
+}
+.mini-thumb-box img { width: 100%; height: 100%; object-fit: contain; padding: 2px; }
+
+.mini-info { display: flex; flex-direction: column; gap: 2px; }
+.mini-name { color: #fff; font-size: 0.75rem; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 160px; }
+.mini-prices { display: flex; gap: 8px; align-items: center; }
+.mini-old { color: rgba(255,255,255,0.5); font-size: 0.7rem; text-decoration: line-through; }
+.mini-new { color: #2D5A44; font-size: 0.8rem; font-weight: 900; }
+
+.insta-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background: #fff;
+  border: none;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  color: #1F2937;
+  transition: all 0.3s;
+}
+.insta-nav:hover { background: #2D5A44; color: #fff; }
+.insta-nav.prev { left: 40px; }
+.insta-nav.next { right: 40px; }
+
+@media(max-width: 768px) {
+  .insta-nav { display: none; }
+  .insta-card { width: 280px; }
+  .insta-track { padding: 0 5%; }
+}
 
 /* ═══════ 5. PARALLAX ═══════ */
 .parallax-banner-section { position: relative; width: 100%; overflow: hidden; }
