@@ -7,17 +7,17 @@ const sliderContent = [
   { 
     id: 1, 
     image: '/images/slider_1.png', 
-    mobileImage: 'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?q=80&w=800&h=1000&fit=crop' 
+    mobileImage: '/images/hero_bg_1775930365612.png' 
   },
   { 
     id: 2, 
     image: '/images/slider_2.png', 
-    mobileImage: 'https://images.unsplash.com/photo-1615397323602-5eef6317bc2d?q=80&w=800&h=1000&fit=crop' 
+    mobileImage: '/images/slider_2.png' 
   },
   { 
     id: 3, 
     image: '/images/slider_3.png', 
-    mobileImage: 'https://images.unsplash.com/photo-1570194065650-d6faeb4ae288?q=80&w=800&h=1000&fit=crop' 
+    mobileImage: '/images/slider_3.png' 
   }
 ];
 
@@ -188,26 +188,26 @@ export default function Home({ addToCart }) {
         <div className="ctnr-full">
           <div className="bento-grid">
             <Link to="/#produtos" className="bento-item item-large">
-              <img src="https://images.unsplash.com/photo-1556228578-0d85b1a4d571?q=80&w=1200&fit=crop" alt="Capitã Aqua" />
+              <img src="/images/category_skin.png" alt="Capitã Aqua" />
               <div className="bento-content">
                 <h3>Capitã Aqua</h3>
                 <p>MÁSCARA HIDRATANTE PROFISSIONAL</p>
               </div>
             </Link>
             <Link to="/#produtos" className="bento-item item-small">
-              <img src="https://images.unsplash.com/photo-1599305090598-fe179d501227?q=80&w=800&fit=crop" alt="Capitã Nutre" />
+              <img src="/images/category_hair.png" alt="Capitã Nutre" />
               <div className="bento-content">
                 <h3>Capitã Nutre</h3>
               </div>
             </Link>
             <Link to="/#produtos" className="bento-item item-small">
-              <img src="https://images.unsplash.com/photo-1615397323602-5eef6317bc2d?q=80&w=800&fit=crop" alt="Capitã Force" />
+              <img src="/images/category_body.png" alt="Capitã Force" />
               <div className="bento-content">
                 <h3>Capitã Force</h3>
               </div>
             </Link>
             <Link to="/#produtos" className="bento-item item-medium">
-              <img src="https://images.unsplash.com/photo-1570194065650-d6faeb4ae288?q=80&w=1000&fit=crop" alt="Finalizadores" />
+              <img src="/images/category_oil.png" alt="Finalizadores" />
               <div className="bento-content">
                 <h3>Finalizadores</h3>
               </div>
@@ -294,16 +294,14 @@ export default function Home({ addToCart }) {
         </div>
       </section>
 
-      {/* ═══════════════ 9. BENEFITS (CAROUSEL MOBILE) ═══════════════ */}
-      <section className="sect sect-bg" style={{ paddingBottom: '7rem' }}>
+      {/* ═══════════════ 9. BENEFITS (CIRCULAR STYLE) ═══════════════ */}
+      <section className="sect sect-white" style={{ paddingBottom: '7rem' }}>
         <div className="ctnr">
-          <div className="sect-head center"><h2>Por que escolher a Matú?</h2></div>
           <div className="swipe-track ben-track desktop-grid-4 ben-mobile-carousel">
             {benefitsData.map((b, i) => (
-              <div key={i} className="ben-card swipe-item">
-                <div className="ben-icon">{b.icon}</div>
-                <h3>{b.title}</h3>
-                <p>{b.desc}</p>
+              <div key={i} className="ben-circular-item swipe-item">
+                <div className="ben-circular-icon">{b.icon}</div>
+                <span className="ben-circular-label">{b.title}</span>
               </div>
             ))}
           </div>
@@ -496,12 +494,41 @@ export default function Home({ addToCart }) {
 .faq-item[open] .faq-arrow { transform: rotate(90deg); opacity: 1; color: #16A34A; }
 .faq-answer { padding-bottom: 1.5rem; color: #4B5563; line-height: 1.7; font-size: 1rem; }
 
-/* ═══════ 9. BENEFITS ═══════ */
-.ben-card { text-align: center; padding: 2rem 1.5rem; background: #FFFFFF; border-radius: 16px; border: 1px solid #E5E7EB; }
-.ben-icon { width: 72px; height: 72px; border-radius: 50%; background: #F0FDF4; color: #16A34A; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem; }
-.ben-card:hover .ben-icon { transform: scale(1.1) rotate(5deg); transition: transform 0.3s; }
-.ben-card h3 { font-size: 1.15rem; color: #1F2937; margin-bottom: .8rem; font-weight: 800; }
-.ben-card p { font-size: .95rem; color: #6B7280; line-height: 1.5; }
+/* ═══════ 9. BENEFITS (CIRCULAR) ═══════ */
+.ben-circular-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  text-align: center;
+}
+.ben-circular-icon {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background-color: #2D5A44; /* Matu Deep Green */
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 4px 15px rgba(45, 90, 68, 0.1);
+}
+.ben-circular-item:hover .ben-circular-icon {
+  transform: scale(1.1);
+  box-shadow: 0 8px 25px rgba(45, 90, 68, 0.2);
+}
+.ben-circular-label {
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: #2D5A44;
+}
+@media(min-width: 768px) {
+  .ben-circular-icon { width: 110px; height: 110px; }
+  .ben-circular-label { font-size: 0.8rem; }
+}
 
 /* Carousel Dots Mobile */
 .hide-desktop { display: none; }
