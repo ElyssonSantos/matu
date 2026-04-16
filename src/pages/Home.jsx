@@ -52,12 +52,12 @@ const newArrivals = [
 ];
 
 const testimonials = [
-  { id: 1, name: 'Mariana Silva', text: 'Os produtos da Matú mudaram minha relação com o espelho. A textura é leve e o resultado é uma pele viçosa de verdade.', rating: 5, image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=150&h=150' },
-  { id: 2, name: 'Camila Torres', text: 'Finalmente encontrei um shampoo sólido que realmente limpa sem agredir. E o cheiro é maravilhoso.', rating: 5, image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&q=80&w=150&h=150' },
-  { id: 3, name: 'Juliana Paiva', text: 'O óleo corporal é meu momento de paz no dia. Sinto que estou dando o melhor para o meu corpo.', rating: 5, image: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=150&h=150' },
-  { id: 4, name: 'Beatriz Costa', text: 'O tônico equilibrante é perfeito para minha pele mista. Reduziu a oleosidade sem ressecar.', rating: 5, image: 'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&q=80&w=150&h=150' },
-  { id: 5, name: 'Fernanda Lima', text: 'Não vivo mais sem o sérum renovador. Minha pele está mais firme e com um brilho natural incrível.', rating: 5, image: 'https://images.unsplash.com/photo-1548142813-c348350df52b?auto=format&fit=crop&q=80&w=150&h=150' },
-  { id: 6, name: 'Helena Souza', text: 'A manteiga de karité é um milagre para áreas secas. Uso no corpo todo e sinto a diferença imediata.', rating: 5, image: 'https://images.unsplash.com/photo-1502685104226-ee32379fefbe?auto=format&fit=crop&q=80&w=150&h=150' }
+  { id: 1, name: 'Mariana Silva', highlight: 'Eu amei 😍', text: 'Os produtos da Matú mudaram minha relação com o espelho. A textura é leve e o resultado é uma pele viçosa de verdade.', rating: 5, image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=150&h=150' },
+  { id: 2, name: 'Camila Torres', highlight: 'Muito bom!', text: 'Finalmente encontrei um shampoo sólido que realmente limpa sem agredir. E o cheiro é maravilhoso.', rating: 5, image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&q=80&w=150&h=150' },
+  { id: 3, name: 'Juliana Paiva', highlight: 'Incrível!', text: 'O óleo corporal é meu momento de paz no dia. Sinto que estou dando o melhor para o meu corpo.', rating: 5, image: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=150&h=150' },
+  { id: 4, name: 'Beatriz Costa', highlight: 'Recomendo muito!', text: 'O tônico equilibrante é perfeito para minha pele mista. Reduziu a oleosidade sem ressecar.', rating: 5, image: 'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&q=80&w=150&h=150' },
+  { id: 5, name: 'Fernanda Lima', highlight: 'Pele impecável!', text: 'Não vivo mais sem o sérum renovador. Minha pele está mais firme e com um brilho natural incrível.', rating: 5, image: 'https://images.unsplash.com/photo-1548142813-c348350df52b?auto=format&fit=crop&q=80&w=150&h=150' },
+  { id: 6, name: 'Helena Souza', highlight: 'Sensação única!', text: 'A manteiga de karité é um milagre para áreas secas. Uso no corpo todo e sinto a diferença imediata.', rating: 5, image: 'https://images.unsplash.com/photo-1502685104226-ee32379fefbe?auto=format&fit=crop&q=80&w=150&h=150' }
 ];
 
 const faqData = [
@@ -107,8 +107,9 @@ export default function Home({ addToCart }) {
 
   useEffect(() => {
     const timer = setInterval(() => setActiveSlide(p => (p + 1) % sliderContent.length), 5000);
-    return () => clearInterval(timer);
-  }, [activeSlide]);
+    const tTimer = setInterval(() => setTSlide(p => (p + 1) % (testimonials.length / 2)), 6000);
+    return () => { clearInterval(timer); clearInterval(tTimer); };
+  }, [activeSlide, tSlide]);
 
   const swipeScroll = (className, dir) => {
     const container = document.querySelector(`.${className}`);
@@ -117,8 +118,8 @@ export default function Home({ addToCart }) {
     }
   };
 
-  const nextT = () => setTSlide(p => (p + 1) % testimonials.length);
-  const prevT = () => setTSlide(p => (p - 1 + testimonials.length) % testimonials.length);
+  const nextT = () => setTSlide(p => (p + 1) % Math.ceil(testimonials.length / 3));
+  const prevT = () => setTSlide(p => (p - 1 + Math.ceil(testimonials.length / 3)) % Math.ceil(testimonials.length / 3));
 
   return (
     <div className="home-root">
@@ -237,28 +238,58 @@ export default function Home({ addToCart }) {
         </div>
       </section>
 
-      {/* ═══════════════ 7. TESTIMONIALS ═══════════════ */}
-      <section className="sect sect-bg">
+      <section className="sect sect-white">
         <div className="ctnr">
-          <div className="sect-head"><h2>Relatos de Experiência</h2><p className="sect-sub">O que as pessoas estão sentindo com a Matú.</p></div>
-          <div className="slider-wrapper">
-            <button className="slider-nav prev" onClick={prevT}><ChevronLeft size={22} /></button>
-            <div className="swipe-track test-track desktop-grid-3">
-              {testimonials.slice(0, 3).map((t, idx) => (
-                <div key={t.id} className="test-card swipe-item">
-                  <div className="test-top">
-                    <img src={t.image} alt={t.name} className="test-avatar" />
-                    <div className="test-stars">{[...Array(t.rating)].map((_, i) => <Star key={i} size={14} fill="#2D5A44" stroke="none" />)}</div>
+          <div className="sect-head">
+            <h2>Depoimentos</h2>
+          </div>
+          <div className="testimonials-slider-container">
+            <div className="t-track" style={{ transform: `translateX(-${tSlide * 100}%)` }}>
+              <div className="t-group">
+                {testimonials.slice(0, 3).map(t => (
+                  <div key={t.id} className="test-card-new">
+                    <div className="test-header">
+                      <img src={t.image} alt={t.name} className="test-avatar" />
+                      <div className="test-meta">
+                        <div className="test-stars">
+                          {[...Array(t.rating)].map((_, i) => <Star key={i} size={14} fill="#2D5A44" stroke="none" />)}
+                        </div>
+                        <span className="test-name">{t.name.split(' ')[0]}</span>
+                      </div>
+                    </div>
+                    <h4 className="test-highlight">{t.highlight}</h4>
+                    <p className="test-text">{t.text}</p>
                   </div>
-                  <p className="test-text">"{t.text}"</p>
-                  <div className="test-author">
-                    <span className="test-name">{t.name}</span>
-                    <span className="test-role">Cliente Verificada</span>
+                ))}
+              </div>
+              <div className="t-group">
+                {testimonials.slice(3, 6).map(t => (
+                  <div key={t.id} className="test-card-new">
+                    <div className="test-header">
+                      <img src={t.image} alt={t.name} className="test-avatar" />
+                      <div className="test-meta">
+                        <div className="test-stars">
+                          {[...Array(t.rating)].map((_, i) => <Star key={i} size={14} fill="#2D5A44" stroke="none" />)}
+                        </div>
+                        <span className="test-name">{t.name.split(' ')[0]}</span>
+                      </div>
+                    </div>
+                    <h4 className="test-highlight">{t.highlight}</h4>
+                    <p className="test-text">{t.text}</p>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-            <button className="slider-nav next" onClick={nextT}><ChevronRight size={22} /></button>
+            
+            <div className="t-controls-row">
+              <div className="t-progress-bar">
+                <div className="t-progress-fill" style={{ width: tSlide === 0 ? '50%' : '100%' }} />
+              </div>
+              <div className="t-nav-btns">
+                <button className="t-nav-btn" onClick={prevT}><ChevronLeft size={20} /></button>
+                <button className="t-nav-btn" onClick={nextT}><ChevronRight size={20} /></button>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -462,15 +493,30 @@ export default function Home({ addToCart }) {
 .par-img-desktop { display: block; width: 100%; height: auto; aspect-ratio: 21/9; object-fit: cover; }
 .par-img-mobile { display: none; width: 100%; height: auto; aspect-ratio: 4/5; object-fit: cover; }
 
-/* ═══════ 7. TESTIMONIALS ═══════ */
-.test-card { background: #FFFFFF; padding: 2rem; border-radius: 16px; border: 1px solid #E5E7EB; display: flex; flex-direction: column; gap: 1.2rem; }
-.test-top { display: flex; justify-content: space-between; align-items: center; }
-.test-avatar { width: 55px; height: 55px; border-radius: 50%; object-fit: cover; border: 2px solid #F9FAFB; }
+/* ═══════ 7. TESTIMONIALS (NEW STYLE) ═══════ */
+.testimonials-slider-container { position: relative; overflow: hidden; margin-top: 2rem; }
+.t-track { display: flex; transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1); width: 100%; }
+.t-group { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; min-width: 100%; flex-shrink: 0; padding: 10px 0; }
+.test-card-new { background: #F3F4F6; padding: 2.5rem; border-radius: 12px; display: flex; flex-direction: column; text-align: left; transition: transform 0.3s ease; }
+.test-card-new:hover { transform: translateY(-5px); }
+.test-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; }
+.test-avatar { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; }
+.test-meta { display: flex; flex-direction: column; gap: 2px; }
 .test-stars { display: flex; gap: 2px; }
-.test-text { font-size: 1rem; line-height: 1.7; color: #4B5563; font-style: italic; flex: 1; }
-.test-author { display: flex; flex-direction: column; }
-.test-name { font-weight: 800; color: #2D5A44; font-size: 1rem; }
-.test-role { font-size: .8rem; color: #6B7280; margin-top: 2px; }
+.test-name { font-size: 0.85rem; color: #6B7280; font-weight: 500; }
+.test-highlight { font-size: 1.1rem; font-weight: 800; color: #1F2937; margin-bottom: 0.8rem; }
+.test-text { font-size: 0.95rem; color: #4B5563; line-height: 1.6; }
+
+.t-controls-row { display: flex; align-items: center; justify-content: space-between; margin-top: 4rem; gap: 2rem; }
+.t-progress-bar { flex: 1; height: 1px; background: #E5E7EB; position: relative; }
+.t-progress-fill { position: absolute; left: 0; top: 0; height: 100%; background: #2D5A44; transition: width 0.6s ease; }
+.t-nav-btns { display: flex; gap: 12px; }
+.t-nav-btn { width: 48px; height: 48px; border-radius: 50%; border: 1px solid #E5E7EB; background: #fff; display: flex; align-items: center; justify-content: center; color: #1F2937; cursor: pointer; transition: all 0.2s; }
+.t-nav-btn:hover { background: #F9FAFB; border-color: #1F2937; }
+
+@media(max-width: 992px) {
+  .t-group { grid-template-columns: 1fr; }
+}
 
 /* ═══════ 8. FAQ ═══════ */
 .faq-layout { display: grid; grid-template-columns: 1fr 1.2fr; gap: 4rem; align-items: start; }
