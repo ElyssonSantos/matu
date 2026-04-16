@@ -200,16 +200,11 @@ export default function Home({ addToCart }) {
                 >
                   <img src={r.poster} alt={r.product} className="insta-poster" />
                   <div className="insta-card-overlay">
-                    <div className="insta-product-mini">
-                      <div className="mini-thumb-box">
-                        <img src={r.thumb} alt="" />
-                      </div>
-                      <div className="mini-info">
-                        <span className="mini-name">{r.product}</span>
-                        <div className="mini-prices">
-                          <span className="mini-old">R$ {r.oldPrice.split(' ')[1]}</span>
-                          <span className="mini-new">R$ {r.price.split(' ')[1]}</span>
-                        </div>
+                    <div className="insta-product-clean">
+                      <span className="clean-name">{r.product}</span>
+                      <div className="clean-prices">
+                        <span className="clean-old">R$ {r.oldPrice.split(' ')[1]}</span>
+                        <span className="clean-new">R$ {r.price.split(' ')[1]}</span>
                       </div>
                     </div>
                   </div>
@@ -505,20 +500,20 @@ export default function Home({ addToCart }) {
 .insta-card { 
   position: relative; 
   flex-shrink: 0; 
-  width: 240px; 
+  width: 260px; 
   aspect-ratio: 9/16; 
   border-radius: 20px; 
   overflow: hidden; 
   cursor: pointer; 
-  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 1s cubic-bezier(0.19, 1, 0.22, 1);
   background: #000;
   box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-  opacity: 0.5;
-  transform: scale(0.85);
+  opacity: 0.4;
+  transform: scale(0.8);
 }
 
 .insta-card.is-centered { 
-  transform: scale(1.1); 
+  transform: scale(1.05); 
   z-index: 5; 
   opacity: 1;
   box-shadow: 0 20px 50px rgba(0,0,0,0.2);
@@ -530,28 +525,19 @@ export default function Home({ addToCart }) {
   position: absolute; 
   bottom: 0; left: 0; right: 0; 
   padding: 1.5rem; 
-  background: linear-gradient(transparent, rgba(0,0,0,0.9)); 
+  background: linear-gradient(transparent, rgba(0,0,0,0.7)); 
 }
 
-.insta-product-mini { 
+.insta-product-clean { 
   display: flex; 
   flex-direction: column;
-  gap: 0.4rem; 
-  background: none; 
-  backdrop-filter: none;
-  border-radius: 0; 
-  padding: 0; 
-  border: none;
+  gap: 0.3rem; 
+  text-align: left;
 }
-
-.mini-thumb-box { display: none; }
-.mini-thumb-box img { width: 100%; height: 100%; object-fit: contain; padding: 2px; }
-
-.mini-info { display: flex; flex-direction: column; gap: 4px; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
-.mini-name { color: #fff; font-size: 0.85rem; font-weight: 700; white-space: nowrap; }
-.mini-prices { display: flex; gap: 10px; align-items: center; }
-.mini-old { color: rgba(255,255,255,0.7); font-size: 0.75rem; text-decoration: line-through; }
-.mini-new { color: #2D5A44; font-size: 0.9rem; font-weight: 900; }
+.clean-name { color: #fff; font-size: 0.85rem; font-weight: 700; text-shadow: 0 1px 4px rgba(0,0,0,0.5); }
+.clean-prices { display: flex; gap: 8px; align-items: center; }
+.clean-old { color: rgba(255,255,255,0.6); font-size: 0.75rem; text-decoration: line-through; }
+.clean-new { color: #2D5A44; font-size: 0.9rem; font-weight: 900; }
 
 .insta-nav {
   position: absolute;
