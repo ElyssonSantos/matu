@@ -222,11 +222,6 @@ export default function Home({ addToCart }) {
         <img src="https://images.unsplash.com/photo-1556228578-0d85b1a4d571?q=80&w=1920&h=800&fit=crop" alt="Matú Natureza" className="par-img-desktop" />
         {/* Mobile Image */}
         <img src="https://images.unsplash.com/photo-1556228578-0d85b1a4d571?q=80&w=800&h=1000&fit=crop" alt="Matú Natureza Mobile" className="par-img-mobile" />
-        <div className="par-overlay" />
-        <div className="par-content">
-          <h2>Sua verdadeira beleza desperta quando você se reconecta à natureza.</h2>
-          <p>Rituais que respeitam o seu tempo e o meio ambiente.</p>
-        </div>
       </section>
 
       {/* ═══════════════ 6. NEW ARRIVALS ═══════════════ */}
@@ -466,10 +461,6 @@ export default function Home({ addToCart }) {
 .parallax-banner-section { position: relative; width: 100%; overflow: hidden; }
 .par-img-desktop { display: block; width: 100%; height: auto; aspect-ratio: 21/9; object-fit: cover; }
 .par-img-mobile { display: none; width: 100%; height: auto; aspect-ratio: 4/5; object-fit: cover; }
-.par-overlay { position: absolute; inset: 0; background: rgba(0, 30, 20, 0.45); }
-.par-content { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 2rem; z-index: 2; }
-.par-content h2 { color: #FFFFFF; font-size: 2.8rem; max-width: 850px; line-height: 1.15; font-weight: 800; text-shadow: 0 2px 10px rgba(0,0,0,0.3); }
-.par-content p { color: #FFFFFF; font-size: 1.25rem; margin-top: 1.5rem; text-shadow: 0 2px 4px rgba(0,0,0,0.5); font-weight: 500; }
 
 /* ═══════ 7. TESTIMONIALS ═══════ */
 .test-card { background: #FFFFFF; padding: 2rem; border-radius: 16px; border: 1px solid #E5E7EB; display: flex; flex-direction: column; gap: 1.2rem; }
@@ -542,7 +533,6 @@ export default function Home({ addToCart }) {
 @media(max-width: 768px) {
   .hero-img-desktop, .par-img-desktop { display: none; }
   .hero-img-mobile, .par-img-mobile { display: block; }
-  .par-content h2 { font-size: 1.8rem; }
   .faq-layout { grid-template-columns: 1fr; gap: 2.5rem; }
   .hide-mobile { display: none !important; }
   .hide-desktop { display: flex; }
