@@ -61,6 +61,7 @@ function App() {
         target="_blank" 
         rel="noopener noreferrer" 
         className="whatsapp-float"
+        aria-label="Falar no WhatsApp"
       >
         <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" />
       </a>

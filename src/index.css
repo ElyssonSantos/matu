@@ -28,6 +28,11 @@
   --header-height: 110px;
 }
 
+html {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+
 * {
   margin: 0;
   padding: 0;

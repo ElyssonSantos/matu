@@ -17,16 +17,16 @@ export default function Navbar({ toggleCart, cartCount }) {
       
       <header className="navbar">
         <div className="container nav-content">
-          <button className="mobile-menu-btn" onClick={() => setMobileMenuOpen(true)}>
+          <button className="mobile-menu-btn" onClick={() => setMobileMenuOpen(true)} aria-label="Abrir menu">
             <Menu />
           </button>
-
+          
           <Link to="/" className="brand-logo">
-            <img src="/images/logo.png" alt="MATÚ" className="logo-img" />
+            <img src="/images/logo.png" alt="MATÚ" className="logo-img" loading="eager" />
           </Link>
 
           <nav className={`nav-links ${mobileMenuOpen ? 'active' : ''}`}>
-            <button className="close-menu-btn" onClick={() => setMobileMenuOpen(false)}>
+            <button className="close-menu-btn" onClick={() => setMobileMenuOpen(false)} aria-label="Fechar menu">
               <X />
             </button>
             <Link to="/" onClick={() => setMobileMenuOpen(false)}>Home</Link>
@@ -35,10 +35,10 @@ export default function Navbar({ toggleCart, cartCount }) {
           </nav>
 
           <div className="nav-actions">
-            <Link to="/login" className="btn-icon">
+            <Link to="/login" className="btn-icon" aria-label="Ir para login">
               <User size={22} />
             </Link>
-            <button className="btn-icon cart-btn" onClick={toggleCart}>
+            <button className="btn-icon cart-btn" onClick={toggleCart} aria-label="Abrir carrinho">
               <ShoppingBag size={22} />
               {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
             </button>

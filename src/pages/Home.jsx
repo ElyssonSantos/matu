@@ -104,8 +104,15 @@ function ProductCard({ product, addToCart }) {
 export default function Home({ addToCart }) {
   const [activeSlide, setActiveSlide] = useState(0);
   const [tSlide, setTSlide] = useState(0);
-  const [centeredInsta, setCenteredInsta] = useState(2); // Start with item 2 (middle-ish)
+  const [centeredInsta, setCenteredInsta] = useState(2);
+  const [winWidth, setWinWidth] = useState(window.innerWidth);
   const instaTrackRef = useRef(null);
+
+  useEffect(() => {
+    const handleResize = () => setWinWidth(window.innerWidth);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   useEffect(() => {
     const track = instaTrackRef.current;
@@ -161,13 +168,13 @@ export default function Home({ addToCart }) {
       <section className="hero-banner-section">
         {sliderContent.map((s, i) => (
           <div key={s.id} className={`hero-slide ${i === activeSlide ? 'active' : ''}`}>
-            <img src={s.image} alt="Banner" className="hero-img-desktop" />
-            <img src={s.mobileImage} alt="Banner" className="hero-img-mobile" />
+            <img src={s.image} alt="Banner" className="hero-img-desktop" loading={i === 0 ? "eager" : "lazy"} />
+            <img src={s.mobileImage} alt="Banner" className="hero-img-mobile" loading={i === 0 ? "eager" : "lazy"} />
           </div>
         ))}
         <div className="hero-dots">
           {sliderContent.map((_, i) => (
-            <button key={i} className={`hero-dot ${i === activeSlide ? 'active' : ''}`} onClick={() => setActiveSlide(i)} />
+            <button key={i} className={`hero-dot ${i === activeSlide ? 'active' : ''}`} onClick={() => setActiveSlide(i)} aria-label={`Ir para slide ${i + 1}`} />
           ))}
         </div>
       </section>
@@ -197,10 +204,10 @@ export default function Home({ addToCart }) {
                 <div className="reelfy_card card_type-overlay_product reelfy_card_autoplay">
                   <div className="reelfy_card_video_wrapper">
                     <div className="reelfy_card_video">
-                      <img src={r.poster} alt={r.product} className="reelfy-poster-img" />
+                      <img src={r.poster} alt={r.product} className="reelfy-poster-img" loading="lazy" />
                       <div className="reelfy_card_product card_product_ajax active">
                         <div className="reelfy_card_product__image">
-                          <img src={r.thumb} alt={r.product} />
+                          <img src={r.thumb} alt={r.product} loading="lazy" />
                         </div>
                         <div className="reelfy_card_product__content">
                           <div className="reelfy_card_product__title">
@@ -219,16 +226,16 @@ export default function Home({ addToCart }) {
             ))}
           </div>
           
-          <button className="rf-nav-btn prev" onClick={() => swipeScroll('reelfy-scroll-container', 'left')}>
+          <button className="rf-nav-btn prev" onClick={() => swipeScroll('reelfy-scroll-container', 'left')} aria-label="Anterior">
             <svg viewBox="0 0 100 100"><path d="M 10,50 L 60,100 L 70,90 L 30,50 L 70,10 L 60,0 Z" fill="currentColor"></path></svg>
           </button>
-          <button className="rf-nav-btn next" onClick={() => swipeScroll('reelfy-scroll-container', 'right')}>
+          <button className="rf-nav-btn next" onClick={() => swipeScroll('reelfy-scroll-container', 'right')} aria-label="Próximo">
             <svg viewBox="0 0 100 100"><path d="M 10,50 L 60,100 L 70,90 L 30,50 L 70,10 L 60,0 Z" fill="currentColor" transform="translate(100, 100) rotate(180)"></path></svg>
           </button>
 
           <div className="reelfy-dots">
             {instagramReels.map((_, idx) => (
-              <span key={idx} className={`rf-dot ${centeredInsta === idx ? 'is-active' : ''}`}></span>
+              <span key={idx} className={`rf-dot ${centeredInsta === idx ? 'is-active' : ''}`} aria-hidden="true"></span>
             ))}
           </div>
         </div>
@@ -258,7 +265,7 @@ export default function Home({ addToCart }) {
               </div>
             </Link>
             <Link to="/#produtos" className="bento-item item-medium">
-              <img src="/images/category_oil.png" alt="Finalizadores" />
+              <img src="/images/category_oil.png" alt="Finalizadores" loading="lazy" />
               <div className="bento-content">
                 <h3>Finalizadores</h3>
               </div>
@@ -269,8 +276,8 @@ export default function Home({ addToCart }) {
 
       {/* ═══════════════ 5. PARALLAX BANNER (DUAL SYSTEM) ═══════════════ */}
       <section className="parallax-banner-section">
-        <img src="https://images.unsplash.com/photo-1556228578-0d85b1a4d571?q=80&w=1920&h=800&fit=crop" alt="Matú Natureza" className="par-img-desktop" />
-        <img src="https://images.unsplash.com/photo-1556228578-0d85b1a4d571?q=80&w=800&h=1000&fit=crop" alt="Matú Natureza Mobile" className="par-img-mobile" />
+        <img src="https://images.unsplash.com/photo-1556228578-0d85b1a4d571?q=80&w=1920&h=800&fit=crop" alt="Matú Natureza" className="par-img-desktop" loading="lazy" />
+        <img src="https://images.unsplash.com/photo-1556228578-0d85b1a4d571?q=80&w=800&h=1000&fit=crop" alt="Matú Natureza Mobile" className="par-img-mobile" loading="lazy" />
       </section>
 
       {/* ═══════════════ 6. NEW ARRIVALS ═══════════════ */}
@@ -292,7 +299,7 @@ export default function Home({ addToCart }) {
             <h2>Depoimentos</h2>
           </div>
           <div className="testimonials-slider-container">
-            <div className="t-track" style={{ transform: `translateX(-${tSlide * (100 / (window.innerWidth < 768 ? 1 : 1.5))}%)` }}>
+            <div className="t-track" style={{ transform: `translateX(-${tSlide * (100 / (winWidth < 768 ? 1 : 1.5))}%)` }}>
               {testimonials.map(t => (
                 <div key={t.id} className="test-card-new">
                   <div className="test-header">
@@ -315,8 +322,8 @@ export default function Home({ addToCart }) {
                 <div className="t-progress-fill" style={{ width: `${((tSlide + 1) / testimonials.length) * 100}%` }} />
               </div>
               <div className="t-nav-btns">
-                <button className="t-nav-btn" onClick={prevT}><ChevronLeft size={20} /></button>
-                <button className="t-nav-btn" onClick={nextT}><ChevronRight size={20} /></button>
+                <button className="t-nav-btn" onClick={prevT} aria-label="Depoimento anterior"><ChevronLeft size={20} /></button>
+                <button className="t-nav-btn" onClick={nextT} aria-label="Próximo depoimento"><ChevronRight size={20} /></button>
               </div>
             </div>
           </div>
@@ -465,7 +472,7 @@ export default function Home({ addToCart }) {
 @media(max-width: 768px) {
   .hero-img-desktop, .par-img-desktop { display: none; }
   .hero-img-mobile, .par-img-mobile { display: block; }
-  .rf-video-item { width: calc(55% - 10px); }
+  .rf-video-item { width: calc(33.3% - 14px); }
   .reelfy-scroll-container { padding: 2rem 5%; }
   .rf-nav-btn { display: none; }
   .faq-layout { grid-template-columns: 1fr; gap: 2.5rem; }

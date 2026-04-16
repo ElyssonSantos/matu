@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import { Leaf, Rabbit, Droplet, Plus, Minus, ShieldCheck } from 'lucide-react';
+import { useParams, Link, useNavigate } from 'react-router-dom';
+import { Leaf, Rabbit, Droplet, Plus, Minus, ShieldCheck, ChevronRight } from 'lucide-react';
 
 const mockProduct = {
   id: 1,
@@ -20,6 +20,7 @@ const crossSell = [
 
 export default function Product({ addToCart }) {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState('sobre'); // sobre, como-usar, para-quem
 
@@ -32,7 +33,7 @@ export default function Product({ addToCart }) {
     <div className="product-page">
       <div className="container product-main">
         <div className="product-gallery">
-          <img src={mockProduct.image} alt={mockProduct.name} className="main-image" />
+          <img src={mockProduct.image} alt={mockProduct.name} className="main-image" loading="eager" />
         </div>
         
         <div className="product-details">
@@ -110,8 +111,8 @@ export default function Product({ addToCart }) {
           <div className="grid grid-cols-4 mt-4 cross-sell-grid">
             {crossSell.slice(0, 2).map(item => (
               <div key={item.id} className="product-card">
-                <div className="product-img-wrapper" style={{ cursor: 'pointer' }} onClick={() => window.location.href=`/product/${item.id}`}>
-                  <img src={item.image} alt={item.name} />
+                <div className="product-img-wrapper" style={{ cursor: 'pointer' }} onClick={() => navigate(`/product/${item.id}`)}>
+                  <img src={item.image} alt={item.name} loading="lazy" />
                   <button className="quick-add" onClick={(e) => { e.stopPropagation(); addToCart({ ...item, quantity: 1 }); }}>+ Rápido</button>
                 </div>
                 <div className="product-info-minimal">
