@@ -253,7 +253,7 @@ export default function Home({ addToCart }) {
                 <div key={t.id} className="test-card swipe-item">
                   <div className="test-top">
                     <img src={t.image} alt={t.name} className="test-avatar" />
-                    <div className="test-stars">{[...Array(t.rating)].map((_, i) => <Star key={i} size={14} fill="#16A34A" stroke="none" />)}</div>
+                    <div className="test-stars">{[...Array(t.rating)].map((_, i) => <Star key={i} size={14} fill="#2D5A44" stroke="none" />)}</div>
                   </div>
                   <p className="test-text">"{t.text}"</p>
                   <div className="test-author">
@@ -279,7 +279,7 @@ export default function Home({ addToCart }) {
               <div className="faq-cta-box">
                 <p><strong>Não encontrou sua resposta?</strong></p>
                 <span className="faq-resp">Tempo médio de resposta: 24h</span>
-                <a href="#contato" className="btn btn-primary" style={{ background: '#16A34A', color: 'white', padding: '0.8rem 1.5rem', borderRadius: '50px', textDecoration: 'none', fontWeight: 'bold', display: 'inline-block' }}>Entre em Contato</a>
+                <a href="#contato" className="btn btn-primary" style={{ background: '#2D5A44', color: 'white', padding: '0.8rem 1.5rem', borderRadius: '50px', textDecoration: 'none', fontWeight: 'bold', display: 'inline-block' }}>Entre em Contato</a>
               </div>
             </div>
             <div className="faq-right">
@@ -322,14 +322,14 @@ export default function Home({ addToCart }) {
 .ctnr { max-width: 1300px; margin: 0 auto; padding: 0 4%; }
 .ctnr-full { max-width: 1400px; margin: 0 auto; padding: 0 4%; }
 .sect-head { margin-bottom: 2.5rem; }
-.sect-head h2 { font-size: 2.2rem; font-weight: 800; color: #16A34A; }
+.sect-head h2 { font-size: 2.2rem; font-weight: 800; color: #2D5A44; }
 .sect-head.center { text-align: center; justify-content: center; }
 .sect-sub { color: #1F2937; max-width: 550px; font-size: 1.05rem; margin-top: 0.5rem; }
-.tag-label { display: inline-block; font-size: .8rem; font-weight: 800; text-transform: uppercase; letter-spacing: .15em; color: #16A34A; margin-bottom: 1rem; }
+.tag-label { display: inline-block; font-size: .8rem; font-weight: 800; text-transform: uppercase; letter-spacing: .15em; color: #2D5A44; margin-bottom: 1rem; }
 .sect-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 1rem; }
 .see-more { display: flex; align-items: center; gap: .5rem; font-weight: 700; font-size: .95rem; color: #1F2937; text-decoration: none; transition: opacity 0.2s; }
 .see-more:hover { opacity: 0.7; }
-.sm-arrow { width: 28px; height: 28px; border-radius: 50%; background: #16A34A; color: #fff; display: flex; align-items: center; justify-content: center; }
+.sm-arrow { width: 28px; height: 28px; border-radius: 50%; background: #2D5A44; color: #fff; display: flex; align-items: center; justify-content: center; }
 
 /* ═══════ 1. HERO (DUAL BANNER) ═══════ */
 .hero-banner-section { position: relative; width: 100%; overflow: hidden; }
@@ -407,16 +407,16 @@ export default function Home({ addToCart }) {
 .m-product-card:hover { transform: translateY(-4px); box-shadow: 0 12px 30px rgba(0,0,0,0.06); }
 .m-product-img { position: relative; aspect-ratio: 1/1.15; overflow: hidden; background: #F9FAFB; }
 .m-product-img img { width: 100%; height: 100%; object-fit: cover; }
-.m-badge { position: absolute; top: 12px; left: 12px; background: #16A34A; color: #fff; padding: 4px 12px; border-radius: 20px; font-size: .75rem; font-weight: 800; z-index: 3; }
+.m-badge { position: absolute; top: 12px; left: 12px; background: #2D5A44; color: #fff; padding: 4px 12px; border-radius: 20px; font-size: .75rem; font-weight: 800; z-index: 3; }
 .m-badge-discount { left: auto; right: 12px; background: #111827; }
 .m-product-info { padding: 1.5rem; display: flex; flex-direction: column; flex: 1; text-align: center; }
 .m-product-info h3 { font-size: 1.05rem; font-weight: 700; color: #1F2937; margin-bottom: .8rem; min-height: 2.8em; line-height: 1.4; }
 .m-price-block { display: flex; flex-direction: column; margin-bottom: 1.2rem; }
 .m-old-price { text-decoration: line-through; color: #9CA3AF; font-size: .85rem; margin-bottom: 0.1rem; }
-.m-price { font-size: 1.3rem; font-weight: 800; color: #16A34A; }
+.m-price { font-size: 1.3rem; font-weight: 800; color: #2D5A44; }
 .m-installments { font-size: .8rem; color: #6B7280; margin-top: 0.2rem; }
-.m-btn-buy { width: 100%; background: #16A34A; color: #FFFFFF; border: none; padding: .85rem; border-radius: 50px; font-weight: 800; text-transform: uppercase; letter-spacing: .05em; cursor: pointer; transition: background .2s; }
-.m-btn-buy:hover { background: #15803d; }
+.m-btn-buy { width: 100%; background: #2D5A44; color: #FFFFFF; border: none; padding: .85rem; border-radius: 50px; font-weight: 800; text-transform: uppercase; letter-spacing: .05em; cursor: pointer; transition: background .2s; }
+.m-btn-buy:hover { background: #1a3b2b; }
 
 /* ═══════ MOBILE-FIRST SWIPE SYSTEM ═══════ */
 .swipe-track {
@@ -452,10 +452,10 @@ export default function Home({ addToCart }) {
 .reel-product-pill { display: flex; align-items: center; gap: .8rem; background: rgba(255,255,255,.98); border-radius: 8px; padding: .6rem; }
 .reel-thumb { width: 40px; height: 40px; object-fit: cover; border-radius: 4px; flex-shrink: 0; }
 .reel-pname { display: block; font-size: .8rem; font-weight: 800; color: #1F2937; }
-.reel-pprice { font-size: .75rem; color: #16A34A; font-weight: 700; margin-top: 2px; display: block; }
+.reel-pprice { font-size: .75rem; color: #2D5A44; font-weight: 700; margin-top: 2px; display: block; }
 .reel-pprice s { color: #9CA3AF; font-weight: normal; margin-right: 4px; }
-.slider-nav { position: absolute; top: 50%; transform: translateY(-50%); width: 44px; height: 44px; border-radius: 50%; background: #FFFFFF; color: #16A34A; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,.15); z-index: 10; border: 1px solid #E5E7EB; cursor: pointer; transition: all .2s; }
-.slider-nav:hover { background: #16A34A; color: #FFFFFF; border-color: #16A34A; }
+.slider-nav { position: absolute; top: 50%; transform: translateY(-50%); width: 44px; height: 44px; border-radius: 50%; background: #FFFFFF; color: #2D5A44; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,.15); z-index: 10; border: 1px solid #E5E7EB; cursor: pointer; transition: all .2s; }
+.slider-nav:hover { background: #2D5A44; color: #FFFFFF; border-color: #2D5A44; }
 .slider-nav.prev { left: -22px; }
 .slider-nav.next { right: -22px; }
 @media(max-width: 868px) { .slider-nav { display: none; } }
@@ -476,12 +476,12 @@ export default function Home({ addToCart }) {
 .test-stars { display: flex; gap: 2px; }
 .test-text { font-size: 1rem; line-height: 1.7; color: #4B5563; font-style: italic; flex: 1; }
 .test-author { display: flex; flex-direction: column; }
-.test-name { font-weight: 800; color: #16A34A; font-size: 1rem; }
+.test-name { font-weight: 800; color: #2D5A44; font-size: 1rem; }
 .test-role { font-size: .8rem; color: #6B7280; margin-top: 2px; }
 
 /* ═══════ 8. FAQ ═══════ */
 .faq-layout { display: grid; grid-template-columns: 1fr 1.2fr; gap: 4rem; align-items: start; }
-.faq-left h2 { font-size: 2.8rem; color: #16A34A; margin-bottom: 1rem; }
+.faq-left h2 { font-size: 2.8rem; color: #2D5A44; margin-bottom: 1rem; }
 .faq-left p { color: #4B5563; line-height: 1.7; margin-bottom: 2.5rem; font-size: 1.05rem; }
 .faq-cta-box { background: #F9FAFB; padding: 2rem; border-radius: 16px; border: 1px solid #E5E7EB; }
 .faq-cta-box p strong { color: #1F2937; margin-bottom: 0.5rem; display: block; font-size: 1.1rem; }
@@ -491,7 +491,7 @@ export default function Home({ addToCart }) {
 .faq-item:last-child { border-bottom: none; }
 .faq-item summary { padding: 1.5rem 0; list-style: none; display: flex; justify-content: space-between; align-items: center; font-size: 1.1rem; font-weight: 700; cursor: pointer; color: #1F2937; }
 .faq-arrow { transition: transform .3s; opacity: .5; }
-.faq-item[open] .faq-arrow { transform: rotate(90deg); opacity: 1; color: #16A34A; }
+.faq-item[open] .faq-arrow { transform: rotate(90deg); opacity: 1; color: #2D5A44; }
 .faq-answer { padding-bottom: 1.5rem; color: #4B5563; line-height: 1.7; font-size: 1rem; }
 
 /* ═══════ 9. BENEFITS (CIRCULAR) ═══════ */
@@ -534,7 +534,7 @@ export default function Home({ addToCart }) {
 .hide-desktop { display: none; }
 .carousel-dots-mobile { display: flex; justify-content: center; gap: 8px; margin-top: 2rem; }
 .c-dot { width: 8px; height: 8px; border-radius: 50%; background: #E5E7EB; transition: all 0.3s ease; }
-.c-dot.active { width: 24px; border-radius: 4px; background: #16A34A; }
+.c-dot.active { width: 24px; border-radius: 4px; background: #2D5A44; }
 
 /* ═══════ MEDIA QUERIES ═══════ */
 @media(max-width: 768px) {
