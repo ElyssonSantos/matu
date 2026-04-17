@@ -456,7 +456,7 @@ export default function Home({ addToCart }) {
 .see-more { display: flex; align-items: center; gap: .5rem; font-weight: 700; font-size: .95rem; color: #1F2937; text-decoration: none; transition: opacity 0.2s; }
 .sm-arrow { width: 28px; height: 28px; border-radius: 50%; background: #2D5A44; color: #fff; display: flex; align-items: center; justify-content: center; }
 
-.hero-banner-section { position: relative; width: 100%; overflow: hidden; }
+.hero-banner-section { position: relative; width: 100%; overflow: hidden; margin-top: 125px; }
 .hero-slide { position: absolute; inset: 0; opacity: 0; transition: opacity 1.2s ease; z-index: 1; }
 .hero-slide.active { opacity: 1; z-index: 2; position: relative; }
 .hero-img-desktop { display: block; width: 100%; height: auto; }
