@@ -223,16 +223,16 @@ export default function Home({ addToCart }) {
         
         // Loop logic: if at end, jump to middle copy
         if (dir === 'right') {
-          if (current >= maxScroll - 10) {
-            container.scrollTo({ left: cardWidth, behavior: 'auto' });
-            setTimeout(() => container.scrollBy({ left: cardWidth, behavior: 'smooth' }), 10);
+          if (current >= maxScroll - 50) {
+            container.scrollTo({ left: 10, behavior: 'auto' });
+            setTimeout(() => container.scrollBy({ left: cardWidth, behavior: 'smooth' }), 50);
           } else {
             container.scrollBy({ left: cardWidth, behavior: 'smooth' });
           }
         } else {
-          if (current <= 10) {
-            container.scrollTo({ left: maxScroll - cardWidth, behavior: 'auto' });
-            setTimeout(() => container.scrollBy({ left: -cardWidth, behavior: 'smooth' }), 10);
+          if (current <= 50) {
+            container.scrollTo({ left: maxScroll - 10, behavior: 'auto' });
+            setTimeout(() => container.scrollBy({ left: -cardWidth, behavior: 'smooth' }), 50);
           } else {
             container.scrollBy({ left: -cardWidth, behavior: 'smooth' });
           }
@@ -301,7 +301,7 @@ export default function Home({ addToCart }) {
             onTouchMove={onDrag}
           >
             {infiniteInsta.map((r, i) => (
-              <div key={`${r.id}-${i}`} className={`rf-video-item ${centeredInsta % instagramReels.length === i % instagramReels.length ? 'is-selected' : ''}`}>
+              <div key={`${r.id}-${i}`} className={`rf-video-item swipe-item ${centeredInsta % instagramReels.length === i % instagramReels.length ? 'is-selected' : ''}`}>
                 <div className="reelfy_card card_type-overlay_product reelfy_card_autoplay">
                   <div className="reelfy_card_video_wrapper">
                     <div className="reelfy_card_video">
@@ -425,8 +425,8 @@ export default function Home({ addToCart }) {
             </div>
 
             <div className="t-controls-row">
-              <div className="t-progress-bar">
-                <div className="t-progress-fill" style={{ width: `${((tSlide + 1) / testimonials.length) * 100}%` }} />
+              <div className="t-progress-bar" style={{ maxWidth: '40%' }}>
+                <div className="t-progress-fill" style={{ width: `${((tSlide % testimonials.length + 1) / testimonials.length) * 100}%` }} />
               </div>
               <div className="t-nav-btns">
                 <button className="t-nav-btn" onClick={prevT} aria-label="Depoimento anterior"><ChevronLeft size={20} /></button>
