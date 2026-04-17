@@ -6,18 +6,8 @@ import { ArrowRight, Star, ChevronLeft, ChevronRight, Leaf, Rabbit, Recycle, Dro
 const sliderContent = [
   {
     id: 1,
-    image: 'https://images.unsplash.com/photo-1612817288484-6f916006741a?q=80&w=2560&auto=format&fit=crop',
-    mobileImage: 'https://images.unsplash.com/photo-1612817288484-6f916006741a?q=80&w=1080&auto=format&fit=crop'
-  },
-  {
-    id: 2,
-    image: 'https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?q=80&w=2560&auto=format&fit=crop',
-    mobileImage: 'https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?q=80&w=1080&auto=format&fit=crop'
-  },
-  {
-    id: 3,
-    image: 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=2560&auto=format&fit=crop',
-    mobileImage: 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=1080&auto=format&fit=crop'
+    image: '/images/banner_kit_matu.png',
+    mobileImage: '/images/banner_kit_matu.png'
   }
 ];
 
@@ -52,12 +42,12 @@ const newArrivals = [
 ];
 
 const testimonials = [
-  { id: 1, name: 'Mariana Silva', highlight: 'Eu amei 😍', text: 'Os produtos da Matú mudaram minha relação com o espelho. A textura é leve e o resultado é uma pele viçosa de verdade.', rating: 5, image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=150&h=150' },
-  { id: 2, name: 'Camila Torres', highlight: 'Muito bom!', text: 'Finalmente encontrei um shampoo sólido que realmente limpa sem agredir. E o cheiro é maravilhoso.', rating: 5, image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&q=80&w=150&h=150' },
-  { id: 3, name: 'Juliana Paiva', highlight: 'Incrível!', text: 'O óleo corporal é meu momento de paz no dia. Sinto que estou dando o melhor para o meu corpo.', rating: 5, image: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=150&h=150' },
-  { id: 4, name: 'Beatriz Costa', highlight: 'Recomendo muito!', text: 'O tônico equilibrante é perfeito para minha pele mista. Reduziu a oleosidade sem ressecar.', rating: 5, image: 'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&q=80&w=150&h=150' },
-  { id: 5, name: 'Fernanda Lima', highlight: 'Pele impecável!', text: 'Não vivo mais sem o sérum renovador. Minha pele está mais firme e com um brilho natural incrível.', rating: 5, image: 'https://images.unsplash.com/photo-1548142813-c348350df52b?auto=format&fit=crop&q=80&w=150&h=150' },
-  { id: 6, name: 'Helena Souza', highlight: 'Sensação única!', text: 'A manteiga de karité é um milagre para áreas secas. Uso no corpo todo e sinto a diferença imediata.', rating: 5, image: 'https://images.unsplash.com/photo-1502685104226-ee32379fefbe?auto=format&fit=crop&q=80&w=150&h=150' }
+  { id: 1, name: 'Mariana Silva', highlight: 'Eu amei 😍', text: 'Os produtos da Matú mudaram minha relação com o espelho.', rating: 5, image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=150&h=150' },
+  { id: 2, name: 'Camila Torres', highlight: 'Muito bom!', text: 'Finalmente encontrei um shampoo que realmente limpa sem agredir. ', rating: 5, image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&q=80&w=150&h=150' },
+  { id: 3, name: 'Juliana Paiva', highlight: 'Incrível!', text: 'O óleo corporal é meu momento de paz no dia. ', rating: 5, image: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=150&h=150' },
+  { id: 4, name: 'Beatriz Costa', highlight: 'Recomendo muito!', text: 'O tônico equilibrante é perfeito para minha pele mista.', rating: 5, image: 'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&q=80&w=150&h=150' },
+  { id: 5, name: 'Fernanda Lima', highlight: 'Pele impecável!', text: 'Não vivo mais sem o sérum renovador.', rating: 5, image: 'https://images.unsplash.com/photo-1548142813-c348350df52b?auto=format&fit=crop&q=80&w=150&h=150' },
+  { id: 6, name: 'Helena Souza', highlight: 'Sensação única!', text: 'A manteiga de karité é um milagre para áreas secas.', rating: 5, image: 'https://images.unsplash.com/photo-1502685104226-ee32379fefbe?auto=format&fit=crop&q=80&w=150&h=150' }
 ];
 
 const faqData = [
