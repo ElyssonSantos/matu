@@ -7,7 +7,7 @@ const sliderContent = [
   {
     id: 1,
     image: '/images/banner_kit_matu.png',
-    mobileImage: '/images/banner_kit_matu_mobile.jpg'
+    mobileImage: '/images/banner_kit_matu_mobile.png'
   }
 ];
 
