@@ -252,7 +252,7 @@ export default function Home({ addToCart }) {
         <div className="ctnr">
           <div className="sect-head">
             <h2>Mais Vendidos</h2>
-            <Link to="/#produtos" className="see-more">Ver Coleção <span className="sm-arrow"><ChevronRight size={14} /></span></Link>
+            <Link to="/#produtos" className="see-more">Ver Mais <span className="sm-arrow"><ChevronRight size={14} /></span></Link>
           </div>
           <div className="swipe-track bs-track desktop-grid-4">
             {bestSellers.map(p => <ProductCard key={p.id} product={p} addToCart={addToCart} />)}
@@ -263,12 +263,12 @@ export default function Home({ addToCart }) {
       <section className="sect sect-bg sect-instagram">
         <div className="ctnr" style={{ position: 'relative' }}>
           <div className="sect-head">
-            <h2>Matú no Instagram</h2>
+            <h2>Quem usa Matú recomenda 💚</h2>
             <p className="sect-sub" style={{ marginTop: '1.5rem' }}>Acompanhe nossa rotina botânica e dicas de autocuidado.</p>
           </div>
-          <div 
-            className="rf-gallery-main rf-carousel reelfy-scroll-container" 
-            id="instaTrack" 
+          <div
+            className="rf-gallery-main rf-carousel reelfy-scroll-container"
+            id="instaTrack"
             ref={instaTrackRef}
             onMouseDown={startDrag}
             onMouseLeave={endDrag}
@@ -304,7 +304,7 @@ export default function Home({ addToCart }) {
               </div>
             ))}
           </div>
-          
+
           <button className="rf-nav-btn prev" onClick={() => swipeScroll('reelfy-scroll-container', 'left')} aria-label="Anterior">
             <svg viewBox="0 0 100 100"><path d="M 10,50 L 60,100 L 70,90 L 30,50 L 70,10 L 60,0 Z" fill="currentColor"></path></svg>
           </button>
@@ -328,7 +328,7 @@ export default function Home({ addToCart }) {
               <img src="/images/category_skin.png" alt="Capitã Aqua" />
               <div className="bento-content">
                 <h3>Capitã Aqua</h3>
-                <p>MÁSCARA HIDRATANTE PROFISSIONAL</p>
+                {/*<p>MÁSCARA HIDRATANTE PROFISSIONAL</p>*/}
               </div>
             </Link>
             <Link to="/#produtos" className="bento-item item-small">
