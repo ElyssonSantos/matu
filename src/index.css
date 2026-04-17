@@ -112,6 +112,10 @@ img {
   text-align: center;
 }
 
+.font-rounded {
+  font-family: 'Outfit', sans-serif !important;
+}
+
 .text-primary {
   color: var(--color-primary);
 }

@@ -6,7 +6,7 @@ import { ArrowRight, Star, ChevronLeft, ChevronRight, Leaf, Rabbit, Recycle, Dro
 const sliderContent = [
   {
     id: 1,
-    image: '/images/banner_kit_matu.png',
+    image: '/images/banner_kit_matu_mobile.png',
     mobileImage: '/images/banner_kit_matu_mobile.png'
   }
 ];
@@ -33,6 +33,12 @@ const instagramReels = [
   { id: 5, poster: '/images/category_hair.png', product: 'Máscara Reconstrutora', oldPrice: 'R$ 99,97', price: 'R$ 69,97', thumb: '/images/product_face_wash.png' },
   { id: 6, poster: '/images/category_oil.png', product: 'Tônico Equilibrante', oldPrice: 'R$ 79,97', price: 'R$ 49,97', thumb: '/images/product_face_wash.png' }
 ];
+
+// Duplicate for infinite effect
+const infiniteInsta = [...instagramReels, ...instagramReels, ...instagramReels];
+const infiniteBestSellers = [...bestSellers, ...bestSellers, ...bestSellers];
+const infiniteNewArrivals = [...newArrivals, ...newArrivals, ...newArrivals];
+const infiniteTestimonials = [...testimonials, ...testimonials, ...testimonials];
 
 const newArrivals = [
   { id: 5, name: 'Sérum Reparador 60ml - Cherry Oil', price: 79.97, image: '/images/product_bottle.png' },
@@ -162,7 +168,7 @@ export default function Home({ addToCart }) {
 
   useEffect(() => {
     const timer = setInterval(() => setActiveSlide(p => (p + 1) % sliderContent.length), 5000);
-    const tTimer = setInterval(() => setTSlide(p => (p + 1) % testimonials.length), 6000);
+    const tTimer = setInterval(() => setTSlide(p => (p + 1) % infiniteTestimonials.length), 6000);
     return () => { clearInterval(timer); clearInterval(tTimer); };
   }, [activeSlide, tSlide]);
 
@@ -225,8 +231,8 @@ export default function Home({ addToCart }) {
   };
 
   const maxTSlide = testimonials.length - 1;
-  const nextT = () => setTSlide(p => (p + 1) % testimonials.length);
-  const prevT = () => setTSlide(p => (p - 1 + testimonials.length) % testimonials.length);
+  const nextT = () => setTSlide(p => (p + 1) % infiniteTestimonials.length);
+  const prevT = () => setTSlide(p => (p - 1 + infiniteTestimonials.length) % infiniteTestimonials.length);
 
   return (
     <div className="home-root">
@@ -250,11 +256,11 @@ export default function Home({ addToCart }) {
       <section className="sect" id="produtos">
         <div className="ctnr" style={{ position: 'relative' }}>
           <div className="sect-head">
-            <h2>Mais Vendidos</h2>
+            <h2 className="font-rounded">Mais Vendidos</h2>
             <Link to="/#produtos" className="see-more">Ver Mais <span className="sm-arrow"><ChevronRight size={14} /></span></Link>
           </div>
           <div className="swipe-track bs-track desktop-grid-4">
-            {bestSellers.map(p => <ProductCard key={p.id} product={p} addToCart={addToCart} />)}
+            {infiniteBestSellers.map((p, i) => <ProductCard key={`${p.id}-${i}`} product={p} addToCart={addToCart} />)}
           </div>
           <button className="rf-nav-btn prev hide-desktop" onClick={() => swipeScroll('bs-track', 'left')} aria-label="Anterior">
             <ChevronLeft size={20} />
@@ -283,8 +289,8 @@ export default function Home({ addToCart }) {
             onTouchEnd={endDrag}
             onTouchMove={onDrag}
           >
-            {instagramReels.map((r, i) => (
-              <div key={r.id} className={`rf-video-item ${centeredInsta === i ? 'is-selected' : ''}`}>
+            {infiniteInsta.map((r, i) => (
+              <div key={`${r.id}-${i}`} className={`rf-video-item ${centeredInsta % instagramReels.length === i % instagramReels.length ? 'is-selected' : ''}`}>
                 <div className="reelfy_card card_type-overlay_product reelfy_card_autoplay">
                   <div className="reelfy_card_video_wrapper">
                     <div className="reelfy_card_video">
@@ -368,11 +374,11 @@ export default function Home({ addToCart }) {
       <section className="sect">
         <div className="ctnr" style={{ position: 'relative' }}>
           <div className="sect-head">
-            <h2>Nossas Novidades</h2>
+            <h2 className="font-rounded">Nossas Novidades</h2>
             <Link to="/#produtos" className="see-more">Ver Mais <span className="sm-arrow"><ChevronRight size={14} /></span></Link>
           </div>
           <div className="swipe-track na-track desktop-grid-4">
-            {newArrivals.map(p => <ProductCard key={p.id} product={p} addToCart={addToCart} />)}
+            {infiniteNewArrivals.map((p, i) => <ProductCard key={`${p.id}-${i}`} product={p} addToCart={addToCart} />)}
           </div>
           <button className="rf-nav-btn prev hide-desktop" onClick={() => swipeScroll('na-track', 'left')} aria-label="Anterior">
             <ChevronLeft size={20} />
@@ -390,8 +396,8 @@ export default function Home({ addToCart }) {
           </div>
           <div className="testimonials-slider-container">
             <div className="t-track" style={{ transform: `translateX(-${tSlide * 100}%)` }}>
-              {testimonials.map(t => (
-                <div key={t.id} className="test-card-new">
+              {infiniteTestimonials.map((t, i) => (
+                <div key={`${t.id}-${i}`} className="test-card-new">
                   <div className="test-header">
                     <img src={t.image} alt={t.name} className="test-avatar" />
                     <div className="test-meta">
