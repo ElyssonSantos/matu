@@ -207,17 +207,26 @@ export default function Home({ addToCart }) {
   const swipeScroll = (className, dir) => {
     const container = document.querySelector(`.${className}`);
     if (container) {
-      const card = container.querySelector('.rf-video-item');
+      const card = container.querySelector('.swipe-item');
       if (card) {
-        const cardWidth = card.offsetWidth + 15; // Width + gap
-        container.scrollBy({ left: dir === 'left' ? -cardWidth : cardWidth, behavior: 'smooth' });
+        const cardWidth = card.offsetWidth + 15; 
+        const maxScroll = container.scrollWidth - container.offsetWidth;
+        const current = container.scrollLeft;
+
+        if (dir === 'right' && current >= maxScroll - 5) {
+          container.scrollTo({ left: 0, behavior: 'smooth' });
+        } else if (dir === 'left' && current <= 5) {
+          container.scrollTo({ left: maxScroll, behavior: 'smooth' });
+        } else {
+          container.scrollBy({ left: dir === 'left' ? -cardWidth : cardWidth, behavior: 'smooth' });
+        }
       }
     }
   };
 
   const maxTSlide = testimonials.length - 1;
-  const nextT = () => setTSlide(p => Math.min(p + 1, maxTSlide));
-  const prevT = () => setTSlide(p => Math.max(p - 1, 0));
+  const nextT = () => setTSlide(p => (p + 1) % testimonials.length);
+  const prevT = () => setTSlide(p => (p - 1 + testimonials.length) % testimonials.length);
 
   return (
     <div className="home-root">
@@ -239,7 +248,7 @@ export default function Home({ addToCart }) {
 
       {/* ═══════════════ 2. BEST SELLERS ═══════════════ */}
       <section className="sect" id="produtos">
-        <div className="ctnr">
+        <div className="ctnr" style={{ position: 'relative' }}>
           <div className="sect-head">
             <h2>Mais Vendidos</h2>
             <Link to="/#produtos" className="see-more">Ver Mais <span className="sm-arrow"><ChevronRight size={14} /></span></Link>
@@ -247,6 +256,12 @@ export default function Home({ addToCart }) {
           <div className="swipe-track bs-track desktop-grid-4">
             {bestSellers.map(p => <ProductCard key={p.id} product={p} addToCart={addToCart} />)}
           </div>
+          <button className="rf-nav-btn prev hide-desktop" onClick={() => swipeScroll('bs-track', 'left')} aria-label="Anterior">
+            <ChevronLeft size={20} />
+          </button>
+          <button className="rf-nav-btn next hide-desktop" onClick={() => swipeScroll('bs-track', 'right')} aria-label="Próximo">
+            <ChevronRight size={20} />
+          </button>
         </div>
       </section>
 
@@ -351,7 +366,7 @@ export default function Home({ addToCart }) {
 
       {/* ═══════════════ 6. NEW ARRIVALS ═══════════════ */}
       <section className="sect">
-        <div className="ctnr">
+        <div className="ctnr" style={{ position: 'relative' }}>
           <div className="sect-head">
             <h2>Nossas Novidades</h2>
             <Link to="/#produtos" className="see-more">Ver Mais <span className="sm-arrow"><ChevronRight size={14} /></span></Link>
@@ -359,6 +374,12 @@ export default function Home({ addToCart }) {
           <div className="swipe-track na-track desktop-grid-4">
             {newArrivals.map(p => <ProductCard key={p.id} product={p} addToCart={addToCart} />)}
           </div>
+          <button className="rf-nav-btn prev hide-desktop" onClick={() => swipeScroll('na-track', 'left')} aria-label="Anterior">
+            <ChevronLeft size={20} />
+          </button>
+          <button className="rf-nav-btn next hide-desktop" onClick={() => swipeScroll('na-track', 'right')} aria-label="Próximo">
+            <ChevronRight size={20} />
+          </button>
         </div>
       </section>
 
@@ -368,14 +389,14 @@ export default function Home({ addToCart }) {
             <h2>Depoimentos</h2>
           </div>
           <div className="testimonials-slider-container">
-            <div className="t-track" style={{ transform: `translateX(-${tSlide * 58}%)` }}>
+            <div className="t-track" style={{ transform: `translateX(-${tSlide * 100}%)` }}>
               {testimonials.map(t => (
                 <div key={t.id} className="test-card-new">
                   <div className="test-header">
                     <img src={t.image} alt={t.name} className="test-avatar" />
                     <div className="test-meta">
                       <div className="test-stars">
-                        {[...Array(t.rating)].map((_, i) => <Star key={i} size={14} fill="#2D5A44" stroke="none" />)}
+                        {[...Array(t.rating)].map((_, i) => <Star key={i} size={14} fill="var(--color-stars)" stroke="none" />)}
                       </div>
                       <span className="test-name">{t.name.split(' ')[0]}</span>
                     </div>
@@ -567,8 +588,9 @@ export default function Home({ addToCart }) {
   flex-direction: column; 
   text-align: left; 
   transition: all 0.3s ease; 
-  min-width: 55%;
+  min-width: 100%;
   flex-shrink: 0;
+  height: fit-content;
 }
 .test-card-new:hover { transform: translateY(-5px); }
 .test-header { display: flex; align-items: center; gap: 0.8rem; margin-bottom: 1rem; }
@@ -655,7 +677,7 @@ export default function Home({ addToCart }) {
   .hide-mobile { display: none !important; }
   .hide-desktop { display: flex; }
   /* Depoimentos mobile */
-  .test-card-new { padding: 1.2rem; min-width: 80%; }
+  .test-card-new { padding: 1.5rem; min-width: 100%; }
   .test-highlight { font-size: 0.95rem; }
   .test-text { font-size: 0.8rem; -webkit-line-clamp: 2; }
   .t-track { gap: 12px; }
