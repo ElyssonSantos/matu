@@ -53,10 +53,10 @@ const testimonials = [
 ];
 
 // Duplicate for infinite effect
-const infiniteInsta = [...instagramReels, ...instagramReels, ...instagramReels];
-const infiniteBestSellers = [...bestSellers, ...bestSellers, ...bestSellers];
-const infiniteNewArrivals = [...newArrivals, ...newArrivals, ...newArrivals];
-const infiniteTestimonials = [...testimonials, ...testimonials, ...testimonials];
+const infiniteInsta = Array(10).fill(instagramReels).flat();
+const infiniteBestSellers = Array(10).fill(bestSellers).flat();
+const infiniteNewArrivals = Array(10).fill(newArrivals).flat();
+const infiniteTestimonials = Array(10).fill(testimonials).flat();
 
 const faqData = [
   { q: "Como posso entrar em contato com vocês?", a: "Você pode nos contatar via WhatsApp, e-mail (contato@matu.com.br) ou através de nossas redes sociais. Estamos disponíveis de segunda a sexta, das 9h às 18h." },
@@ -220,13 +220,22 @@ export default function Home({ addToCart }) {
         const cardWidth = card.offsetWidth + 15; 
         const maxScroll = container.scrollWidth - container.offsetWidth;
         const current = container.scrollLeft;
-
-        if (dir === 'right' && current >= maxScroll - 5) {
-          container.scrollTo({ left: 0, behavior: 'smooth' });
-        } else if (dir === 'left' && current <= 5) {
-          container.scrollTo({ left: maxScroll, behavior: 'smooth' });
+        
+        // Loop logic: if at end, jump to middle copy
+        if (dir === 'right') {
+          if (current >= maxScroll - 10) {
+            container.scrollTo({ left: cardWidth, behavior: 'auto' });
+            setTimeout(() => container.scrollBy({ left: cardWidth, behavior: 'smooth' }), 10);
+          } else {
+            container.scrollBy({ left: cardWidth, behavior: 'smooth' });
+          }
         } else {
-          container.scrollBy({ left: dir === 'left' ? -cardWidth : cardWidth, behavior: 'smooth' });
+          if (current <= 10) {
+            container.scrollTo({ left: maxScroll - cardWidth, behavior: 'auto' });
+            setTimeout(() => container.scrollBy({ left: -cardWidth, behavior: 'smooth' }), 10);
+          } else {
+            container.scrollBy({ left: -cardWidth, behavior: 'smooth' });
+          }
         }
       }
     }
@@ -523,10 +532,10 @@ export default function Home({ addToCart }) {
 
 .swipe-track { display: flex !important; flex-wrap: nowrap; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; width: 100%; gap: 1.2rem; }
 .swipe-track::-webkit-scrollbar { display: none; }
-.swipe-item { scroll-snap-align: center; flex-shrink: 0; width: 80vw; }
+.swipe-item { scroll-snap-align: center; flex-shrink: 0; width: 85vw; }
 @media(min-width: 868px) {
-  .swipe-track.desktop-grid-4 { display: grid !important; grid-template-columns: repeat(4, 1fr); overflow-x: visible; }
-  .desktop-grid-4 .swipe-item { width: 100%; }
+  .swipe-track.desktop-grid-4 { display: flex !important; overflow-x: auto; }
+  .swipe-item { width: 300px; }
 }
 
 .reelfy-scroll-container { display: flex; gap: 15px; overflow-x: auto; scroll-behavior: smooth; scrollbar-width: none; padding: 3rem 0; align-items: center; scroll-snap-type: x mandatory; cursor: grab; -webkit-overflow-scrolling: touch; }
