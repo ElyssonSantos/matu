@@ -11,8 +11,8 @@ const sliderContent = [
   },
   {
     id: 2,
-    image: 'https://images.unsplash.com/photo-1540555700478-4be289fbecee?q=80&w=2560&auto=format&fit=crop',
-    mobileImage: 'https://images.unsplash.com/photo-1540555700478-4be289fbecee?q=80&w=1080&auto=format&fit=crop'
+    image: 'https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?q=80&w=2560&auto=format&fit=crop',
+    mobileImage: 'https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?q=80&w=1080&auto=format&fit=crop'
   },
   {
     id: 3,
@@ -88,8 +88,10 @@ function ProductCard({ product, addToCart }) {
       <div className="m-product-info">
         <h3>{product.name}</h3>
         <div className="m-price-block">
-          {product.oldPrice && <span className="m-old-price">R$ {product.oldPrice.toFixed(2).replace('.', ',')}</span>}
-          <span className="m-price">R$ {product.price.toFixed(2).replace('.', ',')}</span>
+          <div className="m-prices">
+            {product.oldPrice && <span className="m-old-price">R$ {product.oldPrice.toFixed(2).replace('.', ',')}</span>}
+            <span className="m-price">R$ {product.price.toFixed(2).replace('.', ',')}</span>
+          </div>
           <span className="m-installments">Ou 6x de <strong>R$ {(product.price / 6).toFixed(2).replace('.', ',')}</strong> Sem Juros</span>
         </div>
         <button className="m-btn-buy" onClick={() => addToCart(product)}>
@@ -108,6 +110,12 @@ export default function Home({ addToCart }) {
   const [winWidth, setWinWidth] = useState(window.innerWidth);
   const instaTrackRef = useRef(null);
 
+  const isDraggingRef = useRef(false);
+  const startXRef = useRef(0);
+  const scrollLeftRef = useRef(0);
+  const [activeBen, setActiveBen] = useState(0);
+  const benTrackRef = useRef(null);
+
   useEffect(() => {
     const handleResize = () => setWinWidth(window.innerWidth);
     window.addEventListener('resize', handleResize);
@@ -119,7 +127,8 @@ export default function Home({ addToCart }) {
     if (!track) return;
 
     const handleScroll = () => {
-      const cards = track.querySelectorAll('.insta-card');
+      if (isDraggingRef.current) return;
+      const cards = track.querySelectorAll('.rf-video-item');
       const trackCenter = track.getBoundingClientRect().left + track.offsetWidth / 2;
 
       let closestIndex = 0;
@@ -137,15 +146,73 @@ export default function Home({ addToCart }) {
     };
 
     track.addEventListener('scroll', handleScroll);
-    handleScroll(); // Initial check
+    handleScroll();
+    return () => track.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Benefits carousel scroll observer
+  useEffect(() => {
+    const track = benTrackRef.current;
+    if (!track) return;
+    const handleScroll = () => {
+      const items = track.querySelectorAll('.ben-circular-item');
+      const trackCenter = track.getBoundingClientRect().left + track.offsetWidth / 2;
+      let closest = 0, minDist = Infinity;
+      items.forEach((item, i) => {
+        const center = item.getBoundingClientRect().left + item.offsetWidth / 2;
+        const dist = Math.abs(trackCenter - center);
+        if (dist < minDist) { minDist = dist; closest = i; }
+      });
+      setActiveBen(closest);
+    };
+    track.addEventListener('scroll', handleScroll);
+    handleScroll();
     return () => track.removeEventListener('scroll', handleScroll);
   }, []);
 
   useEffect(() => {
     const timer = setInterval(() => setActiveSlide(p => (p + 1) % sliderContent.length), 5000);
-    const tTimer = setInterval(() => setTSlide(p => (p + 1) % (testimonials.length / 2)), 6000);
+    const tTimer = setInterval(() => setTSlide(p => (p + 1) % testimonials.length), 6000);
     return () => { clearInterval(timer); clearInterval(tTimer); };
   }, [activeSlide, tSlide]);
+
+  const startDrag = (e) => {
+    isDraggingRef.current = true;
+    const track = instaTrackRef.current;
+    track.style.scrollSnapType = 'none';
+    track.style.scrollBehavior = 'auto';
+    startXRef.current = e.type.includes('mouse') ? e.pageX : e.touches[0].pageX;
+    scrollLeftRef.current = track.scrollLeft;
+  };
+  const endDrag = () => {
+    if (!isDraggingRef.current) return;
+    isDraggingRef.current = false;
+    const track = instaTrackRef.current;
+    // Re-enable snap after a short delay so it snaps to nearest
+    setTimeout(() => {
+      track.style.scrollSnapType = 'x mandatory';
+      track.style.scrollBehavior = 'smooth';
+    }, 50);
+  };
+  const onDrag = (e) => {
+    if (!isDraggingRef.current) return;
+    e.preventDefault();
+    const x = e.type.includes('mouse') ? e.pageX : e.touches[0].pageX;
+    const walk = (x - startXRef.current) * 1.5;
+    instaTrackRef.current.scrollLeft = scrollLeftRef.current - walk;
+  };
+
+  const handleDotClick = (idx) => {
+    setCenteredInsta(idx);
+    const track = instaTrackRef.current;
+    if (!track) return;
+    const cards = track.querySelectorAll('.rf-video-item');
+    if (cards[idx]) {
+      const cardCenter = cards[idx].offsetLeft + cards[idx].offsetWidth / 2;
+      const trackCenter = track.offsetWidth / 2;
+      track.scrollTo({ left: cardCenter - trackCenter, behavior: 'smooth' });
+    }
+  };
 
   const swipeScroll = (className, dir) => {
     const container = document.querySelector(`.${className}`);
@@ -158,8 +225,9 @@ export default function Home({ addToCart }) {
     }
   };
 
-  const nextT = () => setTSlide(p => (p + 1) % testimonials.length);
-  const prevT = () => setTSlide(p => (p - 1 + testimonials.length) % testimonials.length);
+  const maxTSlide = testimonials.length - 1;
+  const nextT = () => setTSlide(p => Math.min(p + 1, maxTSlide));
+  const prevT = () => setTSlide(p => Math.max(p - 1, 0));
 
   return (
     <div className="home-root">
@@ -198,7 +266,18 @@ export default function Home({ addToCart }) {
             <h2>Matú no Instagram</h2>
             <p className="sect-sub" style={{ marginTop: '1.5rem' }}>Acompanhe nossa rotina botânica e dicas de autocuidado.</p>
           </div>
-          <div className="rf-gallery-main rf-carousel reelfy-scroll-container" id="instaTrack" ref={instaTrackRef}>
+          <div 
+            className="rf-gallery-main rf-carousel reelfy-scroll-container" 
+            id="instaTrack" 
+            ref={instaTrackRef}
+            onMouseDown={startDrag}
+            onMouseLeave={endDrag}
+            onMouseUp={endDrag}
+            onMouseMove={onDrag}
+            onTouchStart={startDrag}
+            onTouchEnd={endDrag}
+            onTouchMove={onDrag}
+          >
             {instagramReels.map((r, i) => (
               <div key={r.id} className={`rf-video-item ${centeredInsta === i ? 'is-selected' : ''}`}>
                 <div className="reelfy_card card_type-overlay_product reelfy_card_autoplay">
@@ -235,7 +314,7 @@ export default function Home({ addToCart }) {
 
           <div className="reelfy-dots">
             {instagramReels.map((_, idx) => (
-              <span key={idx} className={`rf-dot ${centeredInsta === idx ? 'is-active' : ''}`} aria-hidden="true"></span>
+              <span key={idx} className={`rf-dot ${centeredInsta === idx ? 'is-active' : ''}`} aria-hidden="true" onClick={() => handleDotClick(idx)}></span>
             ))}
           </div>
         </div>
@@ -299,7 +378,7 @@ export default function Home({ addToCart }) {
             <h2>Depoimentos</h2>
           </div>
           <div className="testimonials-slider-container">
-            <div className="t-track" style={{ transform: `translateX(-${tSlide * (100 / (winWidth < 768 ? 1 : 1.5))}%)` }}>
+            <div className="t-track" style={{ transform: `translateX(-${tSlide * 58}%)` }}>
               {testimonials.map(t => (
                 <div key={t.id} className="test-card-new">
                   <div className="test-header">
@@ -359,7 +438,7 @@ export default function Home({ addToCart }) {
       {/* ═══════════════ 9. BENEFITS (CIRCULAR STYLE) ═══════════════ */}
       <section className="sect sect-white" style={{ paddingBottom: '7rem' }}>
         <div className="ctnr">
-          <div className="swipe-track ben-track desktop-grid-4 ben-mobile-carousel">
+          <div className="swipe-track ben-track desktop-grid-4" ref={benTrackRef}>
             {benefitsData.map((b, i) => (
               <div key={i} className="ben-circular-item swipe-item">
                 <div className="ben-circular-icon">{b.icon}</div>
@@ -369,7 +448,7 @@ export default function Home({ addToCart }) {
           </div>
           <div className="carousel-dots-mobile hide-desktop">
             {benefitsData.map((_, i) => (
-              <span key={i} className={`c-dot ${i === 0 ? 'active' : ''}`} />
+              <span key={i} className={`c-dot ${activeBen === i ? 'active' : ''}`} />
             ))}
           </div>
         </div>
@@ -416,7 +495,11 @@ export default function Home({ addToCart }) {
 .m-badge { position: absolute; top: 12px; left: 12px; background: #2D5A44; color: #fff; padding: 4px 12px; border-radius: 20px; font-size: .75rem; font-weight: 800; }
 .m-product-info { padding: 1.5rem; display: flex; flex-direction: column; flex: 1; text-align: center; }
 .m-product-info h3 { font-size: 1.05rem; font-weight: 700; color: #1F2937; margin-bottom: .8rem; }
+.m-price-block { display: flex; flex-direction: column; align-items: center; gap: 2px; margin-bottom: 0.8rem; }
+.m-prices { display: flex; align-items: center; gap: 8px; justify-content: center; }
+.m-old-price { color: #9CA3AF; text-decoration: line-through; font-size: 0.95rem; font-weight: 500; }
 .m-price { font-size: 1.3rem; font-weight: 800; color: #2D5A44; }
+.m-installments { font-size: 0.85rem; color: #4B5563; line-height: 1.2; }
 .m-btn-buy { width: 100%; background: #2D5A44; color: #FFFFFF; border: none; padding: .85rem; border-radius: 50px; font-weight: 800; text-transform: uppercase; cursor: pointer; }
 
 .swipe-track { display: flex !important; flex-wrap: nowrap; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; width: 100%; gap: 1.2rem; }
@@ -427,10 +510,10 @@ export default function Home({ addToCart }) {
   .desktop-grid-4 .swipe-item { width: 100%; }
 }
 
-.reelfy-scroll-container { display: flex; gap: 15px; overflow-x: auto; scroll-behavior: smooth; scrollbar-width: none; padding: 3rem 0; align-items: center; scroll-snap-type: x mandatory; }
+.reelfy-scroll-container { display: flex; gap: 15px; overflow-x: auto; scroll-behavior: smooth; scrollbar-width: none; padding: 3rem 0; align-items: center; scroll-snap-type: x mandatory; cursor: grab; -webkit-overflow-scrolling: touch; }
 .reelfy-scroll-container::-webkit-scrollbar { display: none; }
-.rf-video-item { flex-shrink: 0; width: calc(20% - 12px); scroll-snap-align: center; transition: all 0.6s cubic-bezier(0.19, 1, 0.22, 1); transform: scale(0.9); opacity: 0.6; }
-.rf-video-item.is-selected { transform: scale(1.05); opacity: 1; z-index: 5; }
+.rf-video-item { flex-shrink: 0; width: calc(20% - 12px); scroll-snap-align: center; transition: transform 0.5s ease, opacity 0.5s ease; transform: scale(0.85); opacity: 0.6; transform-origin: center center; position: relative; }
+.rf-video-item.is-selected { transform: scale(1.15); opacity: 1; z-index: 5; }
 .reelfy_card { position: relative; border-radius: 24px; overflow: hidden; aspect-ratio: 9/16; background: #000; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
 .reelfy_card_video_wrapper { width: 100%; height: 100%; position: relative; }
 .reelfy-poster-img { width: 100%; height: 100%; object-fit: cover; }
@@ -443,7 +526,7 @@ export default function Home({ addToCart }) {
 .rf-old-price { color: #999; text-decoration: line-through; font-size: 11px; font-weight: 500; }
 .rf-new-price { color: #000; font-weight: 800; font-size: 13px; }
 .reelfy-dots { display: flex; justify-content: center; gap: 8px; margin-top: 1rem; }
-.rf-dot { width: 8px; height: 8px; border-radius: 50%; background: #ddd; transition: all 0.3s; }
+.rf-dot { width: 8px; height: 8px; border-radius: 50%; background: #ddd; transition: all 0.3s; cursor: pointer; }
 .rf-dot.is-active { background: #2D5A44; }
 
 .rf-nav-btn {
@@ -472,8 +555,9 @@ export default function Home({ addToCart }) {
 @media(max-width: 768px) {
   .hero-img-desktop, .par-img-desktop { display: none; }
   .hero-img-mobile, .par-img-mobile { display: block; }
-  .rf-video-item { width: calc(33.3% - 14px); }
-  .reelfy-scroll-container { padding: 2rem 5%; }
+  .rf-video-item { width: calc(40% - 10px); }
+  .rf-video-item.is-selected { transform: scale(1.2); }
+  .reelfy-scroll-container { padding: 2rem 5%; gap: 12px; }
   .rf-nav-btn { display: none; }
   .faq-layout { grid-template-columns: 1fr; gap: 2.5rem; }
 }
@@ -484,32 +568,32 @@ export default function Home({ addToCart }) {
 
 /* ═══════ 7. TESTIMONIALS (NEW STYLE) ═══════ */
 .testimonials-slider-container { position: relative; overflow: hidden; margin-top: 2rem; padding: 20px 0; }
-.t-track { display: flex; transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1); width: 100%; gap: 30px; }
+.t-track { display: flex; transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1); width: 100%; gap: 20px; }
 .test-card-new { 
   background: #F3F4F6; 
-  padding: 2.5rem; 
+  padding: 1.8rem; 
   border-radius: 12px; 
   display: flex; 
   flex-direction: column; 
   text-align: left; 
   transition: all 0.3s ease; 
-  min-width: 60%;
+  min-width: 55%;
   flex-shrink: 0;
 }
 .test-card-new:hover { transform: translateY(-5px); }
-.test-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; }
-.test-avatar { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; }
+.test-header { display: flex; align-items: center; gap: 0.8rem; margin-bottom: 1rem; }
+.test-avatar { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
 .test-meta { display: flex; flex-direction: column; gap: 2px; }
 .test-stars { display: flex; gap: 2px; }
-.test-name { font-size: 0.85rem; color: #6B7280; font-weight: 500; }
-.test-highlight { font-size: 1.1rem; font-weight: 800; color: #1F2937; margin-bottom: 0.8rem; }
-.test-text { font-size: 0.95rem; color: #4B5563; line-height: 1.6; }
+.test-name { font-size: 0.8rem; color: #6B7280; font-weight: 500; }
+.test-highlight { font-size: 1rem; font-weight: 800; color: #1F2937; margin-bottom: 0.5rem; }
+.test-text { font-size: 0.85rem; color: #4B5563; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 
-.t-controls-row { display: flex; align-items: center; justify-content: space-between; margin-top: 4rem; gap: 2rem; }
+.t-controls-row { display: flex; align-items: center; justify-content: space-between; margin-top: 2.5rem; gap: 2rem; }
 .t-progress-bar { flex: 1; height: 1px; background: #E5E7EB; position: relative; }
 .t-progress-fill { position: absolute; left: 0; top: 0; height: 100%; background: #2D5A44; transition: width 0.6s ease; }
 .t-nav-btns { display: flex; gap: 12px; }
-.t-nav-btn { width: 48px; height: 48px; border-radius: 50%; border: 1px solid #E5E7EB; background: #fff; display: flex; align-items: center; justify-content: center; color: #1F2937; cursor: pointer; transition: all 0.2s; }
+.t-nav-btn { width: 40px; height: 40px; border-radius: 50%; border: 1px solid #E5E7EB; background: #fff; display: flex; align-items: center; justify-content: center; color: #1F2937; cursor: pointer; transition: all 0.2s; }
 .t-nav-btn:hover { background: #F9FAFB; border-color: #1F2937; }
 
 @media(max-width: 992px) {
@@ -580,6 +664,15 @@ export default function Home({ addToCart }) {
   .faq-layout { grid-template-columns: 1fr; gap: 2.5rem; }
   .hide-mobile { display: none !important; }
   .hide-desktop { display: flex; }
+  /* Depoimentos mobile */
+  .test-card-new { padding: 1.2rem; min-width: 80%; }
+  .test-highlight { font-size: 0.95rem; }
+  .test-text { font-size: 0.8rem; -webkit-line-clamp: 2; }
+  .t-track { gap: 12px; }
+  .t-controls-row { margin-top: 1.5rem; }
+  .t-nav-btn { width: 36px; height: 36px; }
+  /* Benefits carousel - centered with dots */
+  .ben-circular-item.swipe-item { width: 60vw; }
 }
       `}</style>
     </div>

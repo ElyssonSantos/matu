@@ -21,10 +21,6 @@ export default function Navbar({ toggleCart, cartCount }) {
             <Menu />
           </button>
           
-          <Link to="/" className="brand-logo">
-            <img src="/images/logo.png" alt="MATÚ" className="logo-img" loading="eager" />
-          </Link>
-
           <nav className={`nav-links ${mobileMenuOpen ? 'active' : ''}`}>
             <button className="close-menu-btn" onClick={() => setMobileMenuOpen(false)} aria-label="Fechar menu">
               <X />
@@ -33,6 +29,10 @@ export default function Navbar({ toggleCart, cartCount }) {
             <Link to="/#produtos" onClick={() => setMobileMenuOpen(false)}>Produtos</Link>
             <Link to="/#sobre" onClick={() => setMobileMenuOpen(false)}>Nossa Essência</Link>
           </nav>
+
+          <Link to="/" className="brand-logo absolute-center">
+            <img src="/images/logo.png" alt="MATÚ" className="logo-img" loading="eager" />
+          </Link>
 
           <div className="nav-actions">
             <Link to="/login" className="btn-icon" aria-label="Ir para login">
@@ -49,7 +49,7 @@ export default function Navbar({ toggleCart, cartCount }) {
           .top-bar {
             background-color: var(--color-primary);
             color: white;
-            height: 35px;
+            height: 45px;
             display: flex;
             align-items: center;
             font-size: 0.8rem;
@@ -63,7 +63,7 @@ export default function Navbar({ toggleCart, cartCount }) {
 
           .navbar {
             position: fixed;
-            top: 35px;
+            top: 45px;
             left: 0;
             width: 100%;
             z-index: 100;
@@ -80,9 +80,13 @@ export default function Navbar({ toggleCart, cartCount }) {
             justify-content: space-between;
             align-items: center;
             width: 100%;
+            position: relative;
           }
 
-          .brand-logo {
+          .brand-logo.absolute-center {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
             display: flex;
             align-items: center;
           }
