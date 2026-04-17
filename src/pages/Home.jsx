@@ -7,7 +7,12 @@ const sliderContent = [
   {
     id: 1,
     image: '/images/banner_kit_matu.png',
-    mobileImage: '/images/banner_kit_matu.png'
+    mobileImage: '/images/banner_kit_matu_mobile.png'
+  },
+  {
+    id: 2,
+    image: '/images/banner_kit_matu_2.png',
+    mobileImage: '/images/banner_kit_matu_mobile_2.png'
   }
 ];
 
@@ -459,8 +464,8 @@ export default function Home({ addToCart }) {
 .hero-banner-section { position: relative; width: 100%; overflow: hidden; }
 .hero-slide { position: absolute; inset: 0; opacity: 0; transition: opacity 1.2s ease; z-index: 1; }
 .hero-slide.active { opacity: 1; z-index: 2; position: relative; }
-.hero-img-desktop { display: block; width: 100%; height: auto; aspect-ratio: 32/11; object-fit: cover; }
-.hero-img-mobile { display: none; width: 100%; height: auto; aspect-ratio: 4/5; object-fit: cover; }
+.hero-img-desktop { display: block; width: 100%; height: auto; object-fit: contain; }
+.hero-img-mobile { display: none; width: 100%; height: auto; object-fit: contain; }
 .hero-dots { position: absolute; bottom: 25px; left: 50%; transform: translateX(-50%); display: flex; gap: 10px; z-index: 10; }
 .hero-dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(45, 90, 68, 0.3); border: none; cursor: pointer; transition: all .3s; }
 .hero-dot.active { width: 32px; border-radius: 6px; background: #2D5A44; }
