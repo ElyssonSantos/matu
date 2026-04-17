@@ -34,11 +34,7 @@ const instagramReels = [
   { id: 6, poster: '/images/category_oil.png', product: 'Tônico Equilibrante', oldPrice: 'R$ 79,97', price: 'R$ 49,97', thumb: '/images/product_face_wash.png' }
 ];
 
-// Duplicate for infinite effect
-const infiniteInsta = [...instagramReels, ...instagramReels, ...instagramReels];
-const infiniteBestSellers = [...bestSellers, ...bestSellers, ...bestSellers];
-const infiniteNewArrivals = [...newArrivals, ...newArrivals, ...newArrivals];
-const infiniteTestimonials = [...testimonials, ...testimonials, ...testimonials];
+
 
 const newArrivals = [
   { id: 5, name: 'Sérum Reparador 60ml - Cherry Oil', price: 79.97, image: '/images/product_bottle.png' },
@@ -55,6 +51,12 @@ const testimonials = [
   { id: 5, name: 'Fernanda Lima', highlight: 'Pele impecável!', text: 'Não vivo mais sem o sérum renovador.', rating: 5, image: 'https://images.unsplash.com/photo-1548142813-c348350df52b?auto=format&fit=crop&q=80&w=150&h=150' },
   { id: 6, name: 'Helena Souza', highlight: 'Sensação única!', text: 'A manteiga de karité é um milagre para áreas secas.', rating: 5, image: 'https://images.unsplash.com/photo-1502685104226-ee32379fefbe?auto=format&fit=crop&q=80&w=150&h=150' }
 ];
+
+// Duplicate for infinite effect
+const infiniteInsta = [...instagramReels, ...instagramReels, ...instagramReels];
+const infiniteBestSellers = [...bestSellers, ...bestSellers, ...bestSellers];
+const infiniteNewArrivals = [...newArrivals, ...newArrivals, ...newArrivals];
+const infiniteTestimonials = [...testimonials, ...testimonials, ...testimonials];
 
 const faqData = [
   { q: "Como posso entrar em contato com vocês?", a: "Você pode nos contatar via WhatsApp, e-mail (contato@matu.com.br) ou através de nossas redes sociais. Estamos disponíveis de segunda a sexta, das 9h às 18h." },
