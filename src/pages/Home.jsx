@@ -1,6 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Star, ChevronLeft, ChevronRight, Leaf, Rabbit, Recycle, Droplets } from 'lucide-react';
+import { ArrowRight, Star, ChevronLeft, ChevronRight, Leaf, Rabbit, Recycle, Droplets, Play } from 'lucide-react';
+
+/* ─── UTILS ─── */
+const getReelId = (url) => {
+  if (!url) return null;
+  // Patterns: instagram.com/reels/ID, instagram.com/reel/ID, instagram.com/p/ID
+  const match = url.match(/(?:reels?|p)\/([^/?#&]+)/);
+  return match ? match[1] : null;
+};
 
 /* ─── DATA ─── */
 const sliderContent = [
@@ -26,12 +34,12 @@ const bestSellers = [
 ];
 
 const instagramReels = [
-  { id: 1, poster: '/images/media__1775931116204.png', product: 'Reparador Spray 60ml', oldPrice: 'R$ 116,97', price: 'R$ 58,48', thumb: '/images/product_bottle.png' },
-  { id: 2, poster: '/images/media__1775931109284.png', product: 'Shampoo Sólido Matú', oldPrice: 'R$ 89,97', price: 'R$ 59,97', thumb: '/images/product_shampoo_solid.png' },
-  { id: 3, poster: '/images/category_skin.png', product: 'Sérum Facial Capitã', oldPrice: 'R$ 149,97', price: 'R$ 99,97', thumb: '/images/product_face_cream.png' },
-  { id: 4, poster: '/images/category_body.png', product: 'Óleo Corporal Premium', oldPrice: 'R$ 129,97', price: 'R$ 79,97', thumb: '/images/product_body_oil.png' },
-  { id: 5, poster: '/images/category_hair.png', product: 'Máscara Reconstrutora', oldPrice: 'R$ 99,97', price: 'R$ 69,97', thumb: '/images/product_face_wash.png' },
-  { id: 6, poster: '/images/category_oil.png', product: 'Tônico Equilibrante', oldPrice: 'R$ 79,97', price: 'R$ 49,97', thumb: '/images/product_face_wash.png' }
+  { id: 1, videoUrl: 'https://www.instagram.com/reels/C9kM9T8v0kX/', poster: '/images/media__1775931116204.png', product: 'Reparador Spray 60ml', oldPrice: 'R$ 116,97', price: 'R$ 58,48', thumb: '/images/product_bottle.png' },
+  { id: 2, videoUrl: 'https://www.instagram.com/reels/C-j8T8r0kX1/', poster: '/images/media__1775931109284.png', product: 'Shampoo Sólido Matú', oldPrice: 'R$ 89,97', price: 'R$ 59,97', thumb: '/images/product_shampoo_solid.png' },
+  { id: 3, videoUrl: '', poster: '/images/category_skin.png', product: 'Sérum Facial Capitã', oldPrice: 'R$ 149,97', price: 'R$ 99,97', thumb: '/images/product_face_cream.png' },
+  { id: 4, videoUrl: '', poster: '/images/category_body.png', product: 'Óleo Corporal Premium', oldPrice: 'R$ 129,97', price: 'R$ 79,97', thumb: '/images/product_body_oil.png' },
+  { id: 5, videoUrl: '', poster: '/images/category_hair.png', product: 'Máscara Reconstrutora', oldPrice: 'R$ 99,97', price: 'R$ 69,97', thumb: '/images/product_face_wash.png' },
+  { id: 6, videoUrl: '', poster: '/images/category_oil.png', product: 'Tônico Equilibrante', oldPrice: 'R$ 79,97', price: 'R$ 49,97', thumb: '/images/product_face_wash.png' }
 ];
 
 
@@ -98,6 +106,37 @@ function ProductCard({ product, addToCart }) {
           {product.type === 'social' ? 'Saiba Mais' : 'Comprar'}
         </button>
       </div>
+    </div>
+  );
+}
+
+/* ─── REEL PLAYER COMPONENT ─── */
+function ReelPlayer({ reel, isSelected }) {
+  const reelId = getReelId(reel.videoUrl);
+
+  if (isSelected && reelId) {
+    return (
+      <div className="reelfy-video-container">
+        <iframe
+          src={`https://www.instagram.com/reels/${reelId}/embed/`}
+          className="reelfy-iframe"
+          allow="autoplay"
+          frameBorder="0"
+          scrolling="no"
+          allowTransparency="true"
+        />
+      </div>
+    );
+  }
+
+  return (
+    <div className="reelfy-poster-container">
+      <img src={reel.poster} alt={reel.product} className="reelfy-poster-img" loading="lazy" />
+      {reelId && (
+        <div className="reelfy-play-overlay">
+          <Play size={48} fill="white" color="white" />
+        </div>
+      )}
     </div>
   );
 }
@@ -307,7 +346,7 @@ export default function Home({ addToCart }) {
                 <div className="reelfy_card card_type-overlay_product reelfy_card_autoplay">
                   <div className="reelfy_card_video_wrapper">
                     <div className="reelfy_card_video">
-                      <img src={r.poster} alt={r.product} className="reelfy-poster-img" loading="lazy" />
+                      <ReelPlayer reel={r} isSelected={centeredInsta % instagramReels.length === i % instagramReels.length} />
                       <div className="reelfy_card_product card_product_ajax active">
                         <div className="reelfy_card_product__image">
                           <img src={r.thumb} alt={r.product} loading="lazy" />
@@ -592,6 +631,13 @@ export default function Home({ addToCart }) {
   .rf-nav-btn { display: none; }
   .faq-layout { grid-template-columns: 1fr; gap: 2.5rem; }
 }
+
+.reelfy-video-container { width: 100%; height: 100%; position: relative; background: #000; }
+.reelfy-iframe { width: 100%; height: 100%; border: none; }
+.reelfy-poster-container { width: 100%; height: 100%; position: relative; }
+.reelfy-play-overlay { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.2); opacity: 0.8; transition: opacity 0.3s; }
+.rf-video-item.is-selected .reelfy-play-overlay { opacity: 0; pointer-events: none; }
+.reelfy-poster-img { width: 100%; height: 100%; object-fit: cover; }
 
 .parallax-banner-section { position: relative; width: 100%; height: 400px; overflow: hidden; }
 .par-img-desktop { display: block; width: 100%; height: 100%; object-fit: cover; }
