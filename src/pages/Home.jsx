@@ -150,14 +150,15 @@ function ReelPlayer({ reel, isSelected }) {
         }}
       />
       
-      {/* Embed Iframe - Fixed ID extraction and loading */}
+      {/* Embed Iframe - Using standard 'p' embed which is often more stable for cross-domain */}
       {isSelected && reelId && (
         <iframe
-          src={`https://www.instagram.com/reel/${reelId}/embed/`}
+          src={`https://www.instagram.com/p/${reelId}/embed/`}
           className="reelfy-iframe is-visible"
           frameBorder="0"
           scrolling="no"
           allowTransparency="true"
+          allow="autoplay; encrypted-media"
         />
       )}
 
@@ -384,20 +385,6 @@ export default function Home({ addToCart }) {
                   <div className="reelfy_card_video_wrapper">
                     <div className="reelfy_card_video">
                       <ReelPlayer reel={r} isSelected={centeredInsta % instagramReels.length === i % instagramReels.length} />
-                      <div className="reelfy_card_product card_product_ajax active">
-                        <div className="reelfy_card_product__image">
-                          <img src={r.thumb} alt={r.product} loading="lazy" />
-                        </div>
-                        <div className="reelfy_card_product__content">
-                          <div className="reelfy_card_product__title">
-                            <span>{r.product}</span>
-                          </div>
-                          <div className="reelfy_card_product__prices">
-                            <span className="rf-old-price">{r.oldPrice}</span>
-                            <span className="rf-new-price">{r.price}</span>
-                          </div>
-                        </div>
-                      </div>
                     </div>
                   </div>
                 </div>
