@@ -136,21 +136,25 @@ function ReelPlayer({ reel, isSelected }) {
   // Handle Instagram Embeds
   return (
     <div className={`reelfy-player-wrapper ${isSelected ? 'is-active' : ''}`}>
-      {/* Background Poster - Always present to prevent flicker */}
+      {/* Background Poster - Prioritize local images as they are more reliable */}
       <img 
-        src={reelId ? `https://www.instagram.com/p/${reelId}/media/?size=l` : reel.poster} 
+        src={reel.poster} 
         alt={reel.product} 
-        className={`reelfy-poster-img ${isLoaded && isSelected ? 'is-hidden' : ''}`} 
+        className={`reelfy-poster-img ${isSelected ? 'is-dimmed' : ''}`} 
         loading="lazy"
-        onError={(e) => { e.target.src = reel.poster; }}
+        onError={(e) => { 
+          // If local fails, try Instagram media as fallback
+          if (reelId && !e.target.src.includes('instagram.com')) {
+            e.target.src = `https://www.instagram.com/p/${reelId}/media/?size=l`;
+          }
+        }}
       />
       
-      {/* Embed Iframe - Only load if selected or very near */}
+      {/* Embed Iframe - Fixed ID extraction and loading */}
       {isSelected && reelId && (
         <iframe
           src={`https://www.instagram.com/reel/${reelId}/embed/`}
-          className={`reelfy-iframe ${isLoaded ? 'is-visible' : ''}`}
-          onLoad={() => setIsLoaded(true)}
+          className="reelfy-iframe is-visible"
           frameBorder="0"
           scrolling="no"
           allowTransparency="true"
@@ -668,10 +672,9 @@ export default function Home({ addToCart }) {
 .reelfy-video-container { width: 100%; height: 100%; position: relative; background: #000; overflow: hidden; }
 .reelfy-video-element { width: 100%; height: 100%; object-fit: cover; }
 .reelfy-player-wrapper { width: 100%; height: 100%; position: relative; background: #000; overflow: hidden; }
-.reelfy-iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; opacity: 0; transition: opacity 0.5s ease; z-index: 2; }
-.reelfy-iframe.is-visible { opacity: 1; }
-.reelfy-poster-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; transition: opacity 0.5s ease; }
-.reelfy-poster-img.is-hidden { opacity: 0; pointer-events: none; }
+.reelfy-iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; z-index: 2; }
+.reelfy-poster-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; transition: opacity 0.3s ease; }
+.reelfy-poster-img.is-dimmed { opacity: 0.3; }
 .reelfy-play-overlay { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.2); opacity: 0.8; transition: opacity 0.3s; z-index: 3; }
 .reelfy-error-placeholder { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: #1a1a1a; color: #444; font-size: 0.8rem; font-weight: 800; text-transform: uppercase; }
 .rf-video-item.is-selected .reelfy-play-overlay { opacity: 0; pointer-events: none; }
