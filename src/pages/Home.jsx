@@ -34,8 +34,8 @@ const bestSellers = [
 ];
 
 const instagramReels = [
-  { id: 1, videoUrl: 'https://www.instagram.com/reels/C9kM9T8v0kX/', poster: '/images/media__1775931116204.png', product: 'Reparador Spray 60ml', oldPrice: 'R$ 116,97', price: 'R$ 58,48', thumb: '/images/product_bottle.png' },
-  { id: 2, videoUrl: 'https://www.instagram.com/reels/CosXAKtAJgh/', poster: '/images/media__1775931109284.png', product: 'Shampoo Sólido Matú', oldPrice: 'R$ 89,97', price: 'R$ 59,97', thumb: '/images/product_shampoo_solid.png' },
+  { id: 1, videoUrl: 'https://www.instagram.com/reel/CosXAKtAJgh/', poster: '/images/media__1775931116204.png', product: 'Reparador Spray 60ml', oldPrice: 'R$ 116,97', price: 'R$ 58,48', thumb: '/images/product_bottle.png' },
+  { id: 2, videoUrl: 'https://www.instagram.com/reel/CosXAKtAJgh/', poster: '/images/media__1775931109284.png', product: 'Shampoo Sólido Matú', oldPrice: 'R$ 89,97', price: 'R$ 59,97', thumb: '/images/product_shampoo_solid.png' },
   { id: 3, videoUrl: '', poster: '/images/category_skin.png', product: 'Sérum Facial Capitã', oldPrice: 'R$ 149,97', price: 'R$ 99,97', thumb: '/images/product_face_cream.png' },
   { id: 4, videoUrl: '', poster: '/images/category_body.png', product: 'Óleo Corporal Premium', oldPrice: 'R$ 129,97', price: 'R$ 79,97', thumb: '/images/product_body_oil.png' },
   { id: 5, videoUrl: '', poster: '/images/category_hair.png', product: 'Máscara Reconstrutora', oldPrice: 'R$ 99,97', price: 'R$ 69,97', thumb: '/images/product_face_wash.png' },
@@ -112,29 +112,61 @@ function ProductCard({ product, addToCart }) {
 
 /* ─── REEL PLAYER COMPONENT ─── */
 function ReelPlayer({ reel, isSelected }) {
+  const [isLoaded, setIsLoaded] = useState(false);
   const reelId = getReelId(reel.videoUrl);
+  const isDirectVideo = reel.videoUrl?.match(/\.(mp4|webm|ogg)$/) || reel.videoUrl?.includes('video');
 
-  if (isSelected && reelId) {
+  // Handle direct video files (Premium experience)
+  if (isDirectVideo) {
     return (
       <div className="reelfy-video-container">
-        <iframe
-          src={`https://www.instagram.com/reels/${reelId}/embed/`}
-          className="reelfy-iframe"
-          allow="autoplay"
-          frameBorder="0"
-          scrolling="no"
-          allowTransparency="true"
+        <video
+          src={reel.videoUrl}
+          poster={reel.poster}
+          autoPlay={isSelected}
+          muted
+          loop
+          playsInline
+          className="reelfy-video-element"
         />
       </div>
     );
   }
 
+  // Handle Instagram Embeds
   return (
-    <div className="reelfy-poster-container">
-      <img src={reel.poster} alt={reel.product} className="reelfy-poster-img" loading="lazy" />
-      {reelId && (
+    <div className={`reelfy-player-wrapper ${isSelected ? 'is-active' : ''}`}>
+      {/* Background Poster - Always present to prevent flicker */}
+      <img 
+        src={reel.poster} 
+        alt={reel.product} 
+        className={`reelfy-poster-img ${isLoaded && isSelected ? 'is-hidden' : ''}`} 
+        loading="lazy" 
+      />
+      
+      {/* Embed Iframe - Only load if selected or very near */}
+      {isSelected && reelId && (
+        <iframe
+          src={`https://www.instagram.com/reel/${reelId}/embed/`}
+          className={`reelfy-iframe ${isLoaded ? 'is-visible' : ''}`}
+          onLoad={() => setIsLoaded(true)}
+          frameBorder="0"
+          scrolling="no"
+          allowTransparency="true"
+        />
+      )}
+
+      {/* Overlay for non-selected items */}
+      {!isSelected && reelId && (
         <div className="reelfy-play-overlay">
           <Play size={48} fill="white" color="white" />
+        </div>
+      )}
+      
+      {/* Error State Placeholder if no link */}
+      {!reelId && !isDirectVideo && (
+        <div className="reelfy-error-placeholder">
+          <span>Configurar Link</span>
         </div>
       )}
     </div>
@@ -632,12 +664,16 @@ export default function Home({ addToCart }) {
   .faq-layout { grid-template-columns: 1fr; gap: 2.5rem; }
 }
 
-.reelfy-video-container { width: 100%; height: 100%; position: relative; background: #000; }
-.reelfy-iframe { width: 100%; height: 100%; border: none; }
-.reelfy-poster-container { width: 100%; height: 100%; position: relative; }
-.reelfy-play-overlay { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.2); opacity: 0.8; transition: opacity 0.3s; }
+.reelfy-video-container { width: 100%; height: 100%; position: relative; background: #000; overflow: hidden; }
+.reelfy-video-element { width: 100%; height: 100%; object-fit: cover; }
+.reelfy-player-wrapper { width: 100%; height: 100%; position: relative; background: #000; overflow: hidden; }
+.reelfy-iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; opacity: 0; transition: opacity 0.5s ease; z-index: 2; }
+.reelfy-iframe.is-visible { opacity: 1; }
+.reelfy-poster-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; transition: opacity 0.5s ease; }
+.reelfy-poster-img.is-hidden { opacity: 0; pointer-events: none; }
+.reelfy-play-overlay { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.2); opacity: 0.8; transition: opacity 0.3s; z-index: 3; }
+.reelfy-error-placeholder { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: #1a1a1a; color: #444; font-size: 0.8rem; font-weight: 800; text-transform: uppercase; }
 .rf-video-item.is-selected .reelfy-play-overlay { opacity: 0; pointer-events: none; }
-.reelfy-poster-img { width: 100%; height: 100%; object-fit: cover; }
 
 .parallax-banner-section { position: relative; width: 100%; height: 400px; overflow: hidden; }
 .par-img-desktop { display: block; width: 100%; height: 100%; object-fit: cover; }
