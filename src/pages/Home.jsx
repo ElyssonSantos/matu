@@ -34,12 +34,12 @@ const bestSellers = [
 ];
 
 const instagramReels = [
-  { id: 1, videoUrl: 'https://www.instagram.com/reel/CosXAKtAJgh/', poster: '/images/media__1775931116204.png', product: 'Reparador Spray 60ml', oldPrice: 'R$ 116,97', price: 'R$ 58,48', thumb: '/images/product_bottle.png' },
-  { id: 2, videoUrl: 'https://www.instagram.com/reel/DRvEhw0ibdT/', poster: '/images/media__1775931109284.png', product: 'Shampoo Sólido Matú', oldPrice: 'R$ 89,97', price: 'R$ 59,97', thumb: '/images/product_shampoo_solid.png' },
-  { id: 3, videoUrl: 'https://www.instagram.com/reel/DUs8zcSjsky/', poster: '/images/category_skin.png', product: 'Sérum Facial Capitã', oldPrice: 'R$ 149,97', price: 'R$ 99,97', thumb: '/images/product_face_cream.png' },
-  { id: 4, videoUrl: 'https://www.instagram.com/reel/DWSF0DFCZsF/', poster: '/images/category_body.png', product: 'Óleo Corporal Premium', oldPrice: 'R$ 129,97', price: 'R$ 79,97', thumb: '/images/product_body_oil.png' },
-  { id: 5, videoUrl: 'https://www.instagram.com/reel/DWT8mMGRXPC/', poster: '/images/category_hair.png', product: 'Máscara Reconstrutora', oldPrice: 'R$ 99,97', price: 'R$ 69,97', thumb: '/images/product_face_wash.png' },
-  { id: 6, videoUrl: 'https://www.instagram.com/reel/DSSuPLNiemm/', poster: '/images/category_oil.png', product: 'Tônico Equilibrante', oldPrice: 'R$ 79,97', price: 'R$ 49,97', thumb: '/images/product_face_wash.png' }
+  { id: 1, videoUrl: 'https://i.imgur.com/WoLUcLh.mp4', poster: '/images/media__1775931116204.png', product: 'Reparador Spray 60ml', oldPrice: 'R$ 116,97', price: 'R$ 58,48', thumb: '/images/product_bottle.png' },
+  { id: 2, videoUrl: 'https://i.imgur.com/WoLUcLh.mp4', poster: '/images/media__1775931109284.png', product: 'Shampoo Sólido Matú', oldPrice: 'R$ 89,97', price: 'R$ 59,97', thumb: '/images/product_shampoo_solid.png' },
+  { id: 3, videoUrl: 'https://i.imgur.com/WoLUcLh.mp4', poster: '/images/category_skin.png', product: 'Sérum Facial Capitã', oldPrice: 'R$ 149,97', price: 'R$ 99,97', thumb: '/images/product_face_cream.png' },
+  { id: 4, videoUrl: 'https://i.imgur.com/WoLUcLh.mp4', poster: '/images/category_body.png', product: 'Óleo Corporal Premium', oldPrice: 'R$ 129,97', price: 'R$ 79,97', thumb: '/images/product_body_oil.png' },
+  { id: 5, videoUrl: 'https://i.imgur.com/WoLUcLh.mp4', poster: '/images/category_hair.png', product: 'Máscara Reconstrutora', oldPrice: 'R$ 99,97', price: 'R$ 69,97', thumb: '/images/product_face_wash.png' },
+  { id: 6, videoUrl: 'https://i.imgur.com/WoLUcLh.mp4', poster: '/images/category_oil.png', product: 'Tônico Equilibrante', oldPrice: 'R$ 79,97', price: 'R$ 49,97', thumb: '/images/product_face_wash.png' }
 ];
 
 
