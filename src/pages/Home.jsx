@@ -122,7 +122,6 @@ function ReelPlayer({ reel, isSelected }) {
       <div className="reelfy-video-container">
         <video
           src={reel.videoUrl}
-          poster={reel.poster}
           autoPlay={isSelected}
           muted
           loop
@@ -136,21 +135,7 @@ function ReelPlayer({ reel, isSelected }) {
   // Handle Instagram Embeds
   return (
     <div className={`reelfy-player-wrapper ${isSelected ? 'is-active' : ''}`}>
-      {/* Background Poster - Prioritize local images as they are more reliable */}
-      <img
-        src={reel.poster}
-        alt={reel.product}
-        className={`reelfy-poster-img ${isSelected ? 'is-dimmed' : ''}`}
-        loading="lazy"
-        onError={(e) => {
-          // If local fails, try Instagram media as fallback
-          if (reelId && !e.target.src.includes('instagram.com')) {
-            e.target.src = `https://www.instagram.com/p/${reelId}/media/?size=l`;
-          }
-        }}
-      />
-
-      {/* Embed Iframe - Using standard 'p' embed which is often more stable for cross-domain */}
+      {/* Embed Iframe - Fixed ID extraction and loading */}
       {isSelected && reelId && (
         <iframe
           src={`https://www.instagram.com/p/${reelId}/embed/`}
