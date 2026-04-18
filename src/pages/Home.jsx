@@ -34,12 +34,12 @@ const bestSellers = [
 ];
 
 const instagramReels = [
-  { id: 1, videoUrl: 'https://i.imgur.com/WoLUcLh.mp4', poster: '/images/media__1775931116204.png', product: 'Reparador Spray 60ml', oldPrice: 'R$ 116,97', price: 'R$ 58,48', thumb: '/images/product_bottle.png' },
-  { id: 2, videoUrl: 'https://i.imgur.com/WoLUcLh.mp4', poster: '/images/media__1775931109284.png', product: 'Shampoo Sólido Matú', oldPrice: 'R$ 89,97', price: 'R$ 59,97', thumb: '/images/product_shampoo_solid.png' },
-  { id: 3, videoUrl: 'https://i.imgur.com/WoLUcLh.mp4', poster: '/images/category_skin.png', product: 'Sérum Facial Capitã', oldPrice: 'R$ 149,97', price: 'R$ 99,97', thumb: '/images/product_face_cream.png' },
-  { id: 4, videoUrl: 'https://i.imgur.com/WoLUcLh.mp4', poster: '/images/category_body.png', product: 'Óleo Corporal Premium', oldPrice: 'R$ 129,97', price: 'R$ 79,97', thumb: '/images/product_body_oil.png' },
-  { id: 5, videoUrl: 'https://i.imgur.com/WoLUcLh.mp4', poster: '/images/category_hair.png', product: 'Máscara Reconstrutora', oldPrice: 'R$ 99,97', price: 'R$ 69,97', thumb: '/images/product_face_wash.png' },
-  { id: 6, videoUrl: 'https://i.imgur.com/WoLUcLh.mp4', poster: '/images/category_oil.png', product: 'Tônico Equilibrante', oldPrice: 'R$ 79,97', price: 'R$ 49,97', thumb: '/images/product_face_wash.png' }
+  { id: 1, videoUrl: 'https://i.imgur.com/vU68X4B.mp4', poster: '/images/media__1775931116204.png', product: 'Reparador Spray 60ml', oldPrice: 'R$ 116,97', price: 'R$ 58,48', thumb: '/images/product_bottle.png' },
+  { id: 2, videoUrl: 'https://i.imgur.com/lQgjwVT.mp4', poster: '/images/media__1775931109284.png', product: 'Shampoo Sólido Matú', oldPrice: 'R$ 89,97', price: 'R$ 59,97', thumb: '/images/product_shampoo_solid.png' },
+  { id: 3, videoUrl: 'https://i.imgur.com/vU68X4B.mp4', poster: '/images/category_skin.png', product: 'Sérum Facial Capitã', oldPrice: 'R$ 149,97', price: 'R$ 99,97', thumb: '/images/product_face_cream.png' },
+  { id: 4, videoUrl: 'https://i.imgur.com/lQgjwVT.mp4', poster: '/images/category_body.png', product: 'Óleo Corporal Premium', oldPrice: 'R$ 129,97', price: 'R$ 79,97', thumb: '/images/product_body_oil.png' },
+  { id: 5, videoUrl: 'https://i.imgur.com/vU68X4B.mp4', poster: '/images/category_hair.png', product: 'Máscara Reconstrutora', oldPrice: 'R$ 99,97', price: 'R$ 69,97', thumb: '/images/product_face_wash.png' },
+  { id: 6, videoUrl: 'https://i.imgur.com/lQgjwVT.mp4', poster: '/images/category_oil.png', product: 'Tônico Equilibrante', oldPrice: 'R$ 79,97', price: 'R$ 49,97', thumb: '/images/product_face_wash.png' }
 ];
 
 
@@ -137,19 +137,19 @@ function ReelPlayer({ reel, isSelected }) {
   return (
     <div className={`reelfy-player-wrapper ${isSelected ? 'is-active' : ''}`}>
       {/* Background Poster - Prioritize local images as they are more reliable */}
-      <img 
-        src={reel.poster} 
-        alt={reel.product} 
-        className={`reelfy-poster-img ${isSelected ? 'is-dimmed' : ''}`} 
+      <img
+        src={reel.poster}
+        alt={reel.product}
+        className={`reelfy-poster-img ${isSelected ? 'is-dimmed' : ''}`}
         loading="lazy"
-        onError={(e) => { 
+        onError={(e) => {
           // If local fails, try Instagram media as fallback
           if (reelId && !e.target.src.includes('instagram.com')) {
             e.target.src = `https://www.instagram.com/p/${reelId}/media/?size=l`;
           }
         }}
       />
-      
+
       {/* Embed Iframe - Using standard 'p' embed which is often more stable for cross-domain */}
       {isSelected && reelId && (
         <iframe
@@ -168,7 +168,7 @@ function ReelPlayer({ reel, isSelected }) {
           <Play size={48} fill="white" color="white" />
         </div>
       )}
-      
+
       {/* Error State Placeholder if no link */}
       {!reelId && !isDirectVideo && (
         <div className="reelfy-error-placeholder">
