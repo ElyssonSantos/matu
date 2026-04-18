@@ -35,7 +35,7 @@ const bestSellers = [
 
 const instagramReels = [
   { id: 1, videoUrl: 'https://www.instagram.com/reels/C9kM9T8v0kX/', poster: '/images/media__1775931116204.png', product: 'Reparador Spray 60ml', oldPrice: 'R$ 116,97', price: 'R$ 58,48', thumb: '/images/product_bottle.png' },
-  { id: 2, videoUrl: 'https://www.instagram.com/reels/C-j8T8r0kX1/', poster: '/images/media__1775931109284.png', product: 'Shampoo Sólido Matú', oldPrice: 'R$ 89,97', price: 'R$ 59,97', thumb: '/images/product_shampoo_solid.png' },
+  { id: 2, videoUrl: 'https://www.instagram.com/reels/CosXAKtAJgh/', poster: '/images/media__1775931109284.png', product: 'Shampoo Sólido Matú', oldPrice: 'R$ 89,97', price: 'R$ 59,97', thumb: '/images/product_shampoo_solid.png' },
   { id: 3, videoUrl: '', poster: '/images/category_skin.png', product: 'Sérum Facial Capitã', oldPrice: 'R$ 149,97', price: 'R$ 99,97', thumb: '/images/product_face_cream.png' },
   { id: 4, videoUrl: '', poster: '/images/category_body.png', product: 'Óleo Corporal Premium', oldPrice: 'R$ 129,97', price: 'R$ 79,97', thumb: '/images/product_body_oil.png' },
   { id: 5, videoUrl: '', poster: '/images/category_hair.png', product: 'Máscara Reconstrutora', oldPrice: 'R$ 99,97', price: 'R$ 69,97', thumb: '/images/product_face_wash.png' },
@@ -258,10 +258,10 @@ export default function Home({ addToCart }) {
     if (container) {
       const card = container.querySelector('.swipe-item');
       if (card) {
-        const cardWidth = card.offsetWidth + 15; 
+        const cardWidth = card.offsetWidth + 15;
         const maxScroll = container.scrollWidth - container.offsetWidth;
         const current = container.scrollLeft;
-        
+
         // Loop logic: if at end, jump to middle copy
         if (dir === 'right') {
           if (current >= maxScroll - 50) {
