@@ -79,8 +79,10 @@ function ProductCard({ product, addToCart }) {
   return (
     <div className="m-product-card swipe-item">
       <div className="m-product-img">
-        {product.badge && <span className="m-badge">{product.badge}</span>}
-        {product.discount && <span className="m-badge m-badge-discount">{product.discount}</span>}
+        <div className="m-badges">
+          {product.badge && <span className="m-badge">{product.badge}</span>}
+          {product.discount && <span className="m-badge m-badge-discount">{product.discount}</span>}
+        </div>
         <img src={product.image} alt={product.name} />
       </div>
       <div className="m-product-info">
@@ -520,7 +522,8 @@ export default function Home({ addToCart }) {
 .m-product-card { background: #FFFFFF; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; border: 1px solid #E5E7EB; }
 .m-product-img { position: relative; aspect-ratio: 1/1.15; overflow: hidden; background: #F9FAFB; }
 .m-product-img img { width: 100%; height: 100%; object-fit: cover; }
-.m-badge { position: absolute; top: 12px; left: 12px; background: #2D5A44; color: #fff; padding: 4px 12px; border-radius: 20px; font-size: .75rem; font-weight: 800; }
+.m-badges { position: absolute; top: 12px; left: 12px; display: flex; flex-direction: column; gap: 6px; align-items: flex-start; z-index: 10; }
+.m-badge { background: #2D5A44; color: #fff; padding: 4px 12px; border-radius: 20px; font-size: .75rem; font-weight: 800; white-space: nowrap; }
 .m-product-info { padding: 1.5rem; display: flex; flex-direction: column; flex: 1; text-align: center; }
 .m-product-info h3 { font-size: 1.05rem; font-weight: 700; color: #1F2937; margin-bottom: .8rem; }
 .m-price-block { display: flex; flex-direction: column; align-items: center; gap: 2px; margin-bottom: 0.8rem; }
