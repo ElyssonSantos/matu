@@ -691,14 +691,12 @@ export default function Home({ addToCart }) {
 .faq-answer { padding-bottom: 1.5rem; color: #4B5563; line-height: 1.7; font-size: 1rem; }
 
 /* ═══════ 9. BENEFITS (CIRCULAR) ═══════ */
-.ben-track.desktop-grid-4 {
-  overflow: visible !important;
-}
 @media(min-width: 868px) {
   .ben-track.desktop-grid-4 {
     display: grid !important;
     grid-template-columns: repeat(4, 1fr);
     gap: 2rem;
+    overflow: visible !important;
   }
   .ben-track.desktop-grid-4 .swipe-item {
     width: auto;
