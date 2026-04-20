@@ -1,407 +1,596 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { Leaf, Rabbit, Droplet, Plus, Minus, ShieldCheck, ChevronRight } from 'lucide-react';
+import { 
+  Leaf, 
+  Rabbit, 
+  Droplet, 
+  Plus, 
+  Minus, 
+  ShieldCheck, 
+  ChevronRight, 
+  Star, 
+  Truck, 
+  CheckCircle2, 
+  MessageCircle,
+  ArrowLeft,
+  Share2
+} from 'lucide-react';
 
 const mockProduct = {
   id: 1,
-  name: 'Sérum Renovador Natural',
-  price: 89.90,
-  image: '/images/product_bottle.png',
-  description: 'Um tratamento luxuoso e leve que penetra profundamente na pele. Criado com botânicos selecionados para revitalizar e entregar um brilho natural sem deixar sensação oleosa.',
-  ingredients: 'Óleo de Rosa Mosqueta certificado, Esqualano Vegetal, Vitamina E pura, Extrato de Camomila.',
-  howToUse: 'Aplique 3 a 4 gotas na pele limpa e levemente úmida. Massageie de baixo para cima com movimentos suaves. Pode ser usado de manhã e à noite.',
-  forWho: 'Todos os tipos de pele, especialmente peles secas e que buscam viço natural.',
+  name: 'Sérum Renovador Capitã Aqua',
+  price: 99.97,
+  oldPrice: 149.97,
+  discount: '33% OFF',
+  images: [
+    '/images/product_face_cream.png',
+    '/images/category_skin_new.jpg',
+    '/images/product_bottle.png',
+  ],
+  shortDesc: 'Hidratação profunda e restauração da barreira cutânea com ativos botânicos de alta performance.',
+  description: 'O Sérum Renovador Capitã Aqua é uma fórmula exclusiva da Matú, desenvolvida para peles que buscam hidratação intensa sem peso. Sua textura leve em gel-soro penetra instantaneamente, entregando um complexo de ácido hialurônico botânico e extratos da flora brasileira.',
+  benefits: [
+    'Hidratação profunda por até 48 horas',
+    'Restaura a luminosidade natural da pele',
+    'Estimula a regeneração celular',
+    'Textura ultra-leve de rápida absorção'
+  ],
+  howToUse: 'Com o rosto limpo e levemente úmido, aplique 3-5 gotas sobre a palma das mãos e pressione suavemente sobre o rosto, pescoço e colo. Use de manhã e à noite antes do seu hidratante habitual.',
+  composition: 'Aqua (Água), Aloe Barbadensis Leaf Juice (Extrato de Aloe Vera), Glycerin (Glicerina Vegetal), Hyaluronic Acid (Ácido Hialurônico Botânico), Euterpe Oleracea Fruit Extract (Extrato de Açaí), Sodium Benzoate, Potassium Sorbate.',
+  rating: 4.9,
+  reviewsCount: 128,
+  reviews: [
+    { id: 1, user: 'Ana Paula', rating: 5, comment: 'Incrível! Deixa a pele muito macia e sequinha.', date: '3 dias atrás' },
+    { id: 2, user: 'Larissa M.', rating: 5, comment: 'Melhor sérum que já usei na vida. O cheiro é maravilhoso.', date: '1 semana atrás' }
+  ]
 };
-
-const crossSell = [
-  { id: 2, name: 'Óleo Corporal Relaxante', price: 74.50, image: '/images/product_bottle.png' },
-  { id: 4, name: 'Creme Hidratante Facial', price: 112.00, image: '/images/product_bottle.png' }
-];
 
 export default function Product({ addToCart }) {
   const { id } = useParams();
   const navigate = useNavigate();
   const [quantity, setQuantity] = useState(1);
-  const [activeTab, setActiveTab] = useState('sobre'); // sobre, como-usar, para-quem
+  const [activeImg, setActiveImg] = useState(0);
+  const [activeTab, setActiveTab] = useState('beneficios');
+  const [isZoomed, setIsZoomed] = useState(false);
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+
+  // Decodifica o nome do produto da URL
+  const productName = decodeURIComponent(id || 'Sérum Renovador Capitã Aqua');
+
+  // No mundo real, buscaríamos os dados pelo nome/slug. 
+  // Aqui, adaptamos o mockProduct para o nome atual.
+  const product = { 
+    ...mockProduct, 
+    name: productName,
+    // Ajuste simples para simular produtos diferentes baseado no nome
+    price: productName.includes('Manteiga') ? 78.50 : 99.97,
+    oldPrice: productName.includes('Manteiga') ? 95.00 : 149.97
+  };
+
+  // Scroll to top on mount
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [id]);
+
+  const handleMouseMove = (e) => {
+    if (!isZoomed) return;
+    const { left, top, width, height } = e.target.getBoundingClientRect();
+    const x = ((e.pageX - left - window.scrollX) / width) * 100;
+    const y = ((e.pageY - top - window.scrollY) / height) * 100;
+    setMousePos({ x, y });
+  };
 
   const handleAddToCart = () => {
-    // In a real app we would pass quantity and product object
-    addToCart({ ...mockProduct, quantity, id: Number(id) || 1 });
+    addToCart({ ...product, quantity, id: id });
   };
 
   return (
-    <div className="product-page">
-      <div className="container product-main">
-        <div className="product-gallery">
-          <img src={mockProduct.image} alt={mockProduct.name} className="main-image" loading="eager" />
+    <div className="pdp-container">
+      {/* ─── BREADCRUMB ─── */}
+      <div className="pdp-breadcrumb">
+        <div className="ctnr">
+          <Link to="/"><ArrowLeft size={16} /> Voltar para Home</Link>
+          <span className="divider">/</span>
+          <span>Produtos</span>
+          <span className="divider">/</span>
+          <span className="current">{product.name}</span>
         </div>
-        
-        <div className="product-details">
-          <div className="breadcrumb">
-            <Link to="/">Home</Link> &gt; <span>Produtos</span> &gt; <span>{mockProduct.name}</span>
-          </div>
-          
-          <h1 className="product-title">{mockProduct.name}</h1>
-          <p className="product-price">R$ {mockProduct.price.toFixed(2).replace('.', ',')}</p>
-          
-          <p className="product-short-desc">{mockProduct.description}</p>
-          
-          <div className="trust-icons">
-            <div className="trust-item"><Leaf size={20} /> Natural</div>
-            <div className="trust-item"><Rabbit size={20} /> Vegano</div>
-            <div className="trust-item"><ShieldCheck size={20} /> Cruelty-Free</div>
-          </div>
+      </div>
 
-          <div className="purchase-actions">
-            <div className="quantity-selector">
-              <button onClick={() => setQuantity(Math.max(1, quantity - 1))}><Minus size={16} /></button>
-              <span>{quantity}</span>
-              <button onClick={() => setQuantity(quantity + 1)}><Plus size={16} /></button>
+      <div className="pdp-main-grid ctnr">
+        {/* ─── LEFT: GALLERY ─── */}
+        <div className="pdp-gallery-section">
+          <div className="pdp-thumbnails">
+            {mockProduct.images.map((img, idx) => (
+              <div 
+                key={idx} 
+                className={`pdp-thumb-item ${activeImg === idx ? 'active' : ''}`}
+                onClick={() => setActiveImg(idx)}
+              >
+                <img src={img} alt={`${mockProduct.name} ${idx}`} />
+              </div>
+            ))}
+          </div>
+          
+          <div className="pdp-main-img-wrapper">
+             <div className="pdp-badge-top">Novidade</div>
+             <div 
+                className={`pdp-main-img-inner ${isZoomed ? 'zoomed' : ''}`}
+                onMouseEnter={() => setIsZoomed(true)}
+                onMouseLeave={() => setIsZoomed(false)}
+                onMouseMove={handleMouseMove}
+             >
+                <img 
+                  src={mockProduct.images[activeImg]} 
+                  alt={mockProduct.name} 
+                  style={isZoomed ? { transformOrigin: `${mousePos.x}% ${mousePos.y}%` } : {}}
+                />
+             </div>
+             <div className="pdp-gallery-controls">
+                <button aria-label="Compartilhar"><Share2 size={18} /></button>
+             </div>
+          </div>
+        </div>
+
+        {/* ─── RIGHT: PRODUCT INFO ─── */}
+        <div className="pdp-info-section">
+          <div className="pdp-header">
+            <div className="pdp-rating-strip" onClick={() => setActiveTab('reviews')}>
+              <div className="stars">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} size={14} fill={i < Math.floor(mockProduct.rating) ? "var(--color-primary)" : "none"} color="var(--color-primary)" />
+                ))}
+              </div>
+              <span className="rating-count">({mockProduct.reviewsCount} avaliações)</span>
             </div>
             
-            <button className="btn btn-primary buy-btn" onClick={handleAddToCart}>
-              Comprar Agora
-            </button>
+            <h1 className="pdp-title">{product.name}</h1>
+            <p className="pdp-short-desc">{product.shortDesc}</p>
           </div>
 
-          <div className="product-tabs-container">
-            <div className="tabs-header">
-              <button className={activeTab === 'sobre' ? 'active' : ''} onClick={() => setActiveTab('sobre')}>Sobre o produto</button>
-              <button className={activeTab === 'como-usar' ? 'active' : ''} onClick={() => setActiveTab('como-usar')}>Como usar</button>
-              <button className={activeTab === 'para-quem' ? 'active' : ''} onClick={() => setActiveTab('para-quem')}>Indicação</button>
-            </div>
-            
-            <div className="tabs-content animate-fade-in">
-              {activeTab === 'sobre' && (
-                <div>
-                  <p><strong>Benefícios naturais:</strong> Desenvolvido com uma combinação exclusiva de óleos puros essenciais que promovem regeneração celular sem agressão. Sem fragrâncias sintéticas ou conservantes tóxicos.</p>
-                  <p className="mt-2"><strong>Ingredientes principais:</strong> {mockProduct.ingredients}</p>
-                </div>
-              )}
-              {activeTab === 'como-usar' && (
-                <div>
-                  <p>{mockProduct.howToUse}</p>
-                </div>
-              )}
-              {activeTab === 'para-quem' && (
-                <div>
-                  <p>{mockProduct.forWho}</p>
-                </div>
-              )}
-            </div>
+          <div className="pdp-price-block">
+             <div className="pdp-price-header">
+                <span className="old-price">R$ {product.oldPrice.toFixed(2).replace('.', ',')}</span>
+                <span className="discount-badge">{product.discount}</span>
+             </div>
+             <div className="current-price">
+                <span className="currency">R$</span>
+                <span className="value">{product.price.toFixed(2).replace('.', ',')}</span>
+             </div>
+             <div className="pdp-installments">
+                Ou 6x de <strong>R$ {(product.price / 6).toFixed(2).replace('.', ',')}</strong> sem juros
+             </div>
           </div>
 
-          <div className="diferenciais-box">
-            <h4>Diferenciais Matú</h4>
-            <ul>
-              <li><Droplet size={16} /> Produção artesanal de pequenos lotes</li>
-              <li><Droplet size={16} /> Livre de sulfatos, parabenos e petrolatos</li>
-              <li><Droplet size={16} /> Embalagem reciclável</li>
-            </ul>
+          <div className="pdp-buy-controls">
+             <div className="pdp-qty-selector">
+                <button onClick={() => setQuantity(Math.max(1, quantity - 1))} aria-label="Diminuir"><Minus size={18} /></button>
+                <span className="qty-val">{quantity}</span>
+                <button onClick={() => setQuantity(quantity + 1)} aria-label="Aumentar"><Plus size={18} /></button>
+             </div>
+             <button className="pdp-btn-add" onClick={handleAddToCart}>
+                Adicionar ao Carrinho
+             </button>
+          </div>
+
+          <div className="pdp-secondary-actions">
+            <a href="https://wa.me/5511999999999" className="pdp-btn-wa">
+               <MessageCircle size={20} /> 
+               Reservar pelo WhatsApp
+            </a>
+          </div>
+
+          {/* ─── TRUST SEALS ─── */}
+          <div className="pdp-trust-seals">
+             <div className="seal-item">
+                <Leaf size={24} />
+                <span>Natural & Vegano</span>
+             </div>
+             <div className="seal-item">
+                <Rabbit size={24} />
+                <span>Livre de Crueldade</span>
+             </div>
+             <div className="seal-item">
+                <CheckCircle2 size={24} />
+                <span>Testado Dermat.</span>
+             </div>
+             <div className="seal-item">
+                <Truck size={24} />
+                <span>Entrega Expressa</span>
+             </div>
+          </div>
+
+          {/* ─── ACCORDION / TABS ─── */}
+          <div className="pdp-details-tabs">
+             <div className="pdp-tabs-nav">
+                <button className={activeTab === 'beneficios' ? 'active' : ''} onClick={() => setActiveTab('beneficios')}>Benefícios</button>
+                <button className={activeTab === 'uso' ? 'active' : ''} onClick={() => setActiveTab('uso')}>Modo de Uso</button>
+                <button className={activeTab === 'composicao' ? 'active' : ''} onClick={() => setActiveTab('composicao')}>Composição</button>
+             </div>
+             <div className="pdp-tabs-panel">
+                {activeTab === 'beneficios' && (
+                  <div className="tab-pane animate-fade-in">
+                    <p>{mockProduct.description}</p>
+                    <ul className="pdp-benefits-list">
+                       {mockProduct.benefits.map((b, i) => (
+                         <li key={i}><CheckCircle2 size={16} /> {b}</li>
+                       ))}
+                    </ul>
+                  </div>
+                )}
+                {activeTab === 'uso' && (
+                  <div className="tab-pane animate-fade-in">
+                    <p className="pdp-usage-text">{mockProduct.howToUse}</p>
+                  </div>
+                )}
+                {activeTab === 'composicao' && (
+                  <div className="tab-pane animate-fade-in">
+                    <p className="pdp-comp-text">{mockProduct.composition}</p>
+                    <p className="pdp-comp-notice"><strong>Nota:</strong> Nossas formulações podem ser atualizadas para maior eficácia. Consulte sempre o rótulo da embalagem.</p>
+                  </div>
+                )}
+             </div>
           </div>
         </div>
       </div>
 
-      <section className="section cross-sell bg-light">
-        <div className="container">
-          <div className="section-header">
-            <h2>Você também pode gostar</h2>
-            <p>Combine este produto com outros essenciais da Matú.</p>
-          </div>
-          <div className="grid grid-cols-4 mt-4 cross-sell-grid">
-            {crossSell.slice(0, 2).map(item => (
-              <div key={item.id} className="product-card">
-                <div className="product-img-wrapper" style={{ cursor: 'pointer' }} onClick={() => navigate(`/product/${item.id}`)}>
-                  <img src={item.image} alt={item.name} loading="lazy" />
-                  <button className="quick-add" onClick={(e) => { e.stopPropagation(); addToCart({ ...item, quantity: 1 }); }}>+ Rápido</button>
-                </div>
-                <div className="product-info-minimal">
-                  <span className="p-cat">Cuidados</span>
-                  <Link to={`/product/${item.id}`}>
-                    <h3>{item.name}</h3>
-                  </Link>
-                  <div className="price-row">
-                    <span className="price">R$ {item.price.toFixed(2).replace('.', ',')}</span>
-                    <button className="add-link" onClick={() => addToCart({ ...item, quantity: 1 })}>Adicionar</button>
+      {/* ─── REVIEWS SECTION ─── */}
+      <section className="pdp-reviews-section">
+         <div className="ctnr">
+            <h2 className="section-title">O que dizem sobre a Matú</h2>
+            <div className="reviews-summary">
+               <div className="summary-left">
+                  <span className="avg-total">{mockProduct.rating}</span>
+                  <div className="stars-row">
+                     {[...Array(5)].map((_, i) => <Star key={i} size={18} fill="var(--color-primary)" color="var(--color-primary)" />)}
                   </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+                  <span className="total-label">Baseado em {mockProduct.reviewsCount} opiniões</span>
+               </div>
+               <div className="summary-right">
+                  {/* Simplificado */}
+                  <button className="btn-write-review">Escrever uma Avaliação</button>
+               </div>
+            </div>
+
+            <div className="reviews-list">
+               {mockProduct.reviews.map(rev => (
+                 <div key={rev.id} className="review-card">
+                    <div className="review-header">
+                       <span className="reviewer-name">{rev.user}</span>
+                       <div className="rev-stars">
+                          {[...Array(5)].map((_, i) => <Star key={i} size={12} fill="var(--color-primary)" color="var(--color-primary)" />)}
+                       </div>
+                    </div>
+                    <p className="review-comment">"{rev.comment}"</p>
+                    <span className="review-date">{rev.date}</span>
+                 </div>
+               ))}
+            </div>
+         </div>
       </section>
 
+      {/* ─── MOBILE STICKY BOTTOM ─── */}
+      <div className="pdp-mobile-sticky-bar">
+         <div className="sticky-info">
+            <span className="name">{product.name}</span>
+            <span className="price">R$ {product.price.toFixed(2).replace('.', ',')}</span>
+         </div>
+         <button className="btn-sticky-buy" onClick={handleAddToCart}>
+            Adicionar ao Carrinho
+         </button>
+      </div>
+
+      {/* ─── STYLES ─── */}
       <style>{`
-        .product-page {
-          padding-top: calc(var(--header-height) + 2rem);
+        :root {
+          --color-matu-green: #2E5E4E;
+          --color-matu-beige: #F9F5F0;
+          --color-matu-gold: #D4AF37;
+          --color-matu-text: #1A1A1A;
+          --color-matu-text-light: #666666;
+          --color-matu-border: #E5E1DA;
         }
 
-        .product-main {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 4rem;
-          margin-bottom: 5rem;
+        .pdp-container {
+          background-color: var(--color-bg-surface);
+          color: var(--color-matu-text);
+          padding-bottom: 5rem;
+          margin-top: var(--header-height);
         }
 
-        .main-image {
-          width: 100%;
-          border-radius: var(--radius-lg);
-          object-fit: cover;
-          aspect-ratio: 4/5;
-          background-color: var(--color-bg-sand);
+        .ctnr {
+          max-width: 1200px;
+          margin: 0 auto;
+          padding: 0 5%;
         }
 
-        .breadcrumb {
+        /* Breadcrumb */
+        .pdp-breadcrumb {
+          padding: 1.5rem 0;
           font-size: 0.85rem;
-          color: var(--color-text-light);
-          margin-bottom: 1.5rem;
+        }
+        .pdp-breadcrumb .ctnr {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          color: var(--color-matu-text-light);
+        }
+        .pdp-breadcrumb a {
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          color: var(--color-matu-text);
+          font-weight: 500;
+        }
+        .pdp-breadcrumb .divider { margin: 0 4px; opacity: 0.3; }
+        .pdp-breadcrumb .current { font-weight: 400; opacity: 0.7; }
+
+        /* Main Layout */
+        .pdp-main-grid {
+          display: grid;
+          grid-template-columns: 1.1fr 0.93fr;
+          gap: 5rem;
+          align-items: start;
+          padding-top: 2rem;
         }
 
-        .breadcrumb a {
-          color: var(--color-text-medium);
-        }
-
-        .product-title {
-          font-size: 2.5rem;
-          margin-bottom: 0.5rem;
-          line-height: 1.2;
-        }
-
-        .product-price {
-          font-size: 1.5rem;
-          color: var(--color-primary);
-          font-weight: 600;
-          margin-bottom: 1.5rem;
-        }
-
-        .product-short-desc {
-          margin-bottom: 2rem;
-          font-size: 1.05rem;
-        }
-
-        .trust-icons {
+        /* Gallery */
+        .pdp-gallery-section {
           display: flex;
           gap: 1.5rem;
-          margin-bottom: 2.5rem;
-          flex-wrap: wrap;
+          position: sticky;
+          top: 154px;
         }
-
-        .trust-item {
-          display: flex;
-          align-items: center;
-          gap: 0.5rem;
-          font-size: 0.9rem;
-          color: var(--color-text-medium);
-          background-color: var(--color-bg-sand);
-          padding: 0.5rem 1rem;
-          border-radius: var(--radius-full);
-        }
-
-        .purchase-actions {
-          display: flex;
-          gap: 1rem;
-          margin-bottom: 3rem;
-        }
-
-        .quantity-selector {
-          display: flex;
-          align-items: center;
-          border: 1px solid var(--color-border);
-          border-radius: var(--radius-full);
-          padding: 0 1rem;
-          height: 3.5rem;
-        }
-
-        .quantity-selector button {
-          padding: 0 0.5rem;
-          color: var(--color-text-medium);
-        }
-
-        .quantity-selector span {
-          min-width: 2rem;
-          text-align: center;
-          font-weight: 500;
-        }
-
-        .buy-btn {
-          flex: 1;
-          height: 3.5rem;
-          font-size: 1.1rem;
-        }
-
-        .product-tabs-container {
-          margin-bottom: 2.5rem;
-        }
-
-        .tabs-header {
-          display: flex;
-          gap: 2rem;
-          border-bottom: 1px solid var(--color-border);
-          margin-bottom: 1.5rem;
-        }
-
-        .tabs-header button {
-          padding-bottom: 1rem;
-          font-weight: 500;
-          color: var(--color-text-medium);
-          position: relative;
-        }
-
-        .tabs-header button.active {
-          color: var(--color-primary);
-        }
-
-        .tabs-header button.active::after {
-          content: '';
-          position: absolute;
-          bottom: -1px;
-          left: 0;
-          width: 100%;
-          height: 2px;
-          background-color: var(--color-primary);
-        }
-
-        .tabs-content {
-          font-size: 0.95rem;
-          min-height: 100px;
-        }
-
-        .diferenciais-box {
-          background-color: var(--color-bg-main);
-          padding: 1.5rem;
-          border-radius: var(--radius-md);
-          border: 1px dashed var(--color-border);
-        }
-
-        .diferenciais-box h4 {
-          margin-bottom: 1rem;
-          font-family: var(--font-body);
-        }
-
-        .diferenciais-box ul {
+        .pdp-thumbnails {
           display: flex;
           flex-direction: column;
-          gap: 0.75rem;
+          gap: 12px;
         }
-
-        .diferenciais-box li {
-          display: flex;
-          align-items: center;
-          gap: 0.75rem;
-          font-size: 0.95rem;
-          color: var(--color-text-medium);
-        }
-
-        .diferenciais-box li svg {
-          color: var(--color-primary-light);
-        }
-
-        .bg-light { background-color: var(--color-bg-main); }
-        .mt-4 { margin-top: 2rem; }
-
-        .product-img-wrapper {
-          position: relative;
-          overflow: hidden;
-          border-radius: var(--radius-lg);
-          margin-bottom: 1.5rem;
-        }
-
-        .product-img-wrapper img {
-          width: 100%;
-          aspect-ratio: 1;
-          object-fit: cover;
-          transition: transform 0.5s ease;
-        }
-
-        .product-card:hover .product-img-wrapper img {
-          transform: scale(1.05);
-        }
-
-        .quick-add {
-          position: absolute;
-          bottom: 1rem;
-          left: 50%;
-          transform: translateX(-50%) translateY(20px);
-          background-color: white;
-          color: var(--color-primary);
-          padding: 0.6rem 1.2rem;
-          border-radius: var(--radius-full);
-          font-weight: 600;
-          font-size: 0.85rem;
-          opacity: 0;
-          transition: all 0.3s ease;
-          border: none;
-          white-space: nowrap;
-        }
-
-        .product-card:hover .quick-add {
-          opacity: 1;
-          transform: translateX(-50%) translateY(0);
-        }
-
-        .product-info-minimal {
-          display: flex;
-          flex-direction: column;
-          gap: 0.5rem;
-        }
-
-        .p-cat {
-          font-size: 0.75rem;
-          text-transform: uppercase;
-          letter-spacing: 0.05em;
-          color: var(--color-text-light);
-        }
-
-        .product-info-minimal h3 {
-          font-size: 1.1rem;
-          color: var(--color-text-dark);
-          line-height: 1.4;
-        }
-
-        .price-row {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          margin-top: 0.5rem;
-        }
-
-        .price-row .price {
-          font-weight: 700;
-          color: var(--color-primary);
-          font-size: 1rem;
-        }
-
-        .add-link {
-          font-size: 0.85rem;
-          font-weight: 600;
-          color: var(--color-primary);
-          background: none;
-          border: none;
-          padding: 0;
-          text-decoration: underline;
+        .pdp-thumb-item {
+          width: 80px;
+          border: 1px solid var(--color-matu-border);
+          border-radius: 8px;
           cursor: pointer;
+          overflow: hidden;
+          transition: all 0.3s;
         }
+        .pdp-thumb-item.active { border-color: var(--color-matu-green); border-width: 2px; }
+        .pdp-thumb-item img { width: 100%; height: auto; display: block; filter: brightness(0.98); }
+        
+        .pdp-main-img-wrapper {
+          flex: 1;
+          background: #F4F4F4;
+          border-radius: 12px;
+          overflow: hidden;
+          position: relative;
+          aspect-ratio: 4/5;
+        }
+        .pdp-main-img-inner { width: 100%; height: 100%; overflow: hidden; cursor: zoom-in; }
+        .pdp-main-img-inner img { 
+          width: 100%; 
+          height: 100%; 
+          object-fit: cover; 
+          transition: transform 0.4s ease-out; 
+        }
+        .pdp-main-img-inner.zoomed img { transform: scale(1.6); }
+
+        .pdp-badge-top {
+          position: absolute;
+          top: 20px;
+          left: 20px;
+          background: var(--color-matu-green);
+          color: #fff;
+          padding: 4px 12px;
+          border-radius: 4px;
+          font-size: 0.75rem;
+          font-weight: 700;
+          text-transform: uppercase;
+          z-index: 5;
+        }
+        .pdp-gallery-controls {
+           position: absolute;
+           bottom: 20px;
+           right: 20px;
+           z-index: 5;
+        }
+        .pdp-gallery-controls button {
+           background: rgba(255,255,255,0.8);
+           width: 40px;
+           height: 40px;
+           border-radius: 50%;
+           display: flex;
+           align-items: center;
+           justify-content: center;
+           transition: all 0.3s;
+        }
+        .pdp-gallery-controls button:hover { background: #fff; transform: scale(1.1); }
+
+        /* Product Info */
+        .pdp-info-section { display: flex; flex-direction: column; }
+        .pdp-rating-strip { display: flex; align-items: center; gap: 10px; cursor: pointer; margin-bottom: 2rem; }
+        .pdp-rating-strip .stars { display: flex; gap: 4px; }
+        .rating-count { font-size: 0.85rem; color: var(--color-matu-text-light); text-decoration: underline; }
+
+        .pdp-title { font-size: 2.8rem; font-weight: 600; line-height: 1.15; color: var(--color-matu-green); margin-bottom: 1.5rem; letter-spacing: -0.02em; }
+        .pdp-short-desc { font-size: 1.15rem; color: var(--color-matu-text-light); line-height: 1.5; margin-bottom: 3rem; }
+
+        .pdp-price-block { margin-bottom: 3.5rem; }
+        .pdp-price-header { display: flex; align-items: center; gap: 15px; margin-bottom: 8px; }
+        .old-price { color: var(--color-matu-text-light); text-decoration: line-through; font-size: 1.1rem; }
+        .discount-badge { background: #FDECEC; color: #E54B4B; padding: 2px 8px; border-radius: 4px; font-weight: 700; font-size: 0.85rem; }
+        .current-price { display: flex; align-items: flex-start; gap: 4px; color: var(--color-matu-green); }
+        .current-price .currency { font-size: 1.3rem; font-weight: 600; margin-top: 6px; }
+        .current-price .value { font-size: 3.5rem; font-weight: 700; line-height: 0.9; }
+        .pdp-installments { margin-top: 15px; font-size: 0.95rem; color: var(--color-matu-text-light); }
+        .pdp-installments strong { color: var(--color-matu-text); font-weight: 700; }
+
+        .pdp-buy-controls { display: flex; gap: 15px; margin-bottom: 1.2rem; }
+        .pdp-qty-selector { 
+          display: flex; 
+          align-items: center; 
+          border: 1px solid var(--color-matu-border); 
+          border-radius: 8px; 
+          padding: 0 8px;
+          min-width: 120px;
+          justify-content: space-between;
+        }
+        .pdp-qty-selector button { width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; color: var(--color-matu-text-light); transition: color 0.2s; }
+        .pdp-qty-selector button:hover { color: var(--color-matu-text); }
+        .qty-val { font-weight: 600; font-size: 1.1rem; }
+
+        .pdp-btn-add { 
+          flex: 1; 
+          background: var(--color-matu-green); 
+          color: #fff; 
+          font-weight: 700; 
+          text-transform: uppercase; 
+          letter-spacing: 1px; 
+          font-size: 0.95rem; 
+          border-radius: 8px;
+          transition: all 0.3s;
+        }
+        .pdp-btn-add:hover { background: #1C3C31; transform: translateY(-2px); box-shadow: 0 10px 25px rgba(46,94,78,0.2); }
+
+        .pdp-btn-wa {
+           display: flex;
+           align-items: center;
+           justify-content: center;
+           gap: 10px;
+           width: 100%;
+           padding: 1rem;
+           border: 1px solid var(--color-matu-border);
+           border-radius: 8px;
+           color: var(--color-matu-text);
+           font-weight: 600;
+           transition: all 0.3s;
+           margin-bottom: 3.5rem;
+        }
+        .pdp-btn-wa:hover { border-color: #25D366; color: #25D366; background: #F7FFF9; }
+
+        /* Seals */
+        .pdp-trust-seals {
+           display: grid;
+           grid-template-columns: repeat(2, 1fr);
+           gap: 20px;
+           padding: 2.5rem 0;
+           border-top: 1px solid var(--color-matu-border);
+           border-bottom: 1px solid var(--color-matu-border);
+           margin-bottom: 3.5rem;
+        }
+        .seal-item { display: flex; align-items: center; gap: 12px; }
+        .seal-item svg { color: var(--color-matu-green); opacity: 0.8; }
+        .seal-item span { font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; line-height: 1.2; }
+
+        /* Details Tabs */
+        .pdp-details-tabs { width: 100%; }
+        .pdp-tabs-nav { 
+          display: flex; 
+          gap: 30px; 
+          border-bottom: 1px solid var(--color-matu-border);
+          margin-bottom: 2rem;
+        }
+        .pdp-tabs-nav button {
+          padding: 15px 0;
+          font-weight: 700;
+          color: var(--color-matu-text-light);
+          position: relative;
+          font-size: 0.95rem;
+          text-transform: uppercase;
+        }
+        .pdp-tabs-nav button.active { color: var(--color-matu-green); }
+        .pdp-tabs-nav button.active::after { 
+           content: ''; 
+           position: absolute; 
+           bottom: -1px; 
+           left: 0; 
+           width: 100%; 
+           height: 3px; 
+           background: var(--color-matu-green); 
+        }
+        .pdp-tabs-panel { min-height: 150px; line-height: 1.7; color: var(--color-matu-text-light); }
+        .pdp-benefits-list { list-style: none; margin-top: 1.5rem; display: flex; flex-direction: column; gap: 10px; }
+        .pdp-benefits-list li { display: flex; align-items: center; gap: 10px; color: var(--color-matu-text); font-weight: 500; font-size: 0.95rem; }
+        .pdp-benefits-list li svg { color: var(--color-matu-green); }
+        .pdp-usage-text, .pdp-comp-text { font-size: 1rem; }
+        .pdp-comp-notice { margin-top: 1.5rem; font-size: 0.85rem; }
+
+        /* Reviews */
+        .pdp-reviews-section { padding: 8rem 0; background-color: var(--color-matu-beige); margin-top: 5rem; }
+        .section-title { font-size: 2.2rem; text-align: center; margin-bottom: 4rem; }
+        .reviews-summary { 
+          display: flex; 
+          justify-content: space-between; 
+          align-items: center; 
+          background: #fff; 
+          padding: 3rem; 
+          border-radius: 16px; 
+          margin-bottom: 4rem;
+          box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+        }
+        .summary-left { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+        .avg-total { font-size: 4rem; font-weight: 700; line-height: 1; color: var(--color-matu-green); }
+        .stars-row { display: flex; gap: 4px; }
+        .total-label { font-size: 0.85rem; color: var(--color-matu-text-light); }
+        .btn-write-review { 
+          padding: 1rem 2rem; 
+          border: 1px solid var(--color-matu-green); 
+          color: var(--color-matu-green); 
+          font-weight: 700; 
+          border-radius: 50px; 
+          text-transform: uppercase;
+        }
+
+        .reviews-list { display: grid; gap: 20px; }
+        .review-card { background: #FFF; padding: 2.5rem; border-radius: 12px; }
+        .review-header { display: flex; justify-content: space-between; margin-bottom: 1rem; }
+        .reviewer-name { font-weight: 700; font-size: 1.05rem; }
+        .review-comment { font-style: italic; font-size: 1.1rem; color: #333; margin-bottom: 1.5rem; line-height: 1.6; }
+        .review-date { font-size: 0.8rem; color: var(--color-matu-text-light); }
+
+        /* Mobile Adjustments */
+        .pdp-mobile-sticky-bar { display: none; }
 
         @media (max-width: 992px) {
-          .product-main {
-            grid-template-columns: 1fr;
-            gap: 2rem;
-          }
-          .main-image {
-            max-height: 500px;
-          }
-          .cross-sell-grid {
-            grid-template-columns: repeat(2, 1fr);
-          }
+           .pdp-main-grid { grid-template-columns: 1fr; gap: 3rem; }
+           .pdp-gallery-section { flex-direction: column-reverse; position: static; }
+           .pdp-thumbnails { flex-direction: row; }
+           .pdp-thumb-item { width: 70px; }
+           .pdp-title { font-size: 2.2rem; }
         }
 
         @media (max-width: 768px) {
-          .purchase-actions {
-            flex-direction: column;
-          }
-          .tabs-header {
-            overflow-x: auto; white-space: nowrap;
-          }
+           .pdp-breadcrumb { display: none; }
+           .pdp-main-grid { padding-top: 0; }
+           .pdp-info-section { padding-bottom: 80px; }
+           
+           .pdp-mobile-sticky-bar {
+              display: flex;
+              position: fixed;
+              bottom: 0;
+              left: 0;
+              right: 0;
+              background: #fff;
+              padding: 15px 20px;
+              box-shadow: 0 -4px 15px rgba(0,0,0,0.1);
+              z-index: 1000;
+              align-items: center;
+              justify-content: space-between;
+              gap: 15px;
+           }
+           .sticky-info { display: flex; flex-direction: column; }
+           .sticky-info .name { font-weight: 700; font-size: 0.9rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 140px; }
+           .sticky-info .price { font-weight: 700; color: var(--color-matu-green); }
+           .btn-sticky-buy { 
+             flex: 1; 
+             background: var(--color-matu-green); 
+             color: #fff; 
+             height: 50px; 
+             border-radius: 8px; 
+             font-weight: 700; 
+             text-transform: uppercase; 
+             font-size: 0.85rem; 
+           }
+           .pdp-price-block .value { font-size: 2.8rem; }
         }
       `}</style>
     </div>

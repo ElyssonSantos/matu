@@ -1,14 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { ArrowRight, Star, ChevronLeft, ChevronRight, Leaf, Rabbit, Recycle, Droplets, Play } from 'lucide-react';
 
-/* ─── UTILS ─── */
-const getReelId = (url) => {
-  if (!url) return null;
-  // Patterns: instagram.com/reels/ID, instagram.com/reel/ID, instagram.com/p/ID
-  const match = url.match(/(?:reels?|p)\/([^/?#&]+)/);
-  return match ? match[1] : null;
-};
+
 
 /* ─── DATA ─── */
 const sliderContent = [
@@ -20,10 +14,10 @@ const sliderContent = [
 ];
 
 const categories = [
-  { id: 1, name: 'Capitã Aqua', image: 'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?q=80&w=800&fit=crop' },
-  { id: 2, name: 'Capitã Nutre', image: 'https://images.unsplash.com/photo-1599305090598-fe179d501227?q=80&w=800&fit=crop' },
-  { id: 3, name: 'Capitã Force', image: 'https://images.unsplash.com/photo-1615397323602-5eef6317bc2d?q=80&w=800&fit=crop' },
-  { id: 4, name: 'Finalizadores', image: 'https://images.unsplash.com/photo-1570194065650-d6faeb4ae288?q=80&w=800&fit=crop' }
+  { id: 1, name: 'Rosto', image: '/images/category_skin_new.jpg' },
+  { id: 2, name: 'Cabelos', image: '/images/category_hair_new.jpg' },
+  { id: 3, name: 'Nutrição', image: '/images/category_oil_new.jpg' },
+  { id: 4, name: 'Mini Kit', image: '/images/category_kits_new.jpg' }
 ];
 
 const bestSellers = [
@@ -36,9 +30,9 @@ const bestSellers = [
 const instagramReels = [
   { id: 1, videoUrl: 'https://i.imgur.com/vU68X4B.mp4', poster: '/images/media__1775931116204.png', product: 'Reparador Spray 60ml', oldPrice: 'R$ 116,97', price: 'R$ 58,48', thumb: '/images/product_bottle.png' },
   { id: 2, videoUrl: 'https://i.imgur.com/lQgjwVT.mp4', poster: '/images/media__1775931109284.png', product: 'Shampoo Sólido Matú', oldPrice: 'R$ 89,97', price: 'R$ 59,97', thumb: '/images/product_shampoo_solid.png' },
-  { id: 3, videoUrl: 'https://i.imgur.com/vU68X4B.mp4', poster: '/images/category_skin.png', product: 'Sérum Facial Capitã', oldPrice: 'R$ 149,97', price: 'R$ 99,97', thumb: '/images/product_face_cream.png' },
-  { id: 4, videoUrl: 'https://i.imgur.com/lQgjwVT.mp4', poster: '/images/category_body.png', product: 'Óleo Corporal Premium', oldPrice: 'R$ 129,97', price: 'R$ 79,97', thumb: '/images/product_body_oil.png' },
-  { id: 5, videoUrl: 'https://i.imgur.com/vU68X4B.mp4', poster: '/images/category_hair.png', product: 'Máscara Reconstrutora', oldPrice: 'R$ 99,97', price: 'R$ 69,97', thumb: '/images/product_face_wash.png' },
+  { id: 3, videoUrl: 'https://i.imgur.com/cVJZuvN.mp4', poster: '/images/category_skin.png', product: 'Sérum Facial Capitã', oldPrice: 'R$ 149,97', price: 'R$ 99,97', thumb: '/images/product_face_cream.png' },
+  { id: 4, videoUrl: 'https://i.imgur.com/ySXceFc.mp4', poster: '/images/category_body.png', product: 'Óleo Corporal Premium', oldPrice: 'R$ 129,97', price: 'R$ 79,97', thumb: '/images/product_body_oil.png' },
+  { id: 5, videoUrl: 'https://i.imgur.com/iPCdV1y.mp4', poster: '/images/category_hair.png', product: 'Máscara Reconstrutora', oldPrice: 'R$ 99,97', price: 'R$ 69,97', thumb: '/images/product_face_wash.png' },
   { id: 6, videoUrl: 'https://i.imgur.com/lQgjwVT.mp4', poster: '/images/category_oil.png', product: 'Tônico Equilibrante', oldPrice: 'R$ 79,97', price: 'R$ 49,97', thumb: '/images/product_face_wash.png' }
 ];
 
@@ -84,8 +78,15 @@ const benefitsData = [
 
 /* ─── REUSABLE PRODUCT CARD ─── */
 function ProductCard({ product, addToCart }) {
+  const navigate = useNavigate();
+  
+  const handleCardClick = () => {
+    // Navega usando o nome do produto como slug amigável
+    navigate(`/product/${encodeURIComponent(product.name)}`);
+  };
+
   return (
-    <div className="m-product-card swipe-item">
+    <div className="m-product-card swipe-item" onClick={handleCardClick} style={{ cursor: 'pointer' }}>
       <div className="m-product-img">
         <div className="m-badges">
           {product.badge && <span className="m-badge">{product.badge}</span>}
@@ -102,7 +103,7 @@ function ProductCard({ product, addToCart }) {
           </div>
           <span className="m-installments">Ou 6x de <strong>R$ {(product.price / 6).toFixed(2).replace('.', ',')}</strong> Sem Juros</span>
         </div>
-        <button className="m-btn-buy" onClick={() => addToCart(product)}>
+        <button className="m-btn-buy" onClick={(e) => { e.stopPropagation(); addToCart(product); }}>
           {product.type === 'social' ? 'Saiba Mais' : 'Comprar'}
         </button>
       </div>
@@ -111,58 +112,22 @@ function ProductCard({ product, addToCart }) {
 }
 
 /* ─── REEL PLAYER COMPONENT ─── */
-function ReelPlayer({ reel, isSelected }) {
-  const [isLoaded, setIsLoaded] = useState(false);
-  const reelId = getReelId(reel.videoUrl);
-  const isDirectVideo = reel.videoUrl?.match(/\.(mp4|webm|ogg)$/) || reel.videoUrl?.includes('video');
-
-  // Handle direct video files (Premium experience)
-  if (isDirectVideo) {
-    return (
-      <div className="reelfy-video-container">
-        <video
-          src={reel.videoUrl}
-          autoPlay={isSelected}
-          muted
-          loop
-          playsInline
-          className="reelfy-video-element"
-        />
-      </div>
-    );
-  }
-
-  // Handle Instagram Embeds
+function ReelPlayer({ reel }) {
   return (
-    <div className={`reelfy-player-wrapper ${isSelected ? 'is-active' : ''}`}>
-      {/* Embed Iframe - Fixed ID extraction and loading */}
-      {isSelected && reelId && (
-        <iframe
-          src={`https://www.instagram.com/p/${reelId}/embed/`}
-          className="reelfy-iframe is-visible"
-          frameBorder="0"
-          scrolling="no"
-          allowTransparency="true"
-          allow="autoplay; encrypted-media"
-        />
-      )}
-
-      {/* Overlay for non-selected items */}
-      {!isSelected && reelId && (
-        <div className="reelfy-play-overlay">
-          <Play size={48} fill="white" color="white" />
-        </div>
-      )}
-
-      {/* Error State Placeholder if no link */}
-      {!reelId && !isDirectVideo && (
-        <div className="reelfy-error-placeholder">
-          <span>Configurar Link</span>
-        </div>
-      )}
+    <div className="reelfy-video-container">
+      <video
+        src={reel.videoUrl}
+        autoPlay
+        muted
+        loop
+        playsInline
+        className="reelfy-video-element"
+      />
     </div>
   );
 }
+
+
 
 /* ─── MAIN COMPONENT ─── */
 export default function Home({ addToCart }) {
@@ -369,7 +334,7 @@ export default function Home({ addToCart }) {
                 <div className="reelfy_card card_type-overlay_product reelfy_card_autoplay">
                   <div className="reelfy_card_video_wrapper">
                     <div className="reelfy_card_video">
-                      <ReelPlayer reel={r} isSelected={centeredInsta % instagramReels.length === i % instagramReels.length} />
+                      <ReelPlayer reel={r} />
                     </div>
                   </div>
                 </div>
@@ -392,33 +357,33 @@ export default function Home({ addToCart }) {
         </div>
       </section>
 
-      {/* ═══════════════ 4. CAPITÃ AQUA HIGHLIGHT (BENTO GRID) ═══════════════ */}
+      {/* ═══════════════ 4. Rosto HIGHLIGHT (BENTO GRID) ═══════════════ */}
       <section className="sect">
         <div className="ctnr-full">
           <div className="bento-grid">
-            <Link to="/#produtos" className="bento-item item-large">
-              <img src="/images/category_skin.png" alt="Capitã Aqua" />
+            <Link to={`/product/${encodeURIComponent('Sérum Renovador Capitã Aqua')}`} className="bento-item item-large">
+              <img src="/images/category_skin_new.jpg" alt="Rosto" />
               <div className="bento-content">
-                <h3>Capitã Aqua</h3>
+                <h3>Rosto</h3>
                 {/*<p>MÁSCARA HIDRATANTE PROFISSIONAL</p>*/}
               </div>
             </Link>
-            <Link to="/#produtos" className="bento-item item-small">
-              <img src="/images/category_hair.png" alt="Capitã Nutre" />
+            <Link to={`/product/${encodeURIComponent('Manteiga de Karité Premium')}`} className="bento-item item-small">
+              <img src="/images/category_hair_new.jpg" alt="Cabelos" />
               <div className="bento-content">
-                <h3>Capitã Nutre</h3>
+                <h3>Cabelos</h3>
               </div>
             </Link>
-            <Link to="/#produtos" className="bento-item item-small">
-              <img src="/images/category_body.png" alt="Capitã Force" />
+            <Link to={`/product/${encodeURIComponent('Óleo Regenerador Labial')}`} className="bento-item item-small">
+              <img src="/images/category_oil_new.jpg" alt="Nutrição" />
               <div className="bento-content">
-                <h3>Capitã Force</h3>
+                <h3>Nutrição</h3>
               </div>
             </Link>
-            <Link to="/#produtos" className="bento-item item-medium">
-              <img src="/images/category_oil.png" alt="Finalizadores" loading="lazy" />
+            <Link to={`/product/${encodeURIComponent('Mini Kit Matu de Viagem')}`} className="bento-item item-medium">
+              <img src="/images/category_kits_new.jpg" alt="Mini Kit" loading="lazy" />
               <div className="bento-content">
-                <h3>Finalizadores</h3>
+                <h3>Mini Kit</h3>
               </div>
             </Link>
           </div>
@@ -427,7 +392,7 @@ export default function Home({ addToCart }) {
 
       {/* ═══════════════ 5. PARALLAX BANNER (DUAL SYSTEM) ═══════════════ */}
       <section className="parallax-banner-section">
-        <img src="https://images.unsplash.com/photo-1556228578-0d85b1a4d571?q=80&w=1920&h=800&fit=crop" alt="Matú Natureza" className="par-img-desktop" loading="lazy" />
+        <img src="/images/banner_kit_matu_mobile.png" alt="Matú Natureza" className="par-img-desktop" loading="lazy" />
         <img src="https://images.unsplash.com/photo-1556228578-0d85b1a4d571?q=80&w=800&h=1000&fit=crop" alt="Matú Natureza Mobile" className="par-img-mobile" loading="lazy" />
       </section>
 
@@ -458,18 +423,20 @@ export default function Home({ addToCart }) {
           <div className="testimonials-slider-container">
             <div className="t-track" style={{ transform: `translateX(-${tSlide * 100}%)` }}>
               {infiniteTestimonials.map((t, i) => (
-                <div key={`${t.id}-${i}`} className="test-card-new">
-                  <div className="test-header">
-                    <img src={t.image} alt={t.name} className="test-avatar" />
-                    <div className="test-meta">
-                      <div className="test-stars">
-                        {[...Array(t.rating)].map((_, i) => <Star key={i} size={14} fill="var(--color-stars)" stroke="none" />)}
+                <div key={`${t.id}-${i}`} className="test-slide-wrapper">
+                  <div className="test-card-new">
+                    <div className="test-header">
+                      <img src={t.image} alt={t.name} className="test-avatar" />
+                      <div className="test-meta">
+                        <div className="test-stars">
+                          {[...Array(t.rating)].map((_, i) => <Star key={i} size={14} fill="var(--color-stars)" stroke="none" />)}
+                        </div>
+                        <span className="test-name">{t.name.split(' ')[0]}</span>
                       </div>
-                      <span className="test-name">{t.name.split(' ')[0]}</span>
                     </div>
+                    <h4 className="test-highlight">{t.highlight}</h4>
+                    <p className="test-text">{t.text}</p>
                   </div>
-                  <h4 className="test-highlight">{t.highlight}</h4>
-                  <p className="test-text">{t.text}</p>
                 </div>
               ))}
             </div>
@@ -656,18 +623,36 @@ export default function Home({ addToCart }) {
 .par-img-mobile { display: none; width: 100%; height: 100%; object-fit: cover; }
 
 /* ═══════ 7. TESTIMONIALS (NEW STYLE) ═══════ */
-.testimonials-slider-container { position: relative; overflow: hidden; margin-top: 2rem; padding: 20px 0; }
-.t-track { display: flex; transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1); width: 100%; gap: 20px; }
+.testimonials-slider-container { 
+  position: relative; 
+  overflow: hidden; 
+  margin-top: 2rem; 
+  padding: 20px 0;
+  max-width: 100%;
+}
+@media(min-width: 868px) {
+  .testimonials-slider-container {
+    max-width: 600px; /* Limita a largura no desktop para deixar espaço à direita */
+    margin-left: 0;
+  }
+}
+.t-track { display: flex; transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1); width: 100%; gap: 0; }
+.test-slide-wrapper {
+  min-width: 100%;
+  flex-shrink: 0;
+  display: flex;
+  justify-content: flex-start;
+}
 .test-card-new { 
   background: #F3F4F6; 
   padding: 1.8rem; 
   border-radius: 12px; 
-  display: flex; 
+  display: inline-flex; 
   flex-direction: column; 
   text-align: left; 
   transition: all 0.3s ease; 
-  min-width: 100%;
-  flex-shrink: 0;
+  width: auto;
+  max-width: 90%;
   height: fit-content;
 }
 .test-card-new:hover { transform: translateY(-5px); }
@@ -706,6 +691,19 @@ export default function Home({ addToCart }) {
 .faq-answer { padding-bottom: 1.5rem; color: #4B5563; line-height: 1.7; font-size: 1rem; }
 
 /* ═══════ 9. BENEFITS (CIRCULAR) ═══════ */
+.ben-track.desktop-grid-4 {
+  overflow: visible !important;
+}
+@media(min-width: 868px) {
+  .ben-track.desktop-grid-4 {
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+  }
+  .ben-track.desktop-grid-4 .swipe-item {
+    width: auto;
+  }
+}
 .ben-circular-item {
   display: flex;
   flex-direction: column;
@@ -741,11 +739,17 @@ export default function Home({ addToCart }) {
   .ben-circular-label { font-size: 0.8rem; }
 }
 
+@media(min-width: 868px) {
+  .hide-desktop { display: none !important; }
+}
 /* Carousel Dots Mobile */
-.hide-desktop { display: none; }
 .carousel-dots-mobile { display: flex; justify-content: center; gap: 8px; margin-top: 2rem; }
 .c-dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(45, 90, 68, 0.2); transition: all 0.3s ease; }
 .c-dot.active { width: 24px; border-radius: 4px; background: #2D5A44; }
+
+@media(min-width: 868px) {
+  .carousel-dots-mobile { display: none !important; }
+}
 
 /* ═══════ MEDIA QUERIES ═══════ */
 @media(max-width: 768px) {
@@ -755,7 +759,7 @@ export default function Home({ addToCart }) {
   .hide-mobile { display: none !important; }
   .hide-desktop { display: flex; }
   /* Depoimentos mobile */
-  .test-card-new { padding: 1.5rem; min-width: 100%; }
+  .test-card-new { padding: 1.5rem; width: auto; max-width: 100%; }
   .test-highlight { font-size: 0.95rem; }
   .test-text { font-size: 0.8rem; -webkit-line-clamp: 2; }
   .t-track { gap: 12px; }
